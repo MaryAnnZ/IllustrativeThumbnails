@@ -8,11 +8,12 @@
 void main()
 {
 	std::cout << "Hello world!" << std::endl;
-//	cv::Mat test;
-//	test = cv::imread("images/rainbowDash.jpg");
 	Image* img = new Image();
-	cvNamedWindow("helloWorld");
-	cv::imshow("helloWorld", img->getImage());
+	
+	if (!img->getImage().empty()) {
+		cvNamedWindow("helloWorld");
+		cv::imshow("helloWorld", img->getImage());
+	}
 
 	
 	cvWaitKey(0);
