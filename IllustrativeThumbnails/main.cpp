@@ -10,9 +10,9 @@ void main()
 	std::cout << "Hello world!" << std::endl;
 	Image* img = new Image();
 	
-	if (!img->getImage().empty()) {
+	if (!img->getSourceImage().empty()) {
 		cvNamedWindow("helloWorld");
-		cv::imshow("helloWorld", img->getImage());
+		cv::imshow("helloWorld", img->getGrayscaleImage());
 	}
 
 	

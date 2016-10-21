@@ -1,6 +1,7 @@
 #include "Image.h"
 
 #include <opencv2\highgui.hpp>
+#include <opencv2\imgproc\imgproc.hpp>
 #include <Windows.h>
 
 
@@ -17,9 +18,17 @@ Image::~Image()
 {
 }
 
-cv::Mat Image::getImage()
+cv::Mat Image::getSourceImage()
 {
-	return myImage;
+	return sourceImage;
+}
+
+cv::Mat Image::getGrayscaleImage()
+{
+	if (grayscaleImage.empty()) {
+		convertGrayscale();
+	}
+	return grayscaleImage;
 }
 
 void Image::loadImage()
@@ -53,6 +62,11 @@ void Image::loadImage()
 
 		wcstombs(filePath, file, 660);
 
-		myImage = cv::imread(filePath);
+		sourceImage = cv::imread(filePath);
 	}
+}
+
+void Image::convertGrayscale()
+{
+	cv::cvtColor(sourceImage, grayscaleImage, CV_RGB2GRAY);
 }

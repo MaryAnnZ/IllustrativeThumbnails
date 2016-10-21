@@ -7,12 +7,17 @@ public:
 	Image();
 	~Image();
 	
-	cv::Mat getImage();
+	cv::Mat getSourceImage();
+	cv::Mat	getGrayscaleImage();
+
+	void convertGrayscale();
 private:
 
 	
 	void loadImage();
+	
 
-	cv::Mat myImage;
+	cv::Mat sourceImage;
+	cv::Mat grayscaleImage;
 };
 
