@@ -9,15 +9,23 @@ public:
 	
 	cv::Mat getSourceImage();
 	cv::Mat	getGrayscaleImage();
-
-	void convertGrayscale();
+	cv::Mat getLaplaceImage();
+	cv::Mat getFilteredLaplaceImage();
+	
 private:
 
 	
 	void loadImage();
+	void convertGrayscale();
+	void useLaplace();
+	cv::Mat convertBinary(cv::Mat toProcess);
+	void removeHorizontalLines();
+	cv::Mat cutLine(int startX, int endX, int y, cv::Mat img);
 	
 
 	cv::Mat sourceImage;
 	cv::Mat grayscaleImage;
+	cv::Mat laplaceImage;
+	cv::Mat filteredLaplaceImage;
 };
 
