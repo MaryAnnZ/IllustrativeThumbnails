@@ -12,7 +12,7 @@ void main()
 	
 	if (!img->getSourceImage().empty()) {
 		cvNamedWindow("helloWorld");
-		cv::imshow("helloWorld", img->getFilteredLaplaceImage());
+		cv::imshow("helloWorld", img->getDilatedImage());
 	}
 
 	

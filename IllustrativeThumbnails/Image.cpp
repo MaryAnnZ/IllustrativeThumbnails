@@ -49,6 +49,14 @@ cv::Mat Image::getFilteredLaplaceImage()
 	return filteredLaplaceImage;
 }
 
+cv::Mat Image::getDilatedImage()
+{
+	if (dilatedImage.empty()) {
+		doDilation();
+	}
+	return dilatedImage;
+}
+
 void Image::loadImage()
 {
 	OPENFILENAME dialog;
@@ -152,7 +160,9 @@ void Image::removeHorizontalLines()
 			else {
 				if (countWhitePixels > offset) {
 					toProcess = cutLine(start, x, y, toProcess);
+					countBlackPixels = 0;
 				}
+				countBlackPixels++;
 				start = -1;
 				countWhitePixels = 0;
 			}			
@@ -167,4 +177,13 @@ cv::Mat Image::cutLine(int startX, int endX, int y, cv::Mat img)
 		img.at<uchar>(cv::Point(i, y)) = 0;
 	}
 	return img;
+}
+
+void Image::doDilation()
+{
+	int dilationKernel[] = { 1, 1, 1,
+							 10, 10, 10,
+							1, 1, 1 };
+	cv::Mat kernelMat(3, 3, CV_64FC1, dilationKernel);
+	cv::dilate(getFilteredLaplaceImage(), dilatedImage, kernelMat, cv::Point(-1, -1), 1, 0, cv::morphologyDefaultBorderValue());
 }
