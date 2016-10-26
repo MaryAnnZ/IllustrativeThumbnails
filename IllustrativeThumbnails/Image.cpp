@@ -2,6 +2,7 @@
 
 #include <opencv2\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>
+#include <opencv2\features2d.hpp>
 #include <Windows.h>
 #include <iostream>
 
@@ -49,12 +50,20 @@ cv::Mat Image::getFilteredLaplaceImage()
 	return filteredLaplaceImage;
 }
 
-cv::Mat Image::getDilatedImage()
+cv::Mat Image::getBluredImage()
 {
-	if (dilatedImage.empty()) {
-		doDilation();
+	if (bluredImage.empty()) {
+		doBlur();
 	}
-	return dilatedImage;
+	return bluredImage;
+}
+
+cv::Mat Image::getStringImage()
+{
+	if (stringImage.empty()) {
+		findString();
+	}
+	return stringImage;
 }
 
 void Image::loadImage()
@@ -111,7 +120,7 @@ void Image::useLaplace()
 
 }
 
-cv::Mat Image::convertBinary(cv::Mat toProcess)
+cv::Mat Image::convertBinary(cv::Mat toProcess, int th, bool invert)
 {
 	//TODO: adaptive?
 	cv::Scalar color;
@@ -119,11 +128,21 @@ cv::Mat Image::convertBinary(cv::Mat toProcess)
 		//int countSamePixels = 0;
 		for (int x = 0; x < toProcess.cols; x++) {
 			color = toProcess.at<uchar>(cv::Point(x, y));
-			if (color.val[0] < 200) {
-				toProcess.at<uchar>(cv::Point(x, y)) = 0;
+			if (color.val[0] < th) {
+				if (invert) {
+					toProcess.at<uchar>(cv::Point(x, y)) = 255;
+				}
+				else {
+					toProcess.at<uchar>(cv::Point(x, y)) = 0;
+				}
 			}
 			else {
-				toProcess.at<uchar>(cv::Point(x, y)) = 255;
+				if (invert) {
+					toProcess.at<uchar>(cv::Point(x, y)) = 0;
+				}
+				else {
+					toProcess.at<uchar>(cv::Point(x, y)) = 255;
+				}
 			}
 		}
 	}
@@ -134,7 +153,7 @@ void Image::removeHorizontalLines()
 {
 	//TODO: set manually
 	int offset = 30;
-	cv::Mat toProcess = cv::Mat(convertBinary(getLaplaceImage()));
+	cv::Mat toProcess = cv::Mat(convertBinary(getLaplaceImage(), 200, false));
 
 
 	cv::Scalar color;	
@@ -179,11 +198,119 @@ cv::Mat Image::cutLine(int startX, int endX, int y, cv::Mat img)
 	return img;
 }
 
-void Image::doDilation()
+void Image::doBlur()
 {
 	int dilationKernel[] = { 1, 1, 1,
 							 10, 10, 10,
 							1, 1, 1 };
 	cv::Mat kernelMat(3, 3, CV_64FC1, dilationKernel);
-	cv::dilate(getFilteredLaplaceImage(), dilatedImage, kernelMat, cv::Point(-1, -1), 1, 0, cv::morphologyDefaultBorderValue());
+	//cv::dilate(getFilteredLaplaceImage(), dilatedImage, kernelMat, cv::Point(-1, -1), 1, 0, cv::morphologyDefaultBorderValue());
+	cv::Mat test;
+	cv::blur(getFilteredLaplaceImage(), bluredImage, cv::Size(15, 1));
+}
+
+void Image::findString()
+{
+	cv::Mat toProcess = convertBinary(getBluredImage(), 100, false);
+	std::vector<std::vector<cv::Point>> contours;
+	std::vector<cv::Vec4i> hierarchy;
+
+	cv::findContours(toProcess, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+	cv::Mat drawing = cv::Mat::zeros(toProcess.size(), CV_8UC3);
+	for (int i = 0; i < contours.size(); i++) {
+		cv::Scalar color = cv::Scalar(255, 255, 0);
+		cv::drawContours(drawing, contours, i, color, 2, 8, hierarchy, 0, cv::Point());
+		std::vector<cv::Point> myObjectContours = contours.at(i);
+		std::vector<int> xCoords;
+		std::vector<int> yCoords;
+		for (int j = 0; j < myObjectContours.size(); j++) {
+			xCoords.push_back(myObjectContours.at(j).x);
+			yCoords.push_back(myObjectContours.at(j).y);
+		}
+		std::sort(xCoords.begin(), xCoords.end());
+		std::sort(yCoords.begin(), yCoords.end());
+		int width = xCoords.at(xCoords.size() - 1) - xCoords.at(0);
+		int height = yCoords.at(yCoords.size() - 1) - yCoords.at(0);
+		if (width > 2 * height) {
+			markAsWord(myObjectContours);
+		}
+	}
+
+	checkWords();
+
+	for (Word w : words) {
+		for (int i = w.getMinCorner().x; i <= w.getMaxCorner().x; i++) {
+			for (int j = w.getMinCorner().y; j <= w.getMaxCorner().y; j++) {
+				drawing.at<cv::Vec3b>(cv::Point(i, j)) = cv::Vec3b(255, 0, 0);
+			}
+		}
+	}
+
+	stringImage = drawing;
+}
+
+
+void Image::markAsWord(std::vector<cv::Point> contours)
+{
+	//find corners
+	cv::Point minCorner = cv::Point(-1, -1);
+	cv::Point maxCorner = cv::Point(-1, -1);
+	for (int i = 0; i < contours.size(); i++) {
+		cv::Point contourPoint = contours.at(i);
+		// minCorner
+		if (minCorner.x == -1 || minCorner.y == -1) {
+			minCorner = contourPoint;
+		}
+		else {
+			if (contourPoint.x < minCorner.x) {
+				minCorner.x = contourPoint.x;
+			}
+			if (contourPoint.y < minCorner.y) {
+				minCorner.y = contourPoint.y;
+			}
+		}
+		// maxCorner
+		if (maxCorner.x == -1 || maxCorner.y == -1) {
+			maxCorner = contourPoint;
+		}
+		else {
+			if (contourPoint.x > maxCorner.x) {
+				maxCorner.x = contourPoint.x;
+			}
+			if (contourPoint.y > maxCorner.y) {
+				maxCorner.y = contourPoint.y;
+			}
+		}
+	}
+
+	possibleWords.push_back(Word(minCorner, maxCorner));
+
+
+}
+
+void Image::checkWords()
+{
+	int sumHeight = 0;
+	std::vector<int> minY;
+	std::vector<int> maxY;
+
+	for (Word w : possibleWords) {
+		sumHeight += w.getHeight();
+		minY.push_back(w.getMinCorner().y);
+		maxY.push_back(w.getMaxCorner().y);
+	}
+	double avgHeight = sumHeight / possibleWords.size();
+	for (Word w : possibleWords) {
+		if (w.getHeight() >= avgHeight) {
+			if ((std::find(minY.begin(), minY.end(), w.getMaxCorner().y) == minY.end()) && (std::find(maxY.begin(), maxY.end(), w.getMinCorner().y) == maxY.end())) {
+				words.push_back(w);
+			} else {
+				std::cout << "NOT WORD 2" << std::endl;
+			}
+		}
+		else {
+			std::cout << "NOT WORD" << std::endl;
+		}
+	}
+
 }
