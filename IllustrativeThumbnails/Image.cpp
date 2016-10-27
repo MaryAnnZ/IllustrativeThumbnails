@@ -283,7 +283,11 @@ void Image::markAsWord(std::vector<cv::Point> contours)
 		}
 	}
 
-	possibleWords.push_back(Word(minCorner, maxCorner));
+	int height = maxCorner.y - minCorner.y;
+	int width = maxCorner.x - minCorner.x;
+	if (height > 5 && width > 5) {
+		possibleWords.push_back(Word(minCorner, maxCorner));
+	}
 
 
 }
@@ -301,10 +305,52 @@ void Image::checkWords()
 	}
 	double avgHeight = sumHeight / possibleWords.size();
 	for (Word w : possibleWords) {
-		if (w.getHeight() >= avgHeight) {
-			if ((std::find(minY.begin(), minY.end(), w.getMaxCorner().y) == minY.end()) && (std::find(maxY.begin(), maxY.end(), w.getMinCorner().y) == maxY.end())) {
+		if (w.getHeight() >= avgHeight && w.getHeight() < avgHeight * 2) {
+			bool maxxOk = true;
+			if ((std::find(minY.begin(), minY.end(), w.getMaxCorner().y) != minY.end())) {
+				std::vector<int> occurs;
+				std::vector<int>::iterator iter = minY.begin();
+				while ((iter = std::find(iter, minY.end(), w.getMaxCorner().y)) != minY.end()) {
+					occurs.push_back(std::distance(minY.begin(), iter));
+					iter++;
+				}
+				for (int o : occurs) {
+					Word word = possibleWords.at(o);
+					int min = word.getMinCorner().x;
+					int max = word.getMaxCorner().x;
+					int wMin = w.getMinCorner().x;
+					int wMax = w.getMaxCorner().x;
+					if ((wMin < min && wMax > min)  || (wMin > min && wMax < max) || (wMin > min && wMax > max)){
+						maxxOk = false;
+						break;
+					}
+				}
+			}
+			if (maxxOk) {
+				if ((std::find(maxY.begin(), maxY.end(), w.getMinCorner().y) != maxY.end())) {
+					std::vector<int> occurs;
+					std::vector<int>::iterator iter = maxY.begin();
+					while ((iter = std::find(iter, maxY.end(), w.getMinCorner().y)) != maxY.end()) {
+						occurs.push_back(std::distance(maxY.begin(), iter));
+						iter++;
+					}
+					for (int o : occurs) {
+						Word word = possibleWords.at(o);
+						int min = word.getMinCorner().x;
+						int max = word.getMaxCorner().x;
+						int wMin = w.getMinCorner().x;
+						int wMax = w.getMaxCorner().x;
+						if ((wMin < min && wMax > min) || (wMin > min && wMax < max) || (wMin > min && wMax > max)) {
+							maxxOk = false;
+							break;
+						}
+					}
+				}
+			}
+			if (maxxOk) {
 				words.push_back(w);
-			} else {
+			}
+			else {
 				std::cout << "NOT WORD 2" << std::endl;
 			}
 		}
