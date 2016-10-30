@@ -66,6 +66,24 @@ cv::Mat Image::getStringImage()
 	return stringImage;
 }
 
+cv::Mat Image::getCieluvImage()
+{
+	if (cieluvImage.empty()) {
+		convertToCieluv(cieluvImage);
+	}
+	return cieluvImage;
+}
+
+cv::Mat Image::getSaliencyMap()
+{
+	if (saliencyMap.empty()) {
+		buildGaussPyramid();
+		buildContrastPyramid();
+		calculateSaliencyMap();
+	}
+	return saliencyMap;
+}
+
 void Image::loadImage()
 {
 	OPENFILENAME dialog;
@@ -103,6 +121,7 @@ void Image::loadImage()
 
 void Image::convertGrayscale()
 {
+	//TODO: RGB or BGR
 	cv::cvtColor(sourceImage, grayscaleImage, CV_RGB2GRAY);
 }
 
@@ -303,35 +322,16 @@ void Image::checkWords()
 		minY.push_back(w.getMinCorner().y);
 		maxY.push_back(w.getMaxCorner().y);
 	}
-	double avgHeight = sumHeight / possibleWords.size();
-	for (Word w : possibleWords) {
-		if (w.getHeight() >= avgHeight && w.getHeight() < avgHeight * 2) {
-			bool maxxOk = true;
-			if ((std::find(minY.begin(), minY.end(), w.getMaxCorner().y) != minY.end())) {
-				std::vector<int> occurs;
-				std::vector<int>::iterator iter = minY.begin();
-				while ((iter = std::find(iter, minY.end(), w.getMaxCorner().y)) != minY.end()) {
-					occurs.push_back(std::distance(minY.begin(), iter));
-					iter++;
-				}
-				for (int o : occurs) {
-					Word word = possibleWords.at(o);
-					int min = word.getMinCorner().x;
-					int max = word.getMaxCorner().x;
-					int wMin = w.getMinCorner().x;
-					int wMax = w.getMaxCorner().x;
-					if ((wMin < min && wMax > min)  || (wMin > min && wMax < max) || (wMin > min && wMax > max)){
-						maxxOk = false;
-						break;
-					}
-				}
-			}
-			if (maxxOk) {
-				if ((std::find(maxY.begin(), maxY.end(), w.getMinCorner().y) != maxY.end())) {
+	if (!possibleWords.empty()) {
+		double avgHeight = sumHeight / possibleWords.size();
+		for (Word w : possibleWords) {
+			if (w.getHeight() >= avgHeight && w.getHeight() < avgHeight * 2) {
+				bool maxxOk = true;
+				if ((std::find(minY.begin(), minY.end(), w.getMaxCorner().y) != minY.end())) {
 					std::vector<int> occurs;
-					std::vector<int>::iterator iter = maxY.begin();
-					while ((iter = std::find(iter, maxY.end(), w.getMinCorner().y)) != maxY.end()) {
-						occurs.push_back(std::distance(maxY.begin(), iter));
+					std::vector<int>::iterator iter = minY.begin();
+					while ((iter = std::find(iter, minY.end(), w.getMaxCorner().y)) != minY.end()) {
+						occurs.push_back(std::distance(minY.begin(), iter));
 						iter++;
 					}
 					for (int o : occurs) {
@@ -346,17 +346,137 @@ void Image::checkWords()
 						}
 					}
 				}
-			}
-			if (maxxOk) {
-				words.push_back(w);
+				if (maxxOk) {
+					if ((std::find(maxY.begin(), maxY.end(), w.getMinCorner().y) != maxY.end())) {
+						std::vector<int> occurs;
+						std::vector<int>::iterator iter = maxY.begin();
+						while ((iter = std::find(iter, maxY.end(), w.getMinCorner().y)) != maxY.end()) {
+							occurs.push_back(std::distance(maxY.begin(), iter));
+							iter++;
+						}
+						for (int o : occurs) {
+							Word word = possibleWords.at(o);
+							int min = word.getMinCorner().x;
+							int max = word.getMaxCorner().x;
+							int wMin = w.getMinCorner().x;
+							int wMax = w.getMaxCorner().x;
+							if ((wMin < min && wMax > min) || (wMin > min && wMax < max) || (wMin > min && wMax > max)) {
+								maxxOk = false;
+								break;
+							}
+						}
+					}
+				}
+				if (maxxOk) {
+					words.push_back(w);
+				}
+				else {
+					std::cout << "NOT WORD 2" << std::endl;
+				}
 			}
 			else {
-				std::cout << "NOT WORD 2" << std::endl;
+				std::cout << "NOT WORD" << std::endl;
 			}
-		}
-		else {
-			std::cout << "NOT WORD" << std::endl;
 		}
 	}
 
+}
+
+void Image::convertToCieluv(cv::Mat & img)
+{
+	cv::cvtColor(getSourceImage(), img, CV_BGR2Luv);
+}
+
+void Image::buildGaussPyramid()
+{
+	int pyramidLevels = (int)log2(getCieluvImage().rows / 10);
+	if (gaussPyramid.empty()) {
+		for (int i = 0; i < pyramidLevels; i++) {
+			cv::Mat nextLevel;
+			cv::Mat baseImage;
+			if (i == 0) {		// getCieluv image
+				baseImage = getCieluvImage();
+			}
+			else {				//get image of the index before
+				baseImage = gaussPyramid.at(i - 1);
+			}
+			cv::pyrDown(baseImage, nextLevel);
+			gaussPyramid.push_back(nextLevel);
+			//cvNamedWindow(std::to_string(100 + i).c_str());
+			//cv::imshow(std::to_string(100 + i).c_str(), nextLevel);
+		}
+	}
+	std::cout << "END" << std::endl;
+}
+
+void Image::buildContrastPyramid()
+{
+	if (!gaussPyramid.empty()) {
+		for (int i = 0; i < gaussPyramid.size(); i++) {
+			cv::Mat gaussImage = gaussPyramid.at(i);
+			cv::Mat contrastMap = cv::Mat::zeros(gaussImage.size(), CV_8UC1);
+			int maxX, maxY;
+			if (gaussImage.rows % 2 == 1) {
+				maxY = (gaussImage.rows - 1) / 2;
+			}
+			else {
+				maxY = gaussImage.rows / 2;
+			}
+			if (gaussImage.cols % 2 == 1) {
+				maxX = (gaussImage.cols - 1) / 2;
+			}
+			else {
+				maxX = gaussImage.cols / 2;
+			}
+			double maxDistance = cv::sqrt(maxX * maxX + maxY * maxY);
+			cvNamedWindow(std::to_string(1000 + i).c_str());
+			cv::imshow(std::to_string(1000 + i).c_str(), gaussImage);
+			//calculate only full neigbourhood
+			for (int x = 1; x < contrastMap.cols - 1; x++) {
+				for (int y = 1; y < contrastMap.rows - 1; y++) {
+					double colorDistances = 0.0;
+					cv::Scalar myPixel = gaussImage.at<uchar>(cv::Point(x, y));
+					cv::Scalar neighbour1 = gaussImage.at<uchar>(cv::Point(x, y-1));
+					cv::Scalar neighbour2 = gaussImage.at<uchar>(cv::Point(x-1, y));
+					cv::Scalar neighbour3 = gaussImage.at<uchar>(cv::Point(x+1, y));
+					cv::Scalar neighbour4 = gaussImage.at<uchar>(cv::Point(x, y+1));
+					//colorDistances += cv::norm(myPixel, neighbour1, cv::NORM_L2);
+					colorDistances += cv::norm(myPixel, neighbour2, cv::NORM_L2);
+					colorDistances += cv::norm(myPixel, neighbour3, cv::NORM_L2);
+					//colorDistances += cv::norm(myPixel, neighbour4, cv::NORM_L2);
+					int xDist = maxX - x;
+					int yDist = maxY - y;
+					double myDistance = cv::sqrt(xDist * xDist + yDist * yDist);
+					double weight = 1 - (myDistance / maxDistance);
+					contrastMap.at<uchar>(cv::Point(x, y)) = weight * colorDistances;
+				}
+			}
+			//cut the unfiltered margins
+			if (contrastMap.cols >= 3 && contrastMap.rows >= 3) {
+				contrastMap = contrastMap.rowRange(1, contrastMap.rows - 1);
+				contrastMap = contrastMap.colRange(1, contrastMap.cols - 1);
+				contrastPyramid.push_back(contrastMap);
+				cvNamedWindow(std::to_string(i).c_str());
+				cv::imshow(std::to_string(i).c_str(), contrastMap);
+			}
+		}
+	}
+}
+
+void Image::calculateSaliencyMap()
+{
+
+	if (!contrastPyramid.empty()) {
+		cv::Mat mySaliencyMap = cv::Mat::zeros(getCieluvImage().size(), CV_8UC1);
+		for (int i = 0; i < contrastPyramid.size(); i++) {
+			cv::Mat contrastMap;
+			cv::resize(contrastPyramid.at(i), contrastMap, mySaliencyMap.size());
+			for (int x = 0; x < mySaliencyMap.cols; x++) {
+				for (int y = 0; y < mySaliencyMap.rows; y++) {
+					mySaliencyMap.at<uchar>(cv::Point(x, y)) = mySaliencyMap.at<uchar>(cv::Point(x, y)) + contrastMap.at<uchar>(cv::Point(x, y));
+				}
+			}
+		}
+		cv::normalize(mySaliencyMap, saliencyMap, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+	}
 }
