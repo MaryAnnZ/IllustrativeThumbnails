@@ -260,7 +260,7 @@ void Image::findString()
 	for (Word w : words) {
 		for (int i = w.getMinCorner().x; i <= w.getMaxCorner().x; i++) {
 			for (int j = w.getMinCorner().y; j <= w.getMaxCorner().y; j++) {
-				drawing.at<cv::Vec3b>(cv::Point(i, j)) = cv::Vec3b(255, 0, 0);
+				drawing.at<cv::Vec3b>(cv::Point(i, j)) = cv::Vec3b(100, 0, 0);
 			}
 		}
 	}
@@ -396,17 +396,15 @@ void Image::buildGaussPyramid()
 			cv::Mat baseImage;
 			if (i == 0) {		// getCieluv image
 				baseImage = getCieluvImage();
+				gaussPyramid.push_back(baseImage);
 			}
 			else {				//get image of the index before
 				baseImage = gaussPyramid.at(i - 1);
 			}
 			cv::pyrDown(baseImage, nextLevel);
 			gaussPyramid.push_back(nextLevel);
-			//cvNamedWindow(std::to_string(100 + i).c_str());
-			//cv::imshow(std::to_string(100 + i).c_str(), nextLevel);
 		}
 	}
-	std::cout << "END" << std::endl;
 }
 
 void Image::buildContrastPyramid()
@@ -423,32 +421,32 @@ void Image::buildContrastPyramid()
 				maxY = gaussImage.rows / 2;
 			}
 			if (gaussImage.cols % 2 == 1) {
-				maxX = (gaussImage.cols - 1) / 2;
+				maxX = (gaussImage.cols - 1) * 1.5;
 			}
 			else {
-				maxX = gaussImage.cols / 2;
+				maxX = gaussImage.cols * 1.5;
 			}
 			double maxDistance = cv::sqrt(maxX * maxX + maxY * maxY);
-			cvNamedWindow(std::to_string(1000 + i).c_str());
-			cv::imshow(std::to_string(1000 + i).c_str(), gaussImage);
+			
 			//calculate only full neigbourhood
-			for (int x = 1; x < contrastMap.cols - 1; x++) {
-				for (int y = 1; y < contrastMap.rows - 1; y++) {
+			for (int x = 1; x < gaussImage.cols * 3 - 1; x++) {
+				for (int y = 1; y < gaussImage.rows - 1; y++) {
 					double colorDistances = 0.0;
 					cv::Scalar myPixel = gaussImage.at<uchar>(cv::Point(x, y));
-					cv::Scalar neighbour1 = gaussImage.at<uchar>(cv::Point(x, y-1));
-					cv::Scalar neighbour2 = gaussImage.at<uchar>(cv::Point(x-1, y));
-					cv::Scalar neighbour3 = gaussImage.at<uchar>(cv::Point(x+1, y));
-					cv::Scalar neighbour4 = gaussImage.at<uchar>(cv::Point(x, y+1));
-					//colorDistances += cv::norm(myPixel, neighbour1, cv::NORM_L2);
+					gaussImage.at<uchar>(cv::Point(x, y)) = 255;
+					cv::Scalar neighbour1 = gaussImage.at<uchar>(cv::Point(x-1, y));
+					cv::Scalar neighbour2 = gaussImage.at<uchar>(cv::Point(x, y-1));
+					cv::Scalar neighbour3 = gaussImage.at<uchar>(cv::Point(x, y+1));
+					cv::Scalar neighbour4 = gaussImage.at<uchar>(cv::Point(x+1, y));
+					colorDistances += cv::norm(myPixel, neighbour1, cv::NORM_L2);
 					colorDistances += cv::norm(myPixel, neighbour2, cv::NORM_L2);
 					colorDistances += cv::norm(myPixel, neighbour3, cv::NORM_L2);
-					//colorDistances += cv::norm(myPixel, neighbour4, cv::NORM_L2);
+					colorDistances += cv::norm(myPixel, neighbour4, cv::NORM_L2);
 					int xDist = maxX - x;
 					int yDist = maxY - y;
 					double myDistance = cv::sqrt(xDist * xDist + yDist * yDist);
 					double weight = 1 - (myDistance / maxDistance);
-					contrastMap.at<uchar>(cv::Point(x, y)) = weight * colorDistances;
+					contrastMap.at<uchar>(cv::Point(x / 3, y)) = colorDistances * weight * 0.4;
 				}
 			}
 			//cut the unfiltered margins
@@ -456,8 +454,6 @@ void Image::buildContrastPyramid()
 				contrastMap = contrastMap.rowRange(1, contrastMap.rows - 1);
 				contrastMap = contrastMap.colRange(1, contrastMap.cols - 1);
 				contrastPyramid.push_back(contrastMap);
-				cvNamedWindow(std::to_string(i).c_str());
-				cv::imshow(std::to_string(i).c_str(), contrastMap);
 			}
 		}
 	}
@@ -468,12 +464,22 @@ void Image::calculateSaliencyMap()
 
 	if (!contrastPyramid.empty()) {
 		cv::Mat mySaliencyMap = cv::Mat::zeros(getCieluvImage().size(), CV_8UC1);
+		double mapWeight = 1.0 / contrastPyramid.size();
 		for (int i = 0; i < contrastPyramid.size(); i++) {
 			cv::Mat contrastMap;
 			cv::resize(contrastPyramid.at(i), contrastMap, mySaliencyMap.size());
 			for (int x = 0; x < mySaliencyMap.cols; x++) {
 				for (int y = 0; y < mySaliencyMap.rows; y++) {
-					mySaliencyMap.at<uchar>(cv::Point(x, y)) = mySaliencyMap.at<uchar>(cv::Point(x, y)) + contrastMap.at<uchar>(cv::Point(x, y));
+					mySaliencyMap.at<uchar>(cv::Point(x, y)) = mySaliencyMap.at<uchar>(cv::Point(x, y)) + (contrastMap.at<uchar>(cv::Point(x, y)) * mapWeight);
+				}
+			}
+		}
+		cv::Mat textImage = getStringImage();
+		for (int x = 0; x < textImage.cols*3; x++) {
+			for (int y = 0; y < textImage.rows; y++) {
+				cv::Scalar color = textImage.at<uchar>(cv::Point(x, y));
+				if (color.val[0] == 100) {
+					mySaliencyMap.at<uchar>(cv::Point(x/3, y)) = mySaliencyMap.at<uchar>(cv::Point(x / 3, y)) * 1.5;
 				}
 			}
 		}
