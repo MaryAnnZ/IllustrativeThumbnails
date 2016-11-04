@@ -429,15 +429,15 @@ void Image::buildContrastPyramid()
 			double maxDistance = cv::sqrt(maxX * maxX + maxY * maxY);
 			
 			//calculate only full neigbourhood
-			for (int x = 1; x < gaussImage.cols * 3 - 1; x++) {
+			for (int x = 1; x < gaussImage.cols - 1; x++) {
 				for (int y = 1; y < gaussImage.rows - 1; y++) {
 					double colorDistances = 0.0;
-					cv::Scalar myPixel = gaussImage.at<uchar>(cv::Point(x, y));
-					gaussImage.at<uchar>(cv::Point(x, y)) = 255;
-					cv::Scalar neighbour1 = gaussImage.at<uchar>(cv::Point(x-1, y));
-					cv::Scalar neighbour2 = gaussImage.at<uchar>(cv::Point(x, y-1));
-					cv::Scalar neighbour3 = gaussImage.at<uchar>(cv::Point(x, y+1));
-					cv::Scalar neighbour4 = gaussImage.at<uchar>(cv::Point(x+1, y));
+					cv::Scalar myPixel = gaussImage.at<cv::Vec3b>(cv::Point(x, y));
+					//gaussImage.at<uchar>(cv::Point(x, y)) = 255;
+					cv::Scalar neighbour1 = gaussImage.at<cv::Vec3b>(cv::Point(x-1, y));
+					cv::Scalar neighbour2 = gaussImage.at<cv::Vec3b>(cv::Point(x, y-1));
+					cv::Scalar neighbour3 = gaussImage.at<cv::Vec3b>(cv::Point(x, y+1));
+					cv::Scalar neighbour4 = gaussImage.at<cv::Vec3b>(cv::Point(x+1, y));
 					colorDistances += cv::norm(myPixel, neighbour1, cv::NORM_L2);
 					colorDistances += cv::norm(myPixel, neighbour2, cv::NORM_L2);
 					colorDistances += cv::norm(myPixel, neighbour3, cv::NORM_L2);
@@ -446,7 +446,7 @@ void Image::buildContrastPyramid()
 					int yDist = maxY - y;
 					double myDistance = cv::sqrt(xDist * xDist + yDist * yDist);
 					double weight = 1 - (myDistance / maxDistance);
-					contrastMap.at<uchar>(cv::Point(x / 3, y)) = colorDistances * weight * 0.4;
+					contrastMap.at<uchar>(cv::Point(x, y)) = colorDistances * weight;
 				}
 			}
 			//cut the unfiltered margins
@@ -475,11 +475,11 @@ void Image::calculateSaliencyMap()
 			}
 		}
 		cv::Mat textImage = getStringImage();
-		for (int x = 0; x < textImage.cols*3; x++) {
+		for (int x = 0; x < textImage.cols; x++) {
 			for (int y = 0; y < textImage.rows; y++) {
-				cv::Scalar color = textImage.at<uchar>(cv::Point(x, y));
+				cv::Scalar color = textImage.at<cv::Vec3b>(cv::Point(x, y));
 				if (color.val[0] == 100) {
-					mySaliencyMap.at<uchar>(cv::Point(x/3, y)) = mySaliencyMap.at<uchar>(cv::Point(x / 3, y)) * 1.5;
+					mySaliencyMap.at<uchar>(cv::Point(x, y)) = mySaliencyMap.at<uchar>(cv::Point(x, y)) * 2;
 				}
 			}
 		}
