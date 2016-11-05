@@ -36,6 +36,7 @@ private:
 	void findString();
 	void markAsWord(std::vector<cv::Point> contours);
 	void checkWords();
+	bool checkHistogram(Word word);
 	void convertToCieluv(cv::Mat& img);
 	void buildGaussPyramid();
 	void buildContrastPyramid();

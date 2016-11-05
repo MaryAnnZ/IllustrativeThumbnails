@@ -1,3 +1,5 @@
+#define NOMINMAX
+
 #include "Image.h"
 
 #include <opencv2\highgui.hpp>
@@ -316,7 +318,6 @@ void Image::checkWords()
 	int sumHeight = 0;
 	std::vector<int> minY;
 	std::vector<int> maxY;
-
 	for (Word w : possibleWords) {
 		sumHeight += w.getHeight();
 		minY.push_back(w.getMinCorner().y);
@@ -325,33 +326,14 @@ void Image::checkWords()
 	if (!possibleWords.empty()) {
 		double avgHeight = sumHeight / possibleWords.size();
 		for (Word w : possibleWords) {
-			if (w.getHeight() >= avgHeight && w.getHeight() < avgHeight * 2) {
-				bool maxxOk = true;
-				if ((std::find(minY.begin(), minY.end(), w.getMaxCorner().y) != minY.end())) {
-					std::vector<int> occurs;
-					std::vector<int>::iterator iter = minY.begin();
-					while ((iter = std::find(iter, minY.end(), w.getMaxCorner().y)) != minY.end()) {
-						occurs.push_back(std::distance(minY.begin(), iter));
-						iter++;
-					}
-					for (int o : occurs) {
-						Word word = possibleWords.at(o);
-						int min = word.getMinCorner().x;
-						int max = word.getMaxCorner().x;
-						int wMin = w.getMinCorner().x;
-						int wMax = w.getMaxCorner().x;
-						if ((wMin < min && wMax > min) || (wMin > min && wMax < max) || (wMin > min && wMax > max)) {
-							maxxOk = false;
-							break;
-						}
-					}
-				}
-				if (maxxOk) {
-					if ((std::find(maxY.begin(), maxY.end(), w.getMinCorner().y) != maxY.end())) {
+			if (w.getHeight() >= avgHeight * 0.5 && w.getHeight() < avgHeight * 200) {
+				if (checkHistogram(w)) {
+					bool maxxOk = true;
+					if ((std::find(minY.begin(), minY.end(), w.getMaxCorner().y) != minY.end())) {
 						std::vector<int> occurs;
-						std::vector<int>::iterator iter = maxY.begin();
-						while ((iter = std::find(iter, maxY.end(), w.getMinCorner().y)) != maxY.end()) {
-							occurs.push_back(std::distance(maxY.begin(), iter));
+						std::vector<int>::iterator iter = minY.begin();
+						while ((iter = std::find(iter, minY.end(), w.getMaxCorner().y)) != minY.end()) {
+							occurs.push_back(std::distance(minY.begin(), iter));
 							iter++;
 						}
 						for (int o : occurs) {
@@ -366,20 +348,73 @@ void Image::checkWords()
 							}
 						}
 					}
-				}
-				if (maxxOk) {
-					words.push_back(w);
+					if (maxxOk) {
+						if ((std::find(maxY.begin(), maxY.end(), w.getMinCorner().y) != maxY.end())) {
+							std::vector<int> occurs;
+							std::vector<int>::iterator iter = maxY.begin();
+							while ((iter = std::find(iter, maxY.end(), w.getMinCorner().y)) != maxY.end()) {
+								occurs.push_back(std::distance(maxY.begin(), iter));
+								iter++;
+							}
+							for (int o : occurs) {
+								Word word = possibleWords.at(o);
+								int min = word.getMinCorner().x;
+								int max = word.getMaxCorner().x;
+								int wMin = w.getMinCorner().x;
+								int wMax = w.getMaxCorner().x;
+								if ((wMin < min && wMax > min) || (wMin > min && wMax < max) || (wMin > min && wMax > max)) {
+									maxxOk = false;
+									break;
+								}
+							}
+						}
+					}
+					if (maxxOk) {
+						words.push_back(w);
+					}
+					else {
+						std::cout << "NOT WORD 2" << std::endl;
+					}
 				}
 				else {
-					std::cout << "NOT WORD 2" << std::endl;
+					std::cout << "NOT WORD" << std::endl;
 				}
-			}
-			else {
-				std::cout << "NOT WORD" << std::endl;
 			}
 		}
 	}
 
+}
+
+bool Image::checkHistogram(Word word)
+{
+	cv::Rect rect = cv::Rect(word.getMinCorner(), word.getMaxCorner());
+	cv::Mat source = getGrayscaleImage();
+	cv::Mat roi = source(rect);
+	int histSize = 10;
+	float range[] = { 0, 256 };
+	const float* histRange = { range };
+	cv::Mat histogram;
+	cv::calcHist(&roi, 1, 0, cv::Mat(), histogram, 1, &histSize, &histRange, true, false);
+	int sumPixels = word.getWidth() * word.getHeight();
+	int sumMax1 = 0;
+	int sumMax2 = 0;
+	for (int i = 0; i < histogram.rows; i++) {
+		int curr = histogram.at<float>(i);
+		if (curr > std::min(sumMax1, sumMax2)) {
+			if (sumMax1 > sumMax2) {
+				sumMax2 = curr;
+			}
+			else {
+				sumMax1 = curr;
+			}
+		}
+	}
+	if ((sumMax1 + sumMax2) > (sumPixels * 0.65)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 void Image::convertToCieluv(cv::Mat & img)
@@ -421,10 +456,10 @@ void Image::buildContrastPyramid()
 				maxY = gaussImage.rows / 2;
 			}
 			if (gaussImage.cols % 2 == 1) {
-				maxX = (gaussImage.cols - 1) * 1.5;
+				maxX = (gaussImage.cols - 1);
 			}
 			else {
-				maxX = gaussImage.cols * 1.5;
+				maxX = gaussImage.cols;
 			}
 			double maxDistance = cv::sqrt(maxX * maxX + maxY * maxY);
 			

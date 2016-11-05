@@ -12,7 +12,7 @@ void main()
 	
 	if (!img->getSourceImage().empty()) {
 		cvNamedWindow("helloWorld");
-		cv::imshow("helloWorld", img->getSaliencyMap());
+		cv::imshow("helloWorld", img->getStringImage());
 	}
 
 	
