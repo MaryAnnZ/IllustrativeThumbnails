@@ -20,6 +20,9 @@ public:
 	//scale invariant saliency map
 	cv::Mat getCieluvImage();
 	cv::Mat getSaliencyMap();
+
+	//central window
+	cv::Mat getCentralWindow();
 	
 
 	
@@ -41,6 +44,7 @@ private:
 	void buildGaussPyramid();
 	void buildContrastPyramid();
 	void calculateSaliencyMap();
+	void cropBorders();
 
 
 	
@@ -59,6 +63,9 @@ private:
 	std::vector<cv::Mat> contrastPyramid;
 	cv::Mat saliencyMap;
 	cv::Mat weightedSaliencyMap;
+
+	//important central window
+	cv::Mat croppedImage;
 
 	std::vector<Word> possibleWords;
 	std::vector<Word> words;
