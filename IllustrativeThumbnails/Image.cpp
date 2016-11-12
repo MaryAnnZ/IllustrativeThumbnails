@@ -566,8 +566,8 @@ void Image::cropBorders()
 		}
 	}
 	croppedImage = source.rowRange(upperCroppingPoint, lowerCroppingPoint);
-	//calculate histogram
-	if (lowerCroppingPoint >source.rows - upperBorder) {
+	//calculate histogram for lower border
+	if (lowerCroppingPoint >source.rows - upperBorder / 2) {
 		int step = source.rows * 0.025;
 		int binAmount = 256;
 		float range[] = { 0, 256 };
@@ -592,30 +592,97 @@ void Image::cropBorders()
 		cv::normalize(gHistContent, gHistContent, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
 		cv::calcHist(&bgrPlanesContent[2], 1, 0, cv::Mat(), rHistContent, 1, &binAmount, &histRange, true, false);
 		cv::normalize(rHistContent, rHistContent, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
-		for (int i = croppedImage.rows; i > croppedImage.rows - upperBorder; i -= step) {
-			//test histogram
-			cv::vector<cv::Mat> bgrPlanesCompare;
-			cv::split(croppedImage.rowRange(i - step, i), bgrPlanesCompare);
-			cv::Mat bHistCompare, gHistCompare, rHistCompare;
-			cv::calcHist(&bgrPlanesCompare[0], 1, 0, cv::Mat(), bHistCompare, 1, &binAmount, &histRange, true, false);
-			cv::normalize(bHistCompare, bHistCompare, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
-			cv::calcHist(&bgrPlanesCompare[1], 1, 0, cv::Mat(), gHistCompare, 1, &binAmount, &histRange, true, false);
-			cv::normalize(gHistCompare, gHistCompare, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
-			cv::calcHist(&bgrPlanesCompare[2], 1, 0, cv::Mat(), rHistCompare, 1, &binAmount, &histRange, true, false);
-			cv::normalize(rHistCompare, rHistCompare, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
-			//compare
-			double marginB = cv::compareHist(bHistMargin, bHistCompare, CV_COMP_CORREL);
-			double marginG = cv::compareHist(gHistMargin, gHistCompare, CV_COMP_CORREL);
-			double marginR = cv::compareHist(rHistMargin, rHistCompare, CV_COMP_CORREL);
-			double contentB = cv::compareHist(bHistContent, bHistCompare, CV_COMP_CORREL);
-			double contentG = cv::compareHist(gHistContent, gHistCompare, CV_COMP_CORREL);
-			double contentR = cv::compareHist(rHistContent, rHistCompare, CV_COMP_CORREL);
-			double marginCorrel = marginB + marginG + marginR;
-			double contentCorrel = contentB + contentG + contentR;
-			if (contentCorrel > marginCorrel) {
-				croppedImage = croppedImage.rowRange(0, i - step);
-				std::cout << "hist crop by: " << i << std::endl;
-				break;
+		//check if they are really different
+		double corr = cv::compareHist(bHistMargin, bHistContent, CV_COMP_CORREL);
+		corr += cv::compareHist(gHistMargin, gHistContent, CV_COMP_CORREL);
+		corr += cv::compareHist(rHistMargin, rHistContent, CV_COMP_CORREL);
+		std::cout << "lower corr: " << corr << std::endl;
+		if (corr < 1.3) {
+			for (int i = croppedImage.rows; i > croppedImage.rows - upperBorder; i -= step) {
+				//test histogram
+				cv::vector<cv::Mat> bgrPlanesCompare;
+				cv::split(croppedImage.rowRange(i - step, i), bgrPlanesCompare);
+				cv::Mat bHistCompare, gHistCompare, rHistCompare;
+				cv::calcHist(&bgrPlanesCompare[0], 1, 0, cv::Mat(), bHistCompare, 1, &binAmount, &histRange, true, false);
+				cv::normalize(bHistCompare, bHistCompare, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+				cv::calcHist(&bgrPlanesCompare[1], 1, 0, cv::Mat(), gHistCompare, 1, &binAmount, &histRange, true, false);
+				cv::normalize(gHistCompare, gHistCompare, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+				cv::calcHist(&bgrPlanesCompare[2], 1, 0, cv::Mat(), rHistCompare, 1, &binAmount, &histRange, true, false);
+				cv::normalize(rHistCompare, rHistCompare, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+				//compare
+				double marginB = cv::compareHist(bHistMargin, bHistCompare, CV_COMP_CORREL);
+				double marginG = cv::compareHist(gHistMargin, gHistCompare, CV_COMP_CORREL);
+				double marginR = cv::compareHist(rHistMargin, rHistCompare, CV_COMP_CORREL);
+				double contentB = cv::compareHist(bHistContent, bHistCompare, CV_COMP_CORREL);
+				double contentG = cv::compareHist(gHistContent, gHistCompare, CV_COMP_CORREL);
+				double contentR = cv::compareHist(rHistContent, rHistCompare, CV_COMP_CORREL);
+				double marginCorrel = marginB + marginG + marginR;
+				double contentCorrel = contentB + contentG + contentR;
+				if (contentCorrel > marginCorrel && i - step > croppedImage.rows - upperBorder) {
+					croppedImage = croppedImage.rowRange(0, i - step);
+					std::cout << "hist lower crop by: " << i << "	" << croppedImage.rows - upperBorder << std::endl;
+					break;
+				}
+			}
+		}
+		//calculate histogram for upper border
+		if (upperCroppingPoint < upperBorder) {
+			int step = source.rows * 0.025;
+			int binAmount = 256;
+			float range[] = { 0, 256 };
+			const float* histRange = { range };
+			//margin hist
+			cv::vector<cv::Mat> bgrPlanesMargin;
+			cv::split(croppedImage.rowRange(0, step), bgrPlanesMargin);
+			cv::Mat bHistMargin, gHistMargin, rHistMargin;
+			cv::calcHist(&bgrPlanesMargin[0], 1, 0, cv::Mat(), bHistMargin, 1, &binAmount, &histRange, true, false);
+			cv::normalize(bHistMargin, bHistMargin, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+			cv::calcHist(&bgrPlanesMargin[1], 1, 0, cv::Mat(), gHistMargin, 1, &binAmount, &histRange, true, false);
+			cv::normalize(gHistMargin, gHistMargin, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+			cv::calcHist(&bgrPlanesMargin[2], 1, 0, cv::Mat(), rHistMargin, 1, &binAmount, &histRange, true, false);
+			cv::normalize(rHistMargin, rHistMargin, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+			//content hist
+			cv::vector<cv::Mat> bgrPlanesContent;
+			cv::split(croppedImage.rowRange(upperBorder, upperBorder + step), bgrPlanesContent);
+			cv::Mat bHistContent, gHistContent, rHistContent;
+			cv::calcHist(&bgrPlanesContent[0], 1, 0, cv::Mat(), bHistContent, 1, &binAmount, &histRange, true, false);
+			cv::normalize(bHistContent, bHistContent, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+			cv::calcHist(&bgrPlanesContent[1], 1, 0, cv::Mat(), gHistContent, 1, &binAmount, &histRange, true, false);
+			cv::normalize(gHistContent, gHistContent, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+			cv::calcHist(&bgrPlanesContent[2], 1, 0, cv::Mat(), rHistContent, 1, &binAmount, &histRange, true, false);
+			cv::normalize(rHistContent, rHistContent, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+			//check if they are really different
+			double corr = cv::compareHist(bHistMargin, bHistContent, CV_COMP_CORREL);
+			corr += cv::compareHist(gHistMargin, gHistContent, CV_COMP_CORREL);
+			corr += cv::compareHist(rHistMargin, rHistContent, CV_COMP_CORREL);
+			std::cout << "upper corr: " << corr << std::endl;
+			if (corr < 1.5) {
+				for (int i = 0; i < upperBorder; i += step) {
+					//test histogram
+					cv::vector<cv::Mat> bgrPlanesCompare;
+					cv::split(croppedImage.rowRange(i, i + step), bgrPlanesCompare);
+					cv::Mat bHistCompare, gHistCompare, rHistCompare;
+					cv::calcHist(&bgrPlanesCompare[0], 1, 0, cv::Mat(), bHistCompare, 1, &binAmount, &histRange, true, false);
+					cv::normalize(bHistCompare, bHistCompare, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+					cv::calcHist(&bgrPlanesCompare[1], 1, 0, cv::Mat(), gHistCompare, 1, &binAmount, &histRange, true, false);
+					cv::normalize(gHistCompare, gHistCompare, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+					cv::calcHist(&bgrPlanesCompare[2], 1, 0, cv::Mat(), rHistCompare, 1, &binAmount, &histRange, true, false);
+					cv::normalize(rHistCompare, rHistCompare, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+					//compare
+					double marginB = cv::compareHist(bHistMargin, bHistCompare, CV_COMP_CORREL);
+					double marginG = cv::compareHist(gHistMargin, gHistCompare, CV_COMP_CORREL);
+					double marginR = cv::compareHist(rHistMargin, rHistCompare, CV_COMP_CORREL);
+					double contentB = cv::compareHist(bHistContent, bHistCompare, CV_COMP_CORREL);
+					double contentG = cv::compareHist(gHistContent, gHistCompare, CV_COMP_CORREL);
+					double contentR = cv::compareHist(rHistContent, rHistCompare, CV_COMP_CORREL);
+					double marginCorrel = marginB + marginG + marginR;
+					double contentCorrel = contentB + contentG + contentR;
+					if (contentCorrel > marginCorrel) {
+						croppedImage = croppedImage.rowRange(i + step, croppedImage.rows);
+						std::cout << "hist upper crop by: " << i << "	" << croppedImage.rows - upperBorder <<std::endl;
+						break;
+					}
+				}
 			}
 		}
 	}
