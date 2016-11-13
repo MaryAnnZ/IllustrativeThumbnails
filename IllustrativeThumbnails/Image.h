@@ -22,7 +22,7 @@ public:
 	cv::Mat getSaliencyMap();
 
 	//central window
-	cv::Mat getCentralWindow();
+	cv::Mat getCroppedImage();
 	
 
 	
@@ -44,7 +44,8 @@ private:
 	void buildGaussPyramid();
 	void buildContrastPyramid();
 	void calculateSaliencyMap();
-	void cropBorders();
+	void cropHorizontalBorders();
+	void cropVerticalBorders();
 
 
 	
