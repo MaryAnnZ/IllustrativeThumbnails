@@ -134,7 +134,7 @@ void Image::loadImage()
 void Image::convertGrayscale()
 {
 	//TODO: RGB or BGR
-	cv::cvtColor(sourceImage, grayscaleImage, CV_BGR2GRAY);
+	cv::cvtColor(getCroppedImage(), grayscaleImage, CV_BGR2GRAY);
 }
 
 void Image::useLaplace()
@@ -429,7 +429,7 @@ bool Image::checkHistogram(Word word)
 
 void Image::convertToCieluv(cv::Mat & img)
 {
-	cv::cvtColor(getSourceImage(), img, CV_BGR2Luv);
+	cv::cvtColor(getCroppedImage(), img, CV_BGR2Luv);
 }
 
 void Image::buildGaussPyramid()
