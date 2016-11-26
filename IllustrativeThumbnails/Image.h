@@ -23,6 +23,8 @@ public:
 
 	//central window
 	cv::Mat getCroppedImage();
+
+	cv::Mat showSeams();
 	
 
 	
@@ -70,6 +72,18 @@ private:
 
 	std::vector<Word> possibleWords;
 	std::vector<Word> words;
+
+	//seam carving
+	//source: http://eric-yuan.me/seam-carving/
+	typedef struct Entity {
+		double data;
+		int path;
+	}entity;
+	int whichMin(float x, float y);
+	int whichMin(float x, float y, float z);
+	void calculateVerticalSeam();
+	void findVerticalPath(std::vector<std::vector<Entity>> pathValues);
+	cv::Mat verticalSeamsImage;
 	
 };
 

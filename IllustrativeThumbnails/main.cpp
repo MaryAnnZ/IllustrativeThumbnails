@@ -11,8 +11,14 @@ void main()
 	Image* img = new Image();
 	
 	if (!img->getSourceImage().empty()) {
-		cvNamedWindow("helloWorld");
-		cv::imshow("helloWorld", img->getSaliencyMap());
+		cvNamedWindow("seams");
+		cv::imshow("seams", img->showSeams());
+		cvNamedWindow("importanceMap");
+		cv::imshow("importanceMap", img->getSaliencyMap());
+		cvNamedWindow("cropped");
+		cv::imshow("cropped", img->getCroppedImage());
+		cvNamedWindow("source");
+		cv::imshow("source", img->getSourceImage());
 	}
 
 	

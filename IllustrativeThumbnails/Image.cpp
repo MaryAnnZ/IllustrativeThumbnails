@@ -83,6 +83,7 @@ cv::Mat Image::getSaliencyMap()
 		buildContrastPyramid();
 		calculateSaliencyMap();
 	}
+
 	return saliencyMap;
 }
 
@@ -94,6 +95,16 @@ cv::Mat Image::getCroppedImage()
 		cropVerticalBorders();
 	}
 	return croppedImage;
+}
+
+cv::Mat Image::showSeams()
+{
+	if (verticalSeamsImage.empty()) {
+		for (int count = 0; count < 200; count++) {
+			calculateVerticalSeam();
+		}
+	}
+	return verticalSeamsImage;
 }
 
 void Image::loadImage()
@@ -491,7 +502,7 @@ void Image::buildContrastPyramid()
 					int yDist = maxY - y;
 					double myDistance = cv::sqrt(xDist * xDist + yDist * yDist);
 					double weight = 1 - (myDistance / maxDistance);
-					contrastMap.at<uchar>(cv::Point(x, y)) = colorDistances * weight;
+					contrastMap.at<uchar>(cv::Point(x, y)) = colorDistances;// *weight;
 				}
 			}
 			//cut the unfiltered margins
@@ -840,4 +851,131 @@ void Image::cropVerticalBorders()
 			}
 		}
 	}
+	std::cout << "Origin: " << croppedImage.cols << "	" << croppedImage.rows << std::endl;
+}
+//returns 0 when x > y; 1 else
+int Image::whichMin(float x, float y)
+{
+	if (std::min(x, y) == x || x == y) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+//returns 0 if x is the smallest, 1 if y and 2 else
+int Image::whichMin(float x, float y, float z)
+{
+	if (x == y && y == z) {
+		return 0;
+	}
+	else if (std::min(x, std::min( y, z)) == x) {
+		return 0;
+	}
+	else if (std::min(y, std::min(x, z)) == y) {
+		return 1;
+	}
+	else {
+		return 2;
+	}
+}
+
+//dynamic programming
+#define LEFT -1
+#define MID 0
+#define RIGHT 1
+void Image::calculateVerticalSeam()
+{
+	cv::Mat source = getCroppedImage();
+	cv::Mat importanceMap = getSaliencyMap();
+
+	std::vector<std::vector<Entity>> pathValues = std::vector<std::vector<Entity>>(source.cols, std::vector<Entity>(source.rows));
+	int t = 0;
+	for (int j = 0; j < source.rows; j++) {
+		for (int i = 0; i < source.cols; i++) {
+			if (j == 0) { //first row
+				pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j));
+				pathValues.at(i).at(j).path = 0;
+			}
+			else { // not in the forst row
+				if (i == 0) { //first col
+					t = whichMin(pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data);
+					pathValues.at(i).at(j).data =(float) importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + MID + t).at(j - 1).data;
+					pathValues.at(i).at(j).path = MID + t;
+				} 
+				else if (i == source.cols - 1) { //last col
+					t = whichMin(pathValues.at(i + LEFT).at(j - 1).data, pathValues.at(i + MID).at(j - 1).data);
+					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
+					pathValues.at(i).at(j).path = LEFT + t;
+
+				}
+				else { // middle area
+					t = whichMin(pathValues.at(i + LEFT).at(j - 1).data, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data);
+					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
+					pathValues.at(i).at(j).path = LEFT + t;
+				}
+			}
+		}
+	}
+	//for (int i = 0; i < source.cols; i++) {
+	//	std::cout << pathValues.at(i).at(source.rows - 1).data << std::endl;
+	//}
+	//std::cout << "########" << std::endl;
+	findVerticalPath(pathValues);
+}
+
+void Image::findVerticalPath(std::vector<std::vector<Entity>> pathValues)
+{
+	cv::Mat source = getCroppedImage();
+	int lastMinImportance = 0;
+	for (int count = 0; count < 1; count++) {
+		int j = source.rows - 1;
+		float minImportance = 0;
+		int minIndex = 0;
+		float maxImportance = 0;
+		for (int i = 0; i < source.cols; i++) {
+			if (i == 0) {
+				minImportance = pathValues.at(i).at(j).data;
+				minIndex = i;
+				maxImportance = pathValues.at(i).at(j).data;
+			}
+			else {
+				float curr = pathValues.at(i).at(j).data;
+				if (curr < minImportance) {
+					minImportance = curr;
+					minIndex = i;
+				}
+				else if (curr > maxImportance) {
+					maxImportance = curr;
+				}
+			}
+		}
+		if (lastMinImportance == minImportance) {
+			count--;
+		}
+		lastMinImportance = minImportance;
+		pathValues.at(minIndex).at(j).data = maxImportance;
+		//std::cout << "min index: " << minIndex << std::endl;
+		int x = minIndex;
+		cv::Mat newSource = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC3);
+		cv::Mat newSaliancyMap = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC1);
+		for (int y = source.rows - 1; y >= 0; y--) {
+			source.at<cv::Vec3b>(cv::Point(x, y)) = cv::Vec3b(0, 0, 255);
+			for (int myX = 0; myX < newSource.cols; myX++) {
+				if (myX < x) {
+					newSource.at<cv::Vec3b>(cv::Point(myX, y)) = source.at<cv::Vec3b>(cv::Point(myX, y));
+					newSaliancyMap.at<uchar>(cv::Point(myX, y)) = getSaliencyMap().at<uchar>(cv::Point(myX, y));
+				}
+				else {
+					newSource.at<cv::Vec3b>(cv::Point(myX, y)) = source.at<cv::Vec3b>(cv::Point(myX + 1, y));
+					newSaliancyMap.at<uchar>(cv::Point(myX, y)) = getSaliencyMap().at<uchar>(cv::Point(myX + 1, y));
+				}
+			}
+			//std::cout << x << "		" << y << std::endl;
+			x = x + pathValues.at(x).at(y).path;
+		}
+		croppedImage = newSource;
+		saliencyMap = newSaliancyMap;
+	}
+	//std::cout << "######## " << croppedImage.cols << "		" << croppedImage.rows << std::endl;
+	verticalSeamsImage = source;
 }
