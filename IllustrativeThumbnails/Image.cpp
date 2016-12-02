@@ -100,8 +100,21 @@ cv::Mat Image::getCroppedImage()
 cv::Mat Image::showSeams()
 {
 	if (verticalSeamsImage.empty()) {
-		for (int count = 0; count < 200; count++) {
-			calculateVerticalSeam();
+		for (int count = 0; count < 300; count++) {
+			if (count != 0 && count % 3 == 0) {
+				cv::transpose(verticalSeamsImage, verticalSeamsImage);
+				cv::flip(verticalSeamsImage, verticalSeamsImage, 1);
+				cv::transpose(saliencyMap, saliencyMap);
+				cv::flip(saliencyMap, saliencyMap, 1);
+				calculateVerticalSeam();
+				cv::transpose(verticalSeamsImage, verticalSeamsImage);
+				cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
+				cv::transpose(saliencyMap, saliencyMap);
+				cv::flip(saliencyMap, saliencyMap, 0);
+			} 
+			else {
+				calculateVerticalSeam();
+			}
 		}
 	}
 	return verticalSeamsImage;
@@ -885,7 +898,13 @@ int Image::whichMin(float x, float y, float z)
 #define RIGHT 1
 void Image::calculateVerticalSeam()
 {
-	cv::Mat source = getCroppedImage();
+	cv::Mat source;
+	if (verticalSeamsImage.empty()) {
+		source = cv::Mat(getCroppedImage());
+	}
+	else {
+		source = verticalSeamsImage;
+	}
 	cv::Mat importanceMap = getSaliencyMap();
 
 	std::vector<std::vector<Entity>> pathValues = std::vector<std::vector<Entity>>(source.cols, std::vector<Entity>(source.rows));
@@ -925,7 +944,13 @@ void Image::calculateVerticalSeam()
 
 void Image::findVerticalPath(std::vector<std::vector<Entity>> pathValues)
 {
-	cv::Mat source = getCroppedImage();
+	cv::Mat source;
+	if (verticalSeamsImage.empty()) {
+		source = cv::Mat(getCroppedImage());
+	}
+	else {
+		source = verticalSeamsImage;
+	}
 	int lastMinImportance = 0;
 	for (int count = 0; count < 1; count++) {
 		int j = source.rows - 1;
@@ -959,7 +984,7 @@ void Image::findVerticalPath(std::vector<std::vector<Entity>> pathValues)
 		cv::Mat newSource = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC3);
 		cv::Mat newSaliancyMap = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC1);
 		for (int y = source.rows - 1; y >= 0; y--) {
-			source.at<cv::Vec3b>(cv::Point(x, y)) = cv::Vec3b(0, 0, 255);
+			//source.at<cv::Vec3b>(cv::Point(x, y)) = cv::Vec3b(0, 0, 255);
 			for (int myX = 0; myX < newSource.cols; myX++) {
 				if (myX < x) {
 					newSource.at<cv::Vec3b>(cv::Point(myX, y)) = source.at<cv::Vec3b>(cv::Point(myX, y));
@@ -973,7 +998,7 @@ void Image::findVerticalPath(std::vector<std::vector<Entity>> pathValues)
 			//std::cout << x << "		" << y << std::endl;
 			x = x + pathValues.at(x).at(y).path;
 		}
-		croppedImage = newSource;
+		source = newSource;
 		saliencyMap = newSaliancyMap;
 	}
 	//std::cout << "######## " << croppedImage.cols << "		" << croppedImage.rows << std::endl;
