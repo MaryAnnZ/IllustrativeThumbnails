@@ -406,12 +406,6 @@ void Image::checkWords()
 					if (maxxOk) {
 						words.push_back(w);
 					}
-					else {
-						std::cout << "NOT WORD 2" << std::endl;
-					}
-				}
-				else {
-					std::cout << "NOT WORD" << std::endl;
 				}
 			}
 		}
@@ -548,7 +542,12 @@ void Image::calculateSaliencyMap()
 			for (int y = 0; y < textImage.rows; y++) {
 				cv::Scalar color = textImage.at<cv::Vec3b>(cv::Point(x, y));
 				if (color.val[0] == 100) {
-					mySaliencyMap.at<uchar>(cv::Point(x, y)) = mySaliencyMap.at<uchar>(cv::Point(x, y)) * 2;
+					if (mySaliencyMap.at<uchar>(cv::Point(x, y)) < 125) {
+						mySaliencyMap.at<uchar>(cv::Point(x, y)) = mySaliencyMap.at<uchar>(cv::Point(x, y)) * 2;
+					}
+					else {
+						mySaliencyMap.at<uchar>(cv::Point(x, y)) = 255;
+					}
 				}
 			}
 		}
