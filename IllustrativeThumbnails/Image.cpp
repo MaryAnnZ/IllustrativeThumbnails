@@ -97,7 +97,7 @@ cv::Mat Image::getCroppedImage()
 	return croppedImage;
 }
 
-cv::Mat Image::showSeams()
+cv::Mat Image::showSeamCarved()
 {
 	if (verticalSeamsImage.empty()) {
 		for (int count = 0; count < 300; count++) {
@@ -118,6 +118,11 @@ cv::Mat Image::showSeams()
 		}
 	}
 	return verticalSeamsImage;
+}
+
+cv::Mat Image::showSeams()
+{
+	return showSeamsImage;
 }
 
 void Image::loadImage()
@@ -943,63 +948,85 @@ void Image::calculateVerticalSeam()
 
 void Image::findVerticalPath(std::vector<std::vector<Entity>> pathValues)
 {
+	bool drawSeams = false;
 	cv::Mat source;
 	if (verticalSeamsImage.empty()) {
 		source = cv::Mat(getCroppedImage());
+		drawSeams = true;
 	}
 	else {
 		source = verticalSeamsImage;
 	}
-	int lastMinImportance = 0;
-	for (int count = 0; count < 1; count++) {
-		int j = source.rows - 1;
-		float minImportance = 0;
-		int minIndex = 0;
-		float maxImportance = 0;
-		for (int i = 0; i < source.cols; i++) {
-			if (i == 0) {
-				minImportance = pathValues.at(i).at(j).data;
-				minIndex = i;
-				maxImportance = pathValues.at(i).at(j).data;
-			}
-			else {
-				float curr = pathValues.at(i).at(j).data;
-				if (curr < minImportance) {
-					minImportance = curr;
+	if (drawSeams) {
+		showSeamsImage = source.clone();
+		/*source.copyTo(showSeamsImage);*/
+		std::vector<int> visitedStartPoints;
+		for (int count = 0; count < 1000; count++) {
+			int j = source.rows - 1;
+			float minImportance = 0;
+			int minIndex = 0;
+			for (int i = 0; i < source.cols; i++) {
+				if (i == 0) {
+					minImportance = pathValues.at(i).at(j).data;
 					minIndex = i;
 				}
-				else if (curr > maxImportance) {
-					maxImportance = curr;
+				else {
+					float curr = pathValues.at(i).at(j).data;
+					if (curr < minImportance && std::find(visitedStartPoints.begin(), visitedStartPoints.end(), i) == visitedStartPoints.end()) {
+						minImportance = curr;
+						minIndex = i;
+					}
 				}
 			}
-		}
-		if (lastMinImportance == minImportance) {
-			count--;
-		}
-		lastMinImportance = minImportance;
-		pathValues.at(minIndex).at(j).data = maxImportance;
-		//std::cout << "min index: " << minIndex << std::endl;
-		int x = minIndex;
-		cv::Mat newSource = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC3);
-		cv::Mat newSaliancyMap = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC1);
-		for (int y = source.rows - 1; y >= 0; y--) {
-			//source.at<cv::Vec3b>(cv::Point(x, y)) = cv::Vec3b(0, 0, 255);
-			for (int myX = 0; myX < newSource.cols; myX++) {
-				if (myX < x) {
-					newSource.at<cv::Vec3b>(cv::Point(myX, y)) = source.at<cv::Vec3b>(cv::Point(myX, y));
-					newSaliancyMap.at<uchar>(cv::Point(myX, y)) = getSaliencyMap().at<uchar>(cv::Point(myX, y));
+			visitedStartPoints.push_back(minIndex);
+			int x = minIndex;
+			for (int y = source.rows - 1; y >= 0; y--) {
+				if (count == 0) {
+					showSeamsImage.at<cv::Vec3b>(cv::Point(x, y)) = cv::Vec3b(0, 0, 255);
 				}
 				else {
-					newSource.at<cv::Vec3b>(cv::Point(myX, y)) = source.at<cv::Vec3b>(cv::Point(myX + 1, y));
-					newSaliancyMap.at<uchar>(cv::Point(myX, y)) = getSaliencyMap().at<uchar>(cv::Point(myX + 1, y));
+					if (showSeamsImage.at<cv::Vec3b>(cv::Point(x, y)) != cv::Vec3b(0, 0, 255)) {
+						showSeamsImage.at<cv::Vec3b>(cv::Point(x, y)) = cv::Vec3b(255, 0, 0);
+					}
 				}
+				x = x + pathValues.at(x).at(y).path;
 			}
-			//std::cout << x << "		" << y << std::endl;
-			x = x + pathValues.at(x).at(y).path;
 		}
-		source = newSource;
-		saliencyMap = newSaliancyMap;
 	}
-	//std::cout << "######## " << croppedImage.cols << "		" << croppedImage.rows << std::endl;
-	verticalSeamsImage = source;
+	int j = source.rows - 1;
+	float minImportance = 0;
+	int minIndex = 0;
+	for (int i = 0; i < source.cols; i++) {
+		if (i == 0) {
+			minImportance = pathValues.at(i).at(j).data;
+			minIndex = i;
+		}
+		else {
+			float curr = pathValues.at(i).at(j).data;
+			if (curr < minImportance) {
+				minImportance = curr;
+				minIndex = i;
+			}
+		}
+	}
+	int x = minIndex;
+	cv::Mat newSource = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC3);
+	cv::Mat newSaliancyMap = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC1);
+	for (int y = source.rows - 1; y >= 0; y--) {
+		//source.at<cv::Vec3b>(cv::Point(x, y)) = cv::Vec3b(0, 0, 255);
+		for (int myX = 0; myX < newSource.cols; myX++) {
+			if (myX < x) {
+				newSource.at<cv::Vec3b>(cv::Point(myX, y)) = source.at<cv::Vec3b>(cv::Point(myX, y));
+				newSaliancyMap.at<uchar>(cv::Point(myX, y)) = getSaliencyMap().at<uchar>(cv::Point(myX, y));
+			}
+			else {
+				newSource.at<cv::Vec3b>(cv::Point(myX, y)) = source.at<cv::Vec3b>(cv::Point(myX + 1, y));
+				newSaliancyMap.at<uchar>(cv::Point(myX, y)) = getSaliencyMap().at<uchar>(cv::Point(myX + 1, y));
+			}
+		}
+		//std::cout << x << "		" << y << std::endl;
+		x = x + pathValues.at(x).at(y).path;
+	}
+	verticalSeamsImage = newSource;
+	saliencyMap = newSaliancyMap;
 }

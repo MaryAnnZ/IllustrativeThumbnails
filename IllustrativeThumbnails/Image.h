@@ -24,6 +24,7 @@ public:
 	//central window
 	cv::Mat getCroppedImage();
 
+	cv::Mat showSeamCarved();
 	cv::Mat showSeams();
 	
 
@@ -84,6 +85,7 @@ private:
 	void calculateVerticalSeam();
 	void findVerticalPath(std::vector<std::vector<Entity>> pathValues);
 	cv::Mat verticalSeamsImage;
+	cv::Mat showSeamsImage;
 	
 };
 

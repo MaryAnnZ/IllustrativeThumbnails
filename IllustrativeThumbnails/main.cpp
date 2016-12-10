@@ -11,14 +11,14 @@ void main()
 	Image* img = new Image();
 	
 	if (!img->getSourceImage().empty()) {
-		/*cvNamedWindow("seams");
-		cv::imshow("seams", img->showSeams());*/
+		cvNamedWindow("seamCarved");
+		cv::imshow("seamCarved", img->showSeamCarved());
 		cvNamedWindow("importanceMap");
 		cv::imshow("importanceMap", img->getSaliencyMap());
-		/*cvNamedWindow("cropped");
-		cv::imshow("cropped", img->getCroppedImage());
+		cvNamedWindow("seams");
+		cv::imshow("seams", img->showSeams());
 		cvNamedWindow("source");
-		cv::imshow("source", img->getSourceImage());*/
+		cv::imshow("source", img->getSourceImage());
 	}
 
 	
