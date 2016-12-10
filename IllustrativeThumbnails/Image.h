@@ -82,6 +82,8 @@ private:
 	}entity;
 	int whichMin(float x, float y);
 	int whichMin(float x, float y, float z);
+	int whichMin(float x, float y, float z, float v);
+	int whichMin(float x, float y, float z, float v, float w);
 	void calculateVerticalSeam();
 	void findVerticalPath(std::vector<std::vector<Entity>> pathValues);
 	cv::Mat verticalSeamsImage;

@@ -547,8 +547,8 @@ void Image::calculateSaliencyMap()
 			for (int y = 0; y < textImage.rows; y++) {
 				cv::Scalar color = textImage.at<cv::Vec3b>(cv::Point(x, y));
 				if (color.val[0] == 100) {
-					if (mySaliencyMap.at<uchar>(cv::Point(x, y)) < 125) {
-						mySaliencyMap.at<uchar>(cv::Point(x, y)) = mySaliencyMap.at<uchar>(cv::Point(x, y)) * 2;
+					if (mySaliencyMap.at<uchar>(cv::Point(x, y)) < 155) {
+						mySaliencyMap.at<uchar>(cv::Point(x, y)) = 100 + mySaliencyMap.at<uchar>(cv::Point(x, y));
 					}
 					else {
 						mySaliencyMap.at<uchar>(cv::Point(x, y)) = 255;
@@ -883,7 +883,7 @@ int Image::whichMin(float x, float y)
 int Image::whichMin(float x, float y, float z)
 {
 	if (x == y && y == z) {
-		return 0;
+		return 1;
 	}
 	else if (std::min(x, std::min( y, z)) == x) {
 		return 0;
@@ -896,10 +896,54 @@ int Image::whichMin(float x, float y, float z)
 	}
 }
 
+int Image::whichMin(float x, float y, float z, float v)
+{
+	if (x == y && y == z && z == v) {
+		return 1;
+	}
+	else if (std::min(std::min(x, y), std::min(z, v)) == x) {
+		return 0;
+	}
+	else if (std::min(std::min(x, y), std::min(z, v)) == y) {
+		return 1;
+	}
+	else if (std::min(std::min(x, y), std::min(z, v)) == z) {
+		return 2;
+	}
+	else {
+		return 3;
+	}
+}
+
+int Image::whichMin(float x, float y, float z, float v, float w)
+{
+	if (x == y && y == z && z == v && v == w) {
+		return 2;
+	} else if (std::min(std::min(std::min(x, y), std::min(z, v)), w) == x) {
+		return 0;
+	}
+	else if (std::min(std::min(std::min(x, y), std::min(z, v)), w) == y) {
+		return 1;
+	}
+	else if (std::min(std::min(std::min(x, y), std::min(z, v)), w) == z) {
+		return 2;
+	}
+	else if (std::min(std::min(std::min(x, y), std::min(z, v)), w) == v) {
+		return 3;
+	}
+	else {
+		return 4;
+	}
+}
+
 //dynamic programming
+#define LLEFT -2
 #define LEFT -1
 #define MID 0
 #define RIGHT 1
+#define RRIGHT 2
+#define WEIGHT1 std::sqrt(2) 
+#define WEIGHT2 std::sqrt(5) 
 void Image::calculateVerticalSeam()
 {
 	cv::Mat source;
@@ -919,22 +963,32 @@ void Image::calculateVerticalSeam()
 				pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j));
 				pathValues.at(i).at(j).path = 0;
 			}
-			else { // not in the forst row
+			else { // not in the first row
 				if (i == 0) { //first col
-					t = whichMin(pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data);
+					t = whichMin(pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
 					pathValues.at(i).at(j).data =(float) importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + MID + t).at(j - 1).data;
 					pathValues.at(i).at(j).path = MID + t;
 				} 
-				else if (i == source.cols - 1) { //last col
-					t = whichMin(pathValues.at(i + LEFT).at(j - 1).data, pathValues.at(i + MID).at(j - 1).data);
+				else if (i == 1) { //second row
+					t = whichMin(pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
 					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
 					pathValues.at(i).at(j).path = LEFT + t;
+				}
+				else if (i == source.cols - 2) {//second to last row
+					t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1);
+					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
+					pathValues.at(i).at(j).path = LLEFT + t;
+				}
+				else if (i == source.cols - 1) { //last col
+					t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data);
+					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
+					pathValues.at(i).at(j).path = LLEFT + t;
 
 				}
 				else { // middle area
-					t = whichMin(pathValues.at(i + LEFT).at(j - 1).data, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data);
-					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
-					pathValues.at(i).at(j).path = LEFT + t;
+					t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
+					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
+					pathValues.at(i).at(j).path = LLEFT + t;
 				}
 			}
 		}
@@ -959,7 +1013,6 @@ void Image::findVerticalPath(std::vector<std::vector<Entity>> pathValues)
 	}
 	if (drawSeams) {
 		showSeamsImage = source.clone();
-		/*source.copyTo(showSeamsImage);*/
 		std::vector<int> visitedStartPoints;
 		for (int count = 0; count < 1000; count++) {
 			int j = source.rows - 1;
