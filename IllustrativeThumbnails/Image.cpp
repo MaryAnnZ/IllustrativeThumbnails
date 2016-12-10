@@ -12,9 +12,34 @@
 
 
 
-Image::Image()
+Image::Image(std::map<std::string, double> configData)
 {
 	loadImage();
+	//initialize params
+	kernelSizeLaplace = configData["kernelSizeLaplace"];
+	scaleLaplace = configData["scaleLaplace"];
+	deltaLaplace = configData["deltaLaplace"];
+	horizontalLineOffset = configData["horizontalLineOffset"];
+	convertBinaryTh = configData["convertBinaryTh"];
+	blurWidth = configData["blurWidth"];
+	blurHeight = configData["blurHeight"];
+	findStringBinaryTh = configData["findStringBinaryTh"];
+	minWordWidth = configData["minWordWidth"];
+	minWordHeight = configData["minWordHeight"];
+	minAvgHeight = configData["minAvgHeight"];
+	maxAvgHeight = configData["maxAvgHeight"];
+	histSize = configData["histSize"];
+	minHistRange = configData["minHistRange"];
+	maxHistRange = configData["maxHistRange"];
+	histTh = configData["histTh"];
+	wordWeight = configData["wordWeight"];
+	borderSize = configData["borderSize"];
+	borderSteps = configData["borderSteps"];
+	lowerBorderCorr = configData["lowerBorderCorr"];
+	upperBorderCorr = configData["upperBorderCorr"];
+	leftBorderCorr = configData["leftBorderCorr"];
+	rightBorderCorr = configData["rightBorderCorr"];
+	debugSeamAmount = configData["debugSeamAmount"];
 }
 
 
@@ -100,6 +125,7 @@ cv::Mat Image::getCroppedImage()
 cv::Mat Image::showSeamCarved()
 {
 	if (verticalSeamsImage.empty()) {
+		//TODO
 		for (int count = 0; count < 300; count++) {
 			if (count != 0 && count % 3 == 0) {
 				cv::transpose(verticalSeamsImage, verticalSeamsImage);
@@ -168,16 +194,10 @@ void Image::convertGrayscale()
 
 void Image::useLaplace()
 {
-	//TODO: set manually?
-	int kernelSize = 3;
-	int scale = 1;
-	int delta = 0;
 	int ddepth = CV_16S;
 	cv::Mat distance;
-
-	cv::Laplacian(getGrayscaleImage(), distance, ddepth, kernelSize, scale, delta, cv::BORDER_DEFAULT);
+	cv::Laplacian(getGrayscaleImage(), distance, ddepth, kernelSizeLaplace, scaleLaplace, deltaLaplace, cv::BORDER_DEFAULT);
 	cv::convertScaleAbs(distance, laplaceImage);
-
 }
 
 cv::Mat Image::convertBinary(cv::Mat toProcess, int th, bool invert)
@@ -211,10 +231,7 @@ cv::Mat Image::convertBinary(cv::Mat toProcess, int th, bool invert)
 
 void Image::removeHorizontalLines()
 {
-	//TODO: set manually
-	int offset = 30;
-	cv::Mat toProcess = cv::Mat(convertBinary(getLaplaceImage(), 200, false));
-
+	cv::Mat toProcess = cv::Mat(convertBinary(getLaplaceImage(), convertBinaryTh, false));
 
 	cv::Scalar color;	
 	for (int y = 0; y < toProcess.rows; y++) {
@@ -237,7 +254,7 @@ void Image::removeHorizontalLines()
 				}
 			}
 			else {
-				if (countWhitePixels > offset) {
+				if (countWhitePixels > horizontalLineOffset) {
 					toProcess = cutLine(start, x, y, toProcess);
 					countBlackPixels = 0;
 				}
@@ -260,18 +277,12 @@ cv::Mat Image::cutLine(int startX, int endX, int y, cv::Mat img)
 
 void Image::doBlur()
 {
-	int dilationKernel[] = { 1, 1, 1,
-							 10, 10, 10,
-							1, 1, 1 };
-	cv::Mat kernelMat(3, 3, CV_64FC1, dilationKernel);
-	//cv::dilate(getFilteredLaplaceImage(), dilatedImage, kernelMat, cv::Point(-1, -1), 1, 0, cv::morphologyDefaultBorderValue());
-	cv::Mat test;
-	cv::blur(getFilteredLaplaceImage(), bluredImage, cv::Size(15, 1));
+	cv::blur(getFilteredLaplaceImage(), bluredImage, cv::Size(blurWidth, blurHeight));
 }
 
 void Image::findString()
 {
-	cv::Mat toProcess = convertBinary(getBluredImage(), 100, false);
+	cv::Mat toProcess = convertBinary(getBluredImage(), findStringBinaryTh, false);
 	std::vector<std::vector<cv::Point>> contours;
 	std::vector<cv::Vec4i> hierarchy;
 
@@ -345,7 +356,7 @@ void Image::markAsWord(std::vector<cv::Point> contours)
 
 	int height = maxCorner.y - minCorner.y;
 	int width = maxCorner.x - minCorner.x;
-	if (height > 5 && width > 5) {
+	if (height > minWordWidth && width > minWordHeight) {
 		possibleWords.push_back(Word(minCorner, maxCorner));
 	}
 
@@ -365,7 +376,7 @@ void Image::checkWords()
 	if (!possibleWords.empty()) {
 		double avgHeight = sumHeight / possibleWords.size();
 		for (Word w : possibleWords) {
-			if (w.getHeight() >= avgHeight * 0.5 && w.getHeight() < avgHeight * 200) {
+			if (w.getHeight() >= avgHeight * minAvgHeight && w.getHeight() < avgHeight * maxAvgHeight) {
 				if (checkHistogram(w)) {
 					bool maxxOk = true;
 					if ((std::find(minY.begin(), minY.end(), w.getMaxCorner().y) != minY.end())) {
@@ -423,8 +434,7 @@ bool Image::checkHistogram(Word word)
 	cv::Rect rect = cv::Rect(word.getMinCorner(), word.getMaxCorner());
 	cv::Mat source = getGrayscaleImage();
 	cv::Mat roi = source(rect);
-	int histSize = 10;
-	float range[] = { 0, 256 };
+	float range[] = { minHistRange, maxHistRange };
 	const float* histRange = { range };
 	cv::Mat histogram;
 	cv::calcHist(&roi, 1, 0, cv::Mat(), histogram, 1, &histSize, &histRange, true, false);
@@ -442,7 +452,7 @@ bool Image::checkHistogram(Word word)
 			}
 		}
 	}
-	if ((sumMax1 + sumMax2) > (sumPixels * 0.65)) {
+	if ((sumMax1 + sumMax2) > (sumPixels * histTh)) {
 		return true;
 	}
 	else {
@@ -457,6 +467,7 @@ void Image::convertToCieluv(cv::Mat & img)
 
 void Image::buildGaussPyramid()
 {
+	//TODO #levels
 	int pyramidLevels = (int)log2(getCieluvImage().rows / 10);
 	if (gaussPyramid.empty()) {
 		for (int i = 0; i < pyramidLevels; i++) {
@@ -529,7 +540,7 @@ void Image::buildContrastPyramid()
 
 void Image::calculateSaliencyMap()
 {
-
+	//TODO map weight
 	if (!contrastPyramid.empty()) {
 		cv::Mat mySaliencyMap = cv::Mat::zeros(getCieluvImage().size(), CV_8UC1);
 		double mapWeight = 1.0 / contrastPyramid.size();
@@ -547,8 +558,8 @@ void Image::calculateSaliencyMap()
 			for (int y = 0; y < textImage.rows; y++) {
 				cv::Scalar color = textImage.at<cv::Vec3b>(cv::Point(x, y));
 				if (color.val[0] == 100) {
-					if (mySaliencyMap.at<uchar>(cv::Point(x, y)) < 155) {
-						mySaliencyMap.at<uchar>(cv::Point(x, y)) = 100 + mySaliencyMap.at<uchar>(cv::Point(x, y));
+					if (mySaliencyMap.at<uchar>(cv::Point(x, y)) < 255 - wordWeight) {
+						mySaliencyMap.at<uchar>(cv::Point(x, y)) = wordWeight + mySaliencyMap.at<uchar>(cv::Point(x, y));
 					}
 					else {
 						mySaliencyMap.at<uchar>(cv::Point(x, y)) = 255;
@@ -563,7 +574,7 @@ void Image::calculateSaliencyMap()
 void Image::cropHorizontalBorders()
 {
 	cv::Mat source = getSourceImage();
-	int borderArea = source.rows * 0.2;
+	int borderArea = source.rows * borderSize;
 	int upperCroppingPoint = 0;
 	//detect line
 	for (int y = 0; y < borderArea; y++) {
@@ -598,7 +609,7 @@ void Image::cropHorizontalBorders()
 	croppedImage = source.rowRange(upperCroppingPoint, lowerCroppingPoint);
 	//calculate histogram for lower border
 	if (lowerCroppingPoint >source.rows - borderArea / 2) {
-		int step = source.rows * 0.025;
+		int step = source.rows * borderSteps;
 		int binAmount = 256;
 		float range[] = { 0, 256 };
 		const float* histRange = { range };
@@ -626,7 +637,7 @@ void Image::cropHorizontalBorders()
 		double corr = cv::compareHist(bHistMargin, bHistContent, CV_COMP_CORREL);
 		corr += cv::compareHist(gHistMargin, gHistContent, CV_COMP_CORREL);
 		corr += cv::compareHist(rHistMargin, rHistContent, CV_COMP_CORREL);
-		if (corr < 1.3) {
+		if (corr < lowerBorderCorr) {
 			for (int i = croppedImage.rows; i > croppedImage.rows - borderArea; i -= step) {
 				//test histogram
 				cv::vector<cv::Mat> bgrPlanesCompare;
@@ -655,7 +666,7 @@ void Image::cropHorizontalBorders()
 		}
 		//calculate histogram for upper border
 		if (upperCroppingPoint < borderArea) {
-			int step = source.rows * 0.025;
+			int step = source.rows * borderSteps;
 			int binAmount = 256;
 			float range[] = { 0, 256 };
 			const float* histRange = { range };
@@ -683,7 +694,7 @@ void Image::cropHorizontalBorders()
 			double corr = cv::compareHist(bHistMargin, bHistContent, CV_COMP_CORREL);
 			corr += cv::compareHist(gHistMargin, gHistContent, CV_COMP_CORREL);
 			corr += cv::compareHist(rHistMargin, rHistContent, CV_COMP_CORREL);
-			if (corr < 2) {
+			if (corr < upperBorderCorr) {
 				for (int i = 0; i < borderArea; i += step) {
 					//test histogram
 					cv::vector<cv::Mat> bgrPlanesCompare;
@@ -717,7 +728,7 @@ void Image::cropHorizontalBorders()
 void Image::cropVerticalBorders()
 {
 	cv::Mat source = getCroppedImage();
-	int borderArea = source.cols * 0.2;
+	int borderArea = source.cols * borderSize;
 	int leftCroppingPoint = 0;
 	//detect line
 	for (int x = 0; x < borderArea; x++) {
@@ -754,7 +765,7 @@ void Image::cropVerticalBorders()
 	croppedImage = source.colRange(leftCroppingPoint, rightCroppingPoint);
 	//calculate histogram for left border
 	if (leftCroppingPoint < borderArea / 2) {
-		int step = source.rows * 0.025;
+		int step = source.rows * borderSteps;
 		int binAmount = 256;
 		float range[] = { 0, 256 };
 		const float* histRange = { range };
@@ -782,7 +793,7 @@ void Image::cropVerticalBorders()
 		double corr = cv::compareHist(bHistMargin, bHistContent, CV_COMP_CORREL);
 		corr += cv::compareHist(gHistMargin, gHistContent, CV_COMP_CORREL);
 		corr += cv::compareHist(rHistMargin, rHistContent, CV_COMP_CORREL);
-		if (corr < 2) {
+		if (corr < leftBorderCorr) {
 			for (int i = 0; i < borderArea; i += step) {
 				//test histogram
 				cv::vector<cv::Mat> bgrPlanesCompare;
@@ -812,7 +823,7 @@ void Image::cropVerticalBorders()
 	}
 	//calculate histogram for right border
 	if (rightCroppingPoint > source.cols - borderArea / 2) {
-		int step = source.rows * 0.025;
+		int step = source.rows * borderSteps;
 		int binAmount = 256;
 		float range[] = { 0, 256 };
 		const float* histRange = { range };
@@ -840,7 +851,7 @@ void Image::cropVerticalBorders()
 		double corr = cv::compareHist(bHistMargin, bHistContent, CV_COMP_CORREL);
 		corr += cv::compareHist(gHistMargin, gHistContent, CV_COMP_CORREL);
 		corr += cv::compareHist(rHistMargin, rHistContent, CV_COMP_CORREL);
-		if (corr < 1.3) {
+		if (corr < rightBorderCorr) {
 			for (int i = croppedImage.cols; i > croppedImage.cols - borderArea; i -= step) {
 				//test histogram
 				cv::vector<cv::Mat> bgrPlanesCompare;
@@ -993,10 +1004,6 @@ void Image::calculateVerticalSeam()
 			}
 		}
 	}
-	//for (int i = 0; i < source.cols; i++) {
-	//	std::cout << pathValues.at(i).at(source.rows - 1).data << std::endl;
-	//}
-	//std::cout << "########" << std::endl;
 	findVerticalPath(pathValues);
 }
 
@@ -1014,7 +1021,7 @@ void Image::findVerticalPath(std::vector<std::vector<Entity>> pathValues)
 	if (drawSeams) {
 		showSeamsImage = source.clone();
 		std::vector<int> visitedStartPoints;
-		for (int count = 0; count < 1000; count++) {
+		for (int count = 0; count < debugSeamAmount; count++) {
 			int j = source.rows - 1;
 			float minImportance = 0;
 			int minIndex = 0;

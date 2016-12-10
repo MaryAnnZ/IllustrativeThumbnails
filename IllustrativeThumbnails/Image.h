@@ -5,7 +5,7 @@
 class Image
 {
 public:
-	Image();
+	Image(std::map<std::string, double> configData);
 	~Image();
 	
 	cv::Mat getSourceImage();
@@ -60,6 +60,9 @@ private:
 	cv::Mat filteredLaplaceImage;
 	cv::Mat bluredImage;
 	cv::Mat stringImage;
+	int kernelSizeLaplace;
+	int scaleLaplace;
+	int deltaLaplace;
 
 	//scale invariant saliency map
 	cv::Mat cieluvImage;
@@ -70,9 +73,29 @@ private:
 
 	//important central window
 	cv::Mat croppedImage;
+	double borderSize;
+	double borderSteps;
+	double lowerBorderCorr;
+	double upperBorderCorr;
+	double leftBorderCorr;
+	double rightBorderCorr;
 
 	std::vector<Word> possibleWords;
 	std::vector<Word> words;
+	int horizontalLineOffset;
+	int convertBinaryTh;
+	int blurWidth;
+	int blurHeight;
+	int findStringBinaryTh;
+	int minWordWidth;
+	int minWordHeight;
+	double minAvgHeight;
+	double maxAvgHeight;
+	int histSize;
+	int minHistRange;
+	int maxHistRange;
+	double histTh;
+	int wordWeight;
 
 	//seam carving
 	//source: http://eric-yuan.me/seam-carving/
@@ -88,6 +111,7 @@ private:
 	void findVerticalPath(std::vector<std::vector<Entity>> pathValues);
 	cv::Mat verticalSeamsImage;
 	cv::Mat showSeamsImage;
+	int debugSeamAmount;
 	
 };
 
