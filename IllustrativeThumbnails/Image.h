@@ -27,10 +27,9 @@ public:
 	cv::Mat showSeamCarved();
 	cv::Mat showSeams();
 	
-
 	
 private:
-
+	double size;
 	
 	void loadImage();
 	void convertGrayscale();
@@ -107,8 +106,14 @@ private:
 	int whichMin(float x, float y, float z);
 	int whichMin(float x, float y, float z, float v);
 	int whichMin(float x, float y, float z, float v, float w);
-	void calculateVerticalSeam();
-	void findVerticalPath(std::vector<std::vector<Entity>> pathValues);
+	std::vector<std::vector<Entity>> calculateSeams();
+	typedef struct minPixel {
+		int index;
+		double intensity;
+	};
+	minPixel findStartingPoint(std::vector<std::vector<Entity>> pathValues);
+	void findVerticalPath(minPixel startingPoint, std::vector<std::vector<Entity>> pathValues);
+	void drawSeams(std::vector<std::vector<Entity>> pathValues);
 	cv::Mat verticalSeamsImage;
 	cv::Mat showSeamsImage;
 	int debugSeamAmount;
