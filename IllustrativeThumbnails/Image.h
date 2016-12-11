@@ -26,6 +26,8 @@ public:
 
 	cv::Mat showSeamCarved();
 	cv::Mat showSeams();
+
+	cv::Mat getReference();
 	
 	
 private:
@@ -117,6 +119,9 @@ private:
 	cv::Mat verticalSeamsImage;
 	cv::Mat showSeamsImage;
 	int debugSeamAmount;
+	double resamplingTh;
+	int goalWidth;
+	int goalHeight;
 	
 };
 

@@ -34,8 +34,8 @@ void main()
 			cv::imshow("importanceMap", img->getSaliencyMap());
 			cvNamedWindow("seams");
 			cv::imshow("seams", img->showSeams());
-			cvNamedWindow("source");
-			cv::imshow("source", img->getSourceImage());
+			cvNamedWindow("reference");
+			cv::imshow("reference", img->getReference());
 		}
 
 

@@ -41,6 +41,7 @@ Image::Image(std::map<std::string, double> configData)
 	rightBorderCorr = configData["rightBorderCorr"];
 	debugSeamAmount = configData["debugSeamAmount"];
 	size = configData["size"];
+	resamplingTh = configData["resamplingTh"];
 }
 
 
@@ -127,22 +128,24 @@ cv::Mat Image::showSeamCarved()
 {
 	if (verticalSeamsImage.empty()) {
 		//TODO
-		int width = (int) (getSourceImage().cols * size);
-		int height = (int)(getSourceImage().rows * size);
+		goalWidth = (int) (getSourceImage().cols * size);
+		goalHeight = (int)(getSourceImage().rows * size);
 		//first loop
 		
 		std::vector<std::vector<Entity>> pathValues = calculateSeams();
 		drawSeams(pathValues);
 		minPixel startingPoint = findStartingPoint(pathValues);
 		findVerticalPath(startingPoint, pathValues);
+		double originalVertical = 0;
+		double originalHorizontal = 0;
 		//while (verticalSeamsImage.cols != width) {
 		//	std::vector<std::vector<Entity>> pathValues = calculateSeams();
 		//	//drawSeams(pathValues);
 		//	minPixel startingPoint = findStartingPoint(pathValues);
 		//	findVerticalPath(startingPoint, pathValues);
 		//}
-		while (verticalSeamsImage.cols != width || verticalSeamsImage.rows != height) {
-			if (verticalSeamsImage.cols != width && verticalSeamsImage.rows != height) {
+		while (verticalSeamsImage.cols != goalWidth || verticalSeamsImage.rows != goalHeight) {
+			if (verticalSeamsImage.cols != goalWidth && verticalSeamsImage.rows != goalHeight) {
 				//vertical
 				std::vector<std::vector<Entity>> pathValuesVer = calculateSeams();
 				minPixel startingPointVer = findStartingPoint(pathValuesVer);
@@ -153,8 +156,13 @@ cv::Mat Image::showSeamCarved()
 				cv::flip(saliencyMap, saliencyMap, 1);
 				std::vector<std::vector<Entity>> pathValuesHor = calculateSeams();
 				minPixel startingPointHor = findStartingPoint(pathValuesHor);
+				if (originalVertical == 0 && originalVertical == 0) {
+					originalHorizontal = startingPointHor.intensity * resamplingTh / verticalSeamsImage.cols;
+					originalVertical = startingPointVer.intensity * resamplingTh / verticalSeamsImage.rows;
+				}
+				//std::cout << startingPointVer.intensity / verticalSeamsImage.cols << std::endl;
 				//go for horizontal
-				if (startingPointHor.intensity / verticalSeamsImage.cols > startingPointVer.intensity / verticalSeamsImage.rows) {
+				if (startingPointHor.intensity / verticalSeamsImage.cols < startingPointVer.intensity / verticalSeamsImage.rows && (startingPointHor.intensity / verticalSeamsImage.cols) < originalVertical) {
 					findVerticalPath(startingPointHor, pathValuesHor);
 					cv::transpose(verticalSeamsImage, verticalSeamsImage);
 					cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
@@ -162,21 +170,35 @@ cv::Mat Image::showSeamCarved()
 					cv::flip(saliencyMap, saliencyMap, 0);
 				}
 				//go for vertical
-				else {
+				else if ((startingPointVer.intensity / verticalSeamsImage.rows) < originalVertical){
 					cv::transpose(verticalSeamsImage, verticalSeamsImage);
 					cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
 					cv::transpose(saliencyMap, saliencyMap);
 					cv::flip(saliencyMap, saliencyMap, 0);
 					findVerticalPath(startingPointVer, pathValuesVer);
 				}
+				else {
+					cv::transpose(verticalSeamsImage, verticalSeamsImage);
+					cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
+					cv::transpose(saliencyMap, saliencyMap);
+					cv::flip(saliencyMap, saliencyMap, 0);
+					cv::resize(verticalSeamsImage, verticalSeamsImage, cv::Size(goalWidth, goalHeight));
+					cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
+				}
 			}
-			else if (verticalSeamsImage.cols != width) {
+			else if (verticalSeamsImage.cols != goalWidth) {
 				std::vector<std::vector<Entity>> pathValues = calculateSeams();
 				minPixel startingPoint = findStartingPoint(pathValues);
-				findVerticalPath(startingPoint, pathValues);
+				if ((startingPoint.intensity /verticalSeamsImage.cols) < originalVertical) {
+					findVerticalPath(startingPoint, pathValues);
+				}
+				else {
+					cv::resize(verticalSeamsImage, verticalSeamsImage, cv::Size(goalWidth, goalHeight));
+					cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
+							}
 			}
-			else if (verticalSeamsImage.rows != height) {
-				int diff = verticalSeamsImage.rows - height;
+			else if (verticalSeamsImage.rows != goalHeight) {
+				int diff = verticalSeamsImage.rows - goalHeight;
 				for (int i = 0; i < diff; i++) {
 					if (i == 0) {
 						cv::transpose(verticalSeamsImage, verticalSeamsImage);
@@ -186,33 +208,26 @@ cv::Mat Image::showSeamCarved()
 					}
 					std::vector<std::vector<Entity>> pathValues = calculateSeams();
 					minPixel startingPoint = findStartingPoint(pathValues);
-					findVerticalPath(startingPoint, pathValues);
-					if (i == diff - 1) {
+					if ((startingPoint.intensity / verticalSeamsImage.rows) < originalHorizontal) {
+						findVerticalPath(startingPoint, pathValues);
+						if (i == diff - 1) {
+							cv::transpose(verticalSeamsImage, verticalSeamsImage);
+							cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
+							cv::transpose(saliencyMap, saliencyMap);
+							cv::flip(saliencyMap, saliencyMap, 0);
+						}
+					}
+					else {
 						cv::transpose(verticalSeamsImage, verticalSeamsImage);
-						cv::flip(verticalSeamsImage, verticalSeamsImage, 1);
+						cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
 						cv::transpose(saliencyMap, saliencyMap);
-						cv::flip(saliencyMap, saliencyMap, 1);
+						cv::flip(saliencyMap, saliencyMap, 0);
+						cv::resize(verticalSeamsImage, verticalSeamsImage, cv::Size(goalWidth, goalHeight));
+						cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
 					}
 				}
 			}
-
 		}
-		/*for (int count = 0; count < 300; count++) {
-			if (count != 0 && count % 3 == 0) {
-				cv::transpose(verticalSeamsImage, verticalSeamsImage);
-				cv::flip(verticalSeamsImage, verticalSeamsImage, 1);
-				cv::transpose(saliencyMap, saliencyMap);
-				cv::flip(saliencyMap, saliencyMap, 1);
-				calculateSeams();
-				cv::transpose(verticalSeamsImage, verticalSeamsImage);
-				cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
-				cv::transpose(saliencyMap, saliencyMap);
-				cv::flip(saliencyMap, saliencyMap, 0);
-			} 
-			else {
-				calculateSeams();
-			}
-		}*/
 	}
 	return verticalSeamsImage;
 }
@@ -220,6 +235,13 @@ cv::Mat Image::showSeamCarved()
 cv::Mat Image::showSeams()
 {
 	return showSeamsImage;
+}
+
+cv::Mat Image::getReference()
+{
+	cv::Mat result;
+	cv::resize(getCroppedImage(), result, cv::Size(goalWidth, goalHeight));
+	return result;
 }
 
 void Image::loadImage()
