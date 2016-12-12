@@ -114,6 +114,7 @@ private:
 		double intensity;
 	};
 	minPixel findStartingPoint(std::vector<std::vector<Entity>> pathValues);
+	double findMaxImportance(std::vector<std::vector<Entity>> pathValues);
 	void findVerticalPath(minPixel startingPoint, std::vector<std::vector<Entity>> pathValues);
 	void drawSeams(std::vector<std::vector<Entity>> pathValues);
 	cv::Mat verticalSeamsImage;
