@@ -42,6 +42,13 @@ Image::Image(std::map<std::string, double> configData)
 	debugSeamAmount = configData["debugSeamAmount"];
 	size = configData["size"];
 	resamplingTh = configData["resamplingTh"];
+	if (configData["doLines"] == 0) {
+		doLines = false;
+	}
+	else {
+		doLines = true;
+	}
+	std::cout << doLines << std::endl;
 }
 
 
@@ -132,7 +139,7 @@ cv::Mat Image::showSeamCarved()
 		goalHeight = (int)(getSourceImage().rows * size);
 		//first loop
 		
-		std::vector<std::vector<Entity>> pathValues = calculateSeams();
+		std::vector<std::vector<Entity>> pathValues = calculateSeams(true);
 		drawSeams(pathValues);
 		minPixel startingPoint = findStartingPoint(pathValues);
 		findVerticalPath(startingPoint, pathValues);
@@ -142,7 +149,7 @@ cv::Mat Image::showSeamCarved()
 		while (verticalSeamsImage.cols != goalWidth || verticalSeamsImage.rows != goalHeight) {
 			if (verticalSeamsImage.cols != goalWidth && verticalSeamsImage.rows != goalHeight) {
 				//vertical
-				std::vector<std::vector<Entity>> pathValuesVer = calculateSeams();
+				std::vector<std::vector<Entity>> pathValuesVer = calculateSeams(true);
 				minPixel startingPointVer = findStartingPoint(pathValuesVer);
 				if (originalVertical == 0) {
 					originalVertical = findMaxImportance(pathValuesVer) * resamplingTh / verticalSeamsImage.rows;
@@ -153,7 +160,7 @@ cv::Mat Image::showSeamCarved()
 				cv::flip(verticalSeamsImage, verticalSeamsImage, 1);
 				cv::transpose(saliencyMap, saliencyMap);
 				cv::flip(saliencyMap, saliencyMap, 1);
-				std::vector<std::vector<Entity>> pathValuesHor = calculateSeams();
+				std::vector<std::vector<Entity>> pathValuesHor = calculateSeams(false);
 				minPixel startingPointHor = findStartingPoint(pathValuesHor);
 				if (originalHorizontal == 0) {
 					originalHorizontal = findMaxImportance(pathValuesHor) * resamplingTh / verticalSeamsImage.rows;					
@@ -184,8 +191,12 @@ cv::Mat Image::showSeamCarved()
 					cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
 				}
 			}
+			/*else {
+				cv::resize(verticalSeamsImage, verticalSeamsImage, cv::Size(goalWidth, goalHeight));
+				cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
+			}*/
 			else if (verticalSeamsImage.cols != goalWidth) {
-				std::vector<std::vector<Entity>> pathValues = calculateSeams();
+				std::vector<std::vector<Entity>> pathValues = calculateSeams(true);
 				minPixel startingPoint = findStartingPoint(pathValues);
 				if ((startingPoint.intensity /verticalSeamsImage.cols) < originalVertical) {
 					findVerticalPath(startingPoint, pathValues);
@@ -204,7 +215,7 @@ cv::Mat Image::showSeamCarved()
 						cv::transpose(saliencyMap, saliencyMap);
 						cv::flip(saliencyMap, saliencyMap, 1);
 					}
-					std::vector<std::vector<Entity>> pathValues = calculateSeams();
+					std::vector<std::vector<Entity>> pathValues = calculateSeams(false);
 					minPixel startingPoint = findStartingPoint(pathValues);
 					if ((startingPoint.intensity / verticalSeamsImage.rows) < originalHorizontal) {
 						findVerticalPath(startingPoint, pathValues);
@@ -1046,7 +1057,7 @@ int Image::whichMin(float x, float y, float z, float v, float w)
 #define RRIGHT 2
 #define WEIGHT1 std::sqrt(2) 
 #define WEIGHT2 std::sqrt(5) 
-std::vector<std::vector<Image::Entity>> Image::calculateSeams()
+std::vector<std::vector<Image::Entity>> Image::calculateSeams(bool vertical)
 {
 	cv::Mat source;
 	if (verticalSeamsImage.empty()) {
@@ -1058,39 +1069,86 @@ std::vector<std::vector<Image::Entity>> Image::calculateSeams()
 	cv::Mat importanceMap = getSaliencyMap();
 
 	std::vector<std::vector<Entity>> pathValues = std::vector<std::vector<Entity>>(source.cols, std::vector<Entity>(source.rows));
-	int t = 0;
-	for (int j = 0; j < source.rows; j++) {
-		for (int i = 0; i < source.cols; i++) {
-			if (j == 0) { //first row
-				pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j));
-				pathValues.at(i).at(j).path = 0;
-			}
-			else { // not in the first row
-				if (i == 0) { //first col
-					t = whichMin(pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
-					pathValues.at(i).at(j).data =(float) importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + MID + t).at(j - 1).data;
-					pathValues.at(i).at(j).path = MID + t;
-				} 
-				else if (i == 1) { //second row
-					t = whichMin(pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
-					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
-					pathValues.at(i).at(j).path = LEFT + t;
+	if (vertical) {
+		int t = 0;
+		for (int j = 0; j < source.rows; j++) {
+			for (int i = 0; i < source.cols; i++) {
+				if (j == 0) { //first row
+					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j));
+					pathValues.at(i).at(j).path = 0;
 				}
-				else if (i == source.cols - 2) {//second to last row
-					t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1);
-					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
-					pathValues.at(i).at(j).path = LLEFT + t;
-				}
-				else if (i == source.cols - 1) { //last col
-					t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data);
-					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
-					pathValues.at(i).at(j).path = LLEFT + t;
+				else { // not in the first row
+					if (i == 0) { //first col
+						t = whichMin(pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + MID + t).at(j - 1).data;
+						pathValues.at(i).at(j).path = MID + t;
+					}
+					else if (i == 1) { //second row
+						t = whichMin(pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
+						pathValues.at(i).at(j).path = LEFT + t;
+					}
+					else if (i == source.cols - 2) {//second to last row
+						t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1);
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
+						pathValues.at(i).at(j).path = LLEFT + t;
+					}
+					else if (i == source.cols - 1) { //last col
+						t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data);
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
+						pathValues.at(i).at(j).path = LLEFT + t;
 
+					}
+					else { // middle area
+						t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
+						pathValues.at(i).at(j).path = LLEFT + t;
+					}
 				}
-				else { // middle area
-					t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
-					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
-					pathValues.at(i).at(j).path = LLEFT + t;
+			}
+		}
+	}
+	else {
+		if (doLines) {
+			for (int j = 0; j < source.rows; j++) {
+				for (int i = 0; i < source.cols; i++) {
+					if (j == 0) { // first row
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j));
+						pathValues.at(i).at(j).path = 0;
+					}
+					else {
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i).at(j - 1).data;
+						pathValues.at(i).at(j).path = 0;
+					}
+				}
+			}
+		}
+		else {
+			int t = 0;
+			for (int j = 0; j < source.rows; j++) {
+				for (int i = 0; i < source.cols; i++) {
+					if (j == 0) { //first row
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j));
+						pathValues.at(i).at(j).path = 0;
+					}
+					else { // not in the first row
+						if (i == 0) { //first col
+							t = whichMin(pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1);
+							pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + MID + t).at(j - 1).data;
+							pathValues.at(i).at(j).path = MID + t;
+						}
+						else if (i == source.cols - 1) { //last col
+							t = whichMin(pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data);
+							pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
+							pathValues.at(i).at(j).path = LEFT + t;
+
+						}
+						else { // middle area
+							t = whichMin(pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1);
+							pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
+							pathValues.at(i).at(j).path = LEFT + t;
+						}
+					}
 				}
 			}
 		}

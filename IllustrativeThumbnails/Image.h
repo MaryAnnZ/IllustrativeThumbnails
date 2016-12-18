@@ -108,7 +108,8 @@ private:
 	int whichMin(float x, float y, float z);
 	int whichMin(float x, float y, float z, float v);
 	int whichMin(float x, float y, float z, float v, float w);
-	std::vector<std::vector<Entity>> calculateSeams();
+	std::vector<std::vector<Entity>> calculateSeams(bool vertical);
+	bool doLines;
 	typedef struct minPixel {
 		int index;
 		double intensity;
