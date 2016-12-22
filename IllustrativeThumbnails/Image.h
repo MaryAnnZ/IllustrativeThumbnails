@@ -71,6 +71,7 @@ private:
 	std::vector<cv::Mat> contrastPyramid;
 	cv::Mat saliencyMap;
 	cv::Mat weightedSaliencyMap;
+	cv::Mat isTextMap;
 
 	//important central window
 	cv::Mat croppedImage;

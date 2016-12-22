@@ -48,7 +48,6 @@ Image::Image(std::map<std::string, double> configData)
 	else {
 		doLines = true;
 	}
-	std::cout << doLines << std::endl;
 }
 
 
@@ -160,6 +159,8 @@ cv::Mat Image::showSeamCarved()
 				cv::flip(verticalSeamsImage, verticalSeamsImage, 1);
 				cv::transpose(saliencyMap, saliencyMap);
 				cv::flip(saliencyMap, saliencyMap, 1);
+				cv::transpose(isTextMap, isTextMap);
+				cv::flip(isTextMap, isTextMap, 1);
 				std::vector<std::vector<Entity>> pathValuesHor = calculateSeams(false);
 				minPixel startingPointHor = findStartingPoint(pathValuesHor);
 				if (originalHorizontal == 0) {
@@ -173,6 +174,8 @@ cv::Mat Image::showSeamCarved()
 					cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
 					cv::transpose(saliencyMap, saliencyMap);
 					cv::flip(saliencyMap, saliencyMap, 0);
+					cv::transpose(isTextMap, isTextMap);
+					cv::flip(isTextMap, isTextMap, 0);
 				}
 				//go for vertical
 				else if ((startingPointVer.intensity / verticalSeamsImage.cols) < originalVertical){
@@ -180,6 +183,8 @@ cv::Mat Image::showSeamCarved()
 					cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
 					cv::transpose(saliencyMap, saliencyMap);
 					cv::flip(saliencyMap, saliencyMap, 0);
+					cv::transpose(isTextMap, isTextMap);
+					cv::flip(isTextMap, isTextMap, 0);
 					findVerticalPath(startingPointVer, pathValuesVer);
 				}
 				else {
@@ -187,8 +192,11 @@ cv::Mat Image::showSeamCarved()
 					cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
 					cv::transpose(saliencyMap, saliencyMap);
 					cv::flip(saliencyMap, saliencyMap, 0);
+					cv::transpose(isTextMap, isTextMap);
+					cv::flip(isTextMap, isTextMap, 0);
 					cv::resize(verticalSeamsImage, verticalSeamsImage, cv::Size(goalWidth, goalHeight));
 					cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
+					cv::resize(isTextMap, isTextMap, cv::Size(goalWidth, goalHeight));
 				}
 			}
 			/*else {
@@ -204,6 +212,7 @@ cv::Mat Image::showSeamCarved()
 				else {
 					cv::resize(verticalSeamsImage, verticalSeamsImage, cv::Size(goalWidth, goalHeight));
 					cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
+					cv::resize(isTextMap, isTextMap, cv::Size(goalWidth, goalHeight));
 							}
 			}
 			else if (verticalSeamsImage.rows != goalHeight) {
@@ -214,6 +223,8 @@ cv::Mat Image::showSeamCarved()
 						cv::flip(verticalSeamsImage, verticalSeamsImage, 1);
 						cv::transpose(saliencyMap, saliencyMap);
 						cv::flip(saliencyMap, saliencyMap, 1);
+						cv::transpose(isTextMap, isTextMap);
+						cv::flip(isTextMap, isTextMap, 1);
 					}
 					std::vector<std::vector<Entity>> pathValues = calculateSeams(false);
 					minPixel startingPoint = findStartingPoint(pathValues);
@@ -224,6 +235,8 @@ cv::Mat Image::showSeamCarved()
 							cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
 							cv::transpose(saliencyMap, saliencyMap);
 							cv::flip(saliencyMap, saliencyMap, 0);
+							cv::transpose(isTextMap, isTextMap);
+							cv::flip(isTextMap, isTextMap, 0);
 						}
 					}
 					else {
@@ -231,8 +244,11 @@ cv::Mat Image::showSeamCarved()
 						cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
 						cv::transpose(saliencyMap, saliencyMap);
 						cv::flip(saliencyMap, saliencyMap, 0);
+						cv::transpose(isTextMap, isTextMap);
+						cv::flip(isTextMap, isTextMap, 0);
 						cv::resize(verticalSeamsImage, verticalSeamsImage, cv::Size(goalWidth, goalHeight));
 						cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
+						cv::resize(isTextMap, isTextMap, cv::Size(goalWidth, goalHeight));
 					}
 				}
 			}
@@ -642,6 +658,7 @@ void Image::buildContrastPyramid()
 
 void Image::calculateSaliencyMap()
 {
+	//std::vector<std::vector<Entity>> pathValues = std::vector<std::vector<Entity>>(source.cols, std::vector<Entity>(source.rows));
 	//TODO map weight
 	if (!contrastPyramid.empty()) {
 		cv::Mat mySaliencyMap = cv::Mat::zeros(getCieluvImage().size(), CV_8UC1);
@@ -655,6 +672,8 @@ void Image::calculateSaliencyMap()
 				}
 			}
 		}
+		isTextMap = cv::Mat::zeros(getCieluvImage().size(), CV_8UC1);
+		
 		cv::Mat textImage = getStringImage();
 		for (int x = 0; x < textImage.cols; x++) {
 			for (int y = 0; y < textImage.rows; y++) {
@@ -665,6 +684,7 @@ void Image::calculateSaliencyMap()
 					}
 					else {
 						mySaliencyMap.at<uchar>(cv::Point(x, y)) = 255;
+						isTextMap.at<uchar>(cv::Point(x, y)) = 1;
 					}
 				}
 			}
@@ -1057,6 +1077,7 @@ int Image::whichMin(float x, float y, float z, float v, float w)
 #define RRIGHT 2
 #define WEIGHT1 std::sqrt(2) 
 #define WEIGHT2 std::sqrt(5) 
+#define TEXTWEIGHT 1000000 //TODO
 std::vector<std::vector<Image::Entity>> Image::calculateSeams(bool vertical)
 {
 	cv::Mat source;
@@ -1074,34 +1095,34 @@ std::vector<std::vector<Image::Entity>> Image::calculateSeams(bool vertical)
 		for (int j = 0; j < source.rows; j++) {
 			for (int i = 0; i < source.cols; i++) {
 				if (j == 0) { //first row
-					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j));
+					pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j));
 					pathValues.at(i).at(j).path = 0;
 				}
 				else { // not in the first row
 					if (i == 0) { //first col
 						t = whichMin(pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
-						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + MID + t).at(j - 1).data;
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + MID + t).at(j - 1).data;
 						pathValues.at(i).at(j).path = MID + t;
 					}
 					else if (i == 1) { //second row
 						t = whichMin(pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
-						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
 						pathValues.at(i).at(j).path = LEFT + t;
 					}
 					else if (i == source.cols - 2) {//second to last row
 						t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1);
-						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
 						pathValues.at(i).at(j).path = LLEFT + t;
 					}
 					else if (i == source.cols - 1) { //last col
 						t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data);
-						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
 						pathValues.at(i).at(j).path = LLEFT + t;
 
 					}
 					else { // middle area
 						t = whichMin(pathValues.at(i + LLEFT).at(j - 1).data * WEIGHT2, pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1, pathValues.at(i + RRIGHT).at(j - 1).data * WEIGHT2);
-						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LLEFT + t).at(j - 1).data;
 						pathValues.at(i).at(j).path = LLEFT + t;
 					}
 				}
@@ -1113,11 +1134,11 @@ std::vector<std::vector<Image::Entity>> Image::calculateSeams(bool vertical)
 			for (int j = 0; j < source.rows; j++) {
 				for (int i = 0; i < source.cols; i++) {
 					if (j == 0) { // first row
-						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j));
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j));
 						pathValues.at(i).at(j).path = 0;
 					}
 					else {
-						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i).at(j - 1).data;
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i).at(j - 1).data;
 						pathValues.at(i).at(j).path = 0;
 					}
 				}
@@ -1128,24 +1149,24 @@ std::vector<std::vector<Image::Entity>> Image::calculateSeams(bool vertical)
 			for (int j = 0; j < source.rows; j++) {
 				for (int i = 0; i < source.cols; i++) {
 					if (j == 0) { //first row
-						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j));
+						pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j));
 						pathValues.at(i).at(j).path = 0;
 					}
 					else { // not in the first row
 						if (i == 0) { //first col
 							t = whichMin(pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1);
-							pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + MID + t).at(j - 1).data;
+							pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + MID + t).at(j - 1).data;
 							pathValues.at(i).at(j).path = MID + t;
 						}
 						else if (i == source.cols - 1) { //last col
 							t = whichMin(pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data);
-							pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
+							pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
 							pathValues.at(i).at(j).path = LEFT + t;
 
 						}
 						else { // middle area
 							t = whichMin(pathValues.at(i + LEFT).at(j - 1).data * WEIGHT1, pathValues.at(i + MID).at(j - 1).data, pathValues.at(i + RIGHT).at(j - 1).data * WEIGHT1);
-							pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
+							pathValues.at(i).at(j).data = (float)importanceMap.at<uchar>(cv::Point(i, j)) + TEXTWEIGHT * isTextMap.at<uchar>(cv::Point(i, j)) + pathValues.at(i + LEFT + t).at(j - 1).data;
 							pathValues.at(i).at(j).path = LEFT + t;
 						}
 					}
@@ -1226,16 +1247,19 @@ void Image::findVerticalPath(Image::minPixel startingPoint, std::vector<std::vec
 	int x = startingPoint.index;
 	cv::Mat newSource = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC3);
 	cv::Mat newSaliancyMap = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC1);
+	cv::Mat newIsTextMap = cv::Mat::zeros(source.rows, source.cols - 1, CV_8UC1);
 	for (int y = source.rows - 1; y >= 0; y--) {
 		//source.at<cv::Vec3b>(cv::Point(x, y)) = cv::Vec3b(0, 0, 255);
 		for (int myX = 0; myX < newSource.cols; myX++) {
 			if (myX < x) {
 				newSource.at<cv::Vec3b>(cv::Point(myX, y)) = source.at<cv::Vec3b>(cv::Point(myX, y));
 				newSaliancyMap.at<uchar>(cv::Point(myX, y)) = getSaliencyMap().at<uchar>(cv::Point(myX, y));
+				newIsTextMap.at<uchar>(cv::Point(myX, y)) = isTextMap.at<uchar>(cv::Point(myX, y));
 			}
 			else {
 				newSource.at<cv::Vec3b>(cv::Point(myX, y)) = source.at<cv::Vec3b>(cv::Point(myX + 1, y));
 				newSaliancyMap.at<uchar>(cv::Point(myX, y)) = getSaliencyMap().at<uchar>(cv::Point(myX + 1, y));
+				newIsTextMap.at<uchar>(cv::Point(myX, y)) = isTextMap.at<uchar>(cv::Point(myX + 1, y));
 			}
 		}
 		//std::cout << x << "		" << y << std::endl;
@@ -1243,6 +1267,7 @@ void Image::findVerticalPath(Image::minPixel startingPoint, std::vector<std::vec
 	}
 	verticalSeamsImage = newSource;
 	saliencyMap = newSaliancyMap;
+	isTextMap = newIsTextMap;
 }
 
 void Image::drawSeams(std::vector<std::vector<Entity>> pathValues)
