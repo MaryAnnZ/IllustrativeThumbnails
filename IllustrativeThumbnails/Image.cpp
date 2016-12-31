@@ -115,9 +115,18 @@ cv::Mat Image::getSaliencyMap()
 		buildGaussPyramid();
 		buildContrastPyramid();
 		calculateSaliencyMap();
+		originalSaliencyMap = saliencyMap;
 	}
 
 	return saliencyMap;
+}
+
+cv::Mat Image::getOriginalSaliencyMap()
+{
+	if (originalSaliencyMap.empty()) {
+		getSaliencyMap();
+	}
+	return originalSaliencyMap;
 }
 
 cv::Mat Image::getCroppedImage()

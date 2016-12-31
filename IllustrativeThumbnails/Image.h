@@ -20,6 +20,7 @@ public:
 	//scale invariant saliency map
 	cv::Mat getCieluvImage();
 	cv::Mat getSaliencyMap();
+	cv::Mat getOriginalSaliencyMap();
 
 	//central window
 	cv::Mat getCroppedImage();
@@ -70,6 +71,7 @@ private:
 	std::vector<cv::Mat> gaussPyramid;
 	std::vector<cv::Mat> contrastPyramid;
 	cv::Mat saliencyMap;
+	cv::Mat originalSaliencyMap;
 	cv::Mat weightedSaliencyMap;
 	cv::Mat isTextMap;
 
