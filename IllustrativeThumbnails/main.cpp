@@ -28,18 +28,18 @@ void main()
 		Image* img = new Image(configData);
 
 		if (!img->getSourceImage().empty()) {
-			cvNamedWindow("saliency");
+			/*cvNamedWindow("saliency");
 			cv::imshow("saliency", img->getOriginalSaliencyMap());
 			cvNamedWindow("cropped");
 			cv::imshow("cropped", img->getCroppedImage());
 			cvNamedWindow("string");
-			cv::imshow("string", img->getStringImage());
+			cv::imshow("string", img->getStringImage());*/
 			cvNamedWindow("result");
 			cv::imshow("result", img->showSeamCarved());
-			cvNamedWindow("importanceMap");
+			/*cvNamedWindow("importanceMap");
 			cv::imshow("importanceMap", img->getSaliencyMap());
 			cvNamedWindow("seams");
-			cv::imshow("seams", img->showSeams());
+			cv::imshow("seams", img->showSeams());*/
 		}
 
 

@@ -177,7 +177,7 @@ cv::Mat Image::showSeamCarved()
 				}
 				
 				//go for horizontal
-				if (startingPointHor.intensity / verticalSeamsImage.rows < startingPointVer.intensity / verticalSeamsImage.cols && (startingPointHor.intensity / verticalSeamsImage.rows) < originalHorizontal) {
+				if (startingPointHor.intensity / verticalSeamsImage.cols < startingPointVer.intensity / verticalSeamsImage.rows && (startingPointHor.intensity / verticalSeamsImage.cols) < originalHorizontal) {
 					findVerticalPath(startingPointHor, pathValuesHor);
 					cv::transpose(verticalSeamsImage, verticalSeamsImage);
 					cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
@@ -187,7 +187,7 @@ cv::Mat Image::showSeamCarved()
 					cv::flip(isTextMap, isTextMap, 0);
 				}
 				//go for vertical
-				else if ((startingPointVer.intensity / verticalSeamsImage.cols) < originalVertical){
+				else if ((startingPointVer.intensity / verticalSeamsImage.rows) < originalVertical){
 					cv::transpose(verticalSeamsImage, verticalSeamsImage);
 					cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
 					cv::transpose(saliencyMap, saliencyMap);
@@ -208,10 +208,7 @@ cv::Mat Image::showSeamCarved()
 					cv::resize(isTextMap, isTextMap, cv::Size(goalWidth, goalHeight));
 				}
 			}
-			/*else {
-				cv::resize(verticalSeamsImage, verticalSeamsImage, cv::Size(goalWidth, goalHeight));
-				cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
-			}*/
+			
 			else if (verticalSeamsImage.cols != goalWidth) {
 				std::vector<std::vector<Entity>> pathValues = calculateSeams(true);
 				minPixel startingPoint = findStartingPoint(pathValues);
@@ -224,29 +221,38 @@ cv::Mat Image::showSeamCarved()
 					cv::resize(isTextMap, isTextMap, cv::Size(goalWidth, goalHeight));
 							}
 			}
+			/*else {
+				cv::resize(verticalSeamsImage, verticalSeamsImage, cv::Size(goalWidth, goalHeight));
+				cv::resize(saliencyMap, saliencyMap, cv::Size(goalWidth, goalHeight));
+			}*/
 			else if (verticalSeamsImage.rows != goalHeight) {
 				int diff = verticalSeamsImage.rows - goalHeight;
+		
 				for (int i = 0; i < diff; i++) {
-					if (i == 0) {
-						cv::transpose(verticalSeamsImage, verticalSeamsImage);
-						cv::flip(verticalSeamsImage, verticalSeamsImage, 1);
-						cv::transpose(saliencyMap, saliencyMap);
-						cv::flip(saliencyMap, saliencyMap, 1);
-						cv::transpose(isTextMap, isTextMap);
-						cv::flip(isTextMap, isTextMap, 1);
-					}
+					cv::transpose(verticalSeamsImage, verticalSeamsImage);
+					cv::flip(verticalSeamsImage, verticalSeamsImage, 1);
+					cv::transpose(saliencyMap, saliencyMap);
+					cv::flip(saliencyMap, saliencyMap, 1);
+					cv::transpose(isTextMap, isTextMap);
+					cv::flip(isTextMap, isTextMap, 1);
 					std::vector<std::vector<Entity>> pathValues = calculateSeams(false);
 					minPixel startingPoint = findStartingPoint(pathValues);
 					if ((startingPoint.intensity / verticalSeamsImage.rows) < originalHorizontal) {
 						findVerticalPath(startingPoint, pathValues);
-						if (i == diff - 1) {
+						cv::transpose(verticalSeamsImage, verticalSeamsImage);
+						cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
+						cv::transpose(saliencyMap, saliencyMap);
+						cv::flip(saliencyMap, saliencyMap, 0);
+						cv::transpose(isTextMap, isTextMap);
+						cv::flip(isTextMap, isTextMap, 0);
+						/*if (i == diff - 1) {
 							cv::transpose(verticalSeamsImage, verticalSeamsImage);
 							cv::flip(verticalSeamsImage, verticalSeamsImage, 0);
 							cv::transpose(saliencyMap, saliencyMap);
 							cv::flip(saliencyMap, saliencyMap, 0);
 							cv::transpose(isTextMap, isTextMap);
 							cv::flip(isTextMap, isTextMap, 0);
-						}
+						}*/
 					}
 					else {
 						cv::transpose(verticalSeamsImage, verticalSeamsImage);
