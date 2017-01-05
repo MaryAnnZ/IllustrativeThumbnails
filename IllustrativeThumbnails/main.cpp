@@ -30,11 +30,11 @@ void main()
 		if (!img->getSourceImage().empty()) {
 			/*cvNamedWindow("saliency");
 			cv::imshow("saliency", img->getOriginalSaliencyMap());*/
-			cvNamedWindow("cropped");
-			cv::imshow("cropped", img->getCroppedImage());
-			/*cvNamedWindow("string");
+			cvNamedWindow("blurred");
+			cv::imshow("blurred", img->getBluredImage());
+			cvNamedWindow("string");
 			cv::imshow("string", img->getStringImage());
-			cvNamedWindow("result");
+			/*cvNamedWindow("result");
 			cv::imshow("result", img->showSeamCarved());
 			cvNamedWindow("importanceMap");
 			cv::imshow("importanceMap", img->getSaliencyMap());
