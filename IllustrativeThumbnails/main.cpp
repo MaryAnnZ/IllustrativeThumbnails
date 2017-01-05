@@ -29,9 +29,9 @@ void main()
 
 		if (!img->getSourceImage().empty()) {
 			/*cvNamedWindow("saliency");
-			cv::imshow("saliency", img->getOriginalSaliencyMap());*/
+			cv::imshow("saliency", img->getOriginalSaliencyMap());
 			cvNamedWindow("blurred");
-			cv::imshow("blurred", img->getBluredImage());
+			cv::imshow("blurred", img->getBluredImage());*/
 			cvNamedWindow("string");
 			cv::imshow("string", img->getStringImage());
 			/*cvNamedWindow("result");

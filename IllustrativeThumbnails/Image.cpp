@@ -489,7 +489,7 @@ void Image::markAsWord(std::vector<cv::Point> contours)
 
 	int height = maxCorner.y - minCorner.y;
 	int width = maxCorner.x - minCorner.x;
-	if (height > minWordWidth && width > minWordHeight) {
+	if (width > minWordWidth && height > minWordHeight) {
 		possibleWords.push_back(Word(minCorner, maxCorner));
 	}
 
