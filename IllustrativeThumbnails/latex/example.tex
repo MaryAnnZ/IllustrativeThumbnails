@@ -155,7 +155,7 @@ Algorithms, invented for retrieve visual data from common images, are examinated
 According to the information visualization method, like combining the most important parts in form of collages or simple resizing, two classes are divided.
 In the following some of these methods are compared.
 
-\section{Processing UI elements}
+\section{Processing as UI}
 Considering that the input is a screenshot, there is a high chance that common UI elements are shown on the screen.
 Exceptions are only the cases where graphics, images, videos or application containing these, e.g. video games, gallery program, video player are captured.
 The applications like that tend to hide all UI elements, "fullscreen" mode, or redefine them, e.g. game menu.\par
@@ -192,8 +192,30 @@ Although the Prefab and Sikuli systems can be helpful for labeling the images as
 But theses approaches has the drawback of the usage of the database and the slow template matching. 
 Since there is no need to know, which widgets are on the screen, and processing the actual content can already cause performance issues, the use these methods would overcomplicate the application without providing noteworthy advantages.
 
+\section{Processing as common picture}
+There are several information retrieving methods for processing images with any content.
+Furthermore in case of making any kind of image more illustrative, there are important tasks like interesting point recognition, Region of Interest (ROI) selection, image or feature composition etc. which they can handle easily.
+According to the manner of the input data there are two different groups of these algorithms, which need to be discussed in the following sections.
+The first category works with more than one picture in the same time.
+Its strength is to choose singe features which represents the most the whole input data. 
+In exchange it is likely that no input image will be recognizable on the result.
+On the other hand there are the methods in the second group, which take only one picture for input and process it as one unit.
+So the result is similar to the input data, but therefore the chance is high that not only the unimportant but the areas with high information ratio are damaged
+At the very and of this section some approaches are presented, which can help the work of both of the above mentioned groups.
 
-  
+\subsection{Collage creating methods} 
+A collage is an assembled image, containing parts of a bunch of input images and being representative for the whole input data.
+There are two cases by creating thumbnails more illustrative where such methods can be helpful.
+On the one hand the actual information of a screenshot image concentrates only in few regions of the picture.
+Many parts, for example UI elements, space between the content etc, can be ignored. 
+The other way around the content can be retrieved in form of ROIs, and afterwards they can be combined arbitrary.
+On the other hand using collage creator algorithms thumbnails for desktop switching can be easily generated, where the input are screenshots of the open application of the desktop instead of some ROIs of one screen.\par
+For a representative collage the most important task is to choose the best images, which information content covers the whole input data.
+Forras takes the parameters representativeness, importance costs, transition cost and object sensitivity into account.
+
+\subsection{Resampling methods}
+
+\subsection{Feature combining methods}
 
 \chapter{Methodology}
 

@@ -16,12 +16,16 @@
 \contentsline {chapter}{Contents}{xv}{section*.9}
 \contentsline {chapter}{\chapternumberline {1}Introduction}{1}{chapter.1}
 \contentsline {chapter}{\chapternumberline {2}Related Work}{3}{chapter.2}
-\contentsline {section}{\numberline {2.1}Processing UI elements}{3}{section.2.1}
-\contentsline {chapter}{\chapternumberline {3}Methodology}{5}{chapter.3}
-\contentsline {chapter}{List of Figures}{7}{section*.11}
-\contentsline {chapter}{List of Tables}{9}{section*.12}
-\contentsline {chapter}{List of Algorithms}{11}{chapter*.13}
-\contentsline {chapter}{Index}{13}{section*.14}
-\contentsline {chapter}{Glossary}{15}{section*.15}
-\contentsline {chapter}{Acronyms}{17}{section*.17}
-\contentsline {chapter}{Bibliography}{19}{section*.20}
+\contentsline {section}{\numberline {2.1}Processing as UI}{3}{section.2.1}
+\contentsline {section}{\numberline {2.2}Processing as common picture}{4}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Collage creating methods}{5}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}Resampling methods}{5}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Feature combining methods}{5}{subsection.2.2.3}
+\contentsline {chapter}{\chapternumberline {3}Methodology}{7}{chapter.3}
+\contentsline {chapter}{List of Figures}{9}{section*.11}
+\contentsline {chapter}{List of Tables}{11}{section*.12}
+\contentsline {chapter}{List of Algorithms}{13}{chapter*.13}
+\contentsline {chapter}{Index}{15}{section*.14}
+\contentsline {chapter}{Glossary}{17}{section*.15}
+\contentsline {chapter}{Acronyms}{19}{section*.17}
+\contentsline {chapter}{Bibliography}{21}{section*.20}
