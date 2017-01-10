@@ -212,8 +212,55 @@ The other way around the content can be retrieved in form of ROIs, and afterward
 On the other hand using collage creator algorithms thumbnails for desktop switching can be easily generated, where the input are screenshots of the open application of the desktop instead of some ROIs of one screen.\par
 For a representative collage the most important task is to choose the best images, which information content covers the whole input data.
 Forras takes the parameters representativeness, importance costs, transition cost and object sensitivity into account.
+Representativeness means being interesting in this case.
+A picture tends to have high representativeness value, if there are many special textures on it, and if it is not similar to the rest of the data (so that no image is chosen twice).
+Importance cost evaluates and collect the ROIs of the input.
+While transition cost stands for the smooth transition between every two images.
+At last, the parameter object sensitivity holds the results of object recognition, and it helps in the arrangement, that the object has a reasonable placement.\par
+Forras concentrates however only the first two parameters above.
+It clusters the images, according their source and the time, and measures the quality.
+Thank for the clustering by the choice of the final images it is clear,  which images are the same or have similar content.
+This feature, accordingly modified, can be useful by sorting ROIs of a screenshot, i.e.: text content, image content etc. or of the running applications of the desktop, i.e.: textprocessing, gallery application etc.
+The parameter quality summarizes the value of the results of the following calculations: blurriness, compression, contrast and color balance.
+Since in this case only screenshots, thus computer generated pictures, can be the input, these measurements invented for camera data would provide less meaningful results than the algorithm above.\par 
+Having the best ROIs for the collage the last task is to merge them into one output picture.
+For this purpose Forras uses a method called ROI packing.
+First the central point of every ROI needs to get chosen and every pixel on the canvas needs to get assigned to one of the using the k-Means algorithm.
+After that the ROIs can be placed on the area calculated for them.
+To fill the place between the ROIs they have to grow, keeping the aspect ratio, until they overlap. 
+Then every ROI is shifted to the middle of its area.
+This method can be repeated until no ROI grows anymore.
+To fill the white areas, neighboring ROIs are allowed to cover them, and so fill the whole image.\par
+Collage methods are very useful to represent a large image dataset only in a small place.
+They work with numerous input data, and taking the most important parts of them create a new image, that is not similar to any before.
+That is why they are more useful for making a thumbnail for a desktop but not for one application.
+Even though taking only the most important ROIs of one screen it would be possible to create an image more illustrative that any other, since the important content is the largest and the best readable.
+Cutting one screen apart and arranging some parts of them willingly would confuse the user, and even more time would be needed to recognize the screen.
 
 \subsection{Resampling methods}
+Treating the input image as one unit, has a big advantage against the approaches mentioned before.
+Even after modification the result will be highly similar to the input.
+Resampling means, that some parts of the image will be eliminated, but all remaining areas will have the same proportion to each other, not like by the collage algorithms.
+The image remains recognizable because of the same look, even though the most important areas are less readable.\par 
+To select areas, which needs to kept same, Forras uses several attention models, which defines Attention Objects (AO).
+AOs usually are objects from the real world, which catch the human eye, because of their familiarity, shape, color etc.
+With three values AOs can be easily parametrized, these are ROI, Attention Value (AV) and Minimal Perceptible Size (MPS).
+The attention models fit the AOs into the context.
+Forras works with three different attention model at the same time, with saliency, face and text attention.
+Having the importance value of every pixel the most important area can be detected.\par 
+The algorithm above after carefully calculation chooses only one area, which contains as many AOs as possible.
+So some possibly important AOs have to be ignored and cut off.
+With Feature awared Texturing described in Forras this do not have to be the case.
+The algorithm expects an input image and a feature mask.
+A grid is generated, which lies on the input image.
+This grid can be modified in an optional shape, but the gridpoints on the feature mask are not allowed to change their proportion to each other.
+In that way the picture elements between the AOs fill the new shape, but the AOs get barely distorted\par 
+A detailed importance is essential by creating thumbnails, since a screen usually contain more information and ROIs than a common picture. 
+But the algorithms described above has aspects, like face recognition and grid calculation, which overcomplicate the calculations, causing performance issues without reaching better quality.
+A face on a computer screen is not so common as on usual photos, and it is not so important too than text for example.
+With a grid the input image can get reshaped in any other form, and in addition no important part needs to get damaged.
+But it is meant to form the input in completely other shape, not for resize it according to aspect ratio.
+Some aspects however, like definition of AOs, can be useful polishing the actual algorithm, this will be discussed in the future work section.
 
 \subsection{Feature combining methods}
 
