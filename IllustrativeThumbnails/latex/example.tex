@@ -282,7 +282,59 @@ So the use of such advanced methods like Poisson equation is pointless, since th
  
 
 \chapter{Methodology}
+The algorithm, which creates thumbnails more illustrative, has three main steps.
+At the beginning the UI elements are cut off.
+In the case of thumbnails there are other ways to get information about what application are actually opened, for example the labeling of the thumbnails.
+In addition it is usual that the same software is running many times for other purposes, for example the usage of text editor for writing and for reading some document.
+The content  not the surface of these application matters, although reading the title of the thumbnails is smaller than the software recognition through visual data, this aspect needs to take count for the better visualization of the actual content area.
+The second step is the calculation of the importance map weighted on the place of text data.
+Unlike to common pictures from the real life the occurrence of text on computer screens is higher and more important.
+For this reason the calculation of the final importance map have two steps.
+First the importance value of every picture is generated according to the color changes of the source image.
+Second the color value is increased at the places where text is found.
+In that way not only the silhouette but the whole body of the letters seams to be salient.
+Lastly seam carving and simple resampling is performed  until the output size is reached.
+In this section these three main sections is discussed, and an overview about the algorithm is shown.
 
+\section{Eliminating UI elements}
+For the elimination of UI elements, they need to get identified first.
+In the search for UI widget, it is supposed, that they are placed near the border of the screen but not in the central area.
+The middle of a screen works as reference data for the investigation, and it is not checked if there are some unimportant UI elements placed.
+The UI elimination algorithm works right on the source window, no further premodification is needed for this process.\par
+Cropping the border first the horizontal then the vertical margins are checked, where the order is relevant.
+The algorithm is based on the observation, that there are the upper and the lower bars, which cover the whole width of the display.
+The sidebars, if they exist, run however only between the the upper and the lower bars, and cover the remaining area.
+Furthermore it is common that the sidebar have slightly different style that the other UI widgets mentioned above.
+The UI matching method investigates slices of the screen running along the margins and checking if they belong to the UI or to the middle area of the window.
+To get better results, it is important to investigate coherent data, and to not mix parts of different UI bars in one slice.
+That is why the order of margin cropping is chosen in the mentioned way.\par 
+To find the best cropping line, where the UI meets the content area a double checking method is performed.
+The first step is searching for a line having the same color and no interruption along the horizontal sides of the screen.
+This method is based on the consideration that toolbars often have a one color background.
+Therefore the task is to find a line, where no more widget is placed, but it still belongs to the UI area, so it is filled with a background color.\par
+If there are a defined UI are the method above works well, but there are several cases, where it is not able to provide any result.
+Game applications usually uses their own graphical UI, but even by more traditional applications it can happen that the UI area is so overloaded, that no background line can be found.
+For that reason is it important to perform an other checking loop too.
+This step is based on the correlation value of the histograms of the border and the center.
+The margin is split into thin slices.
+Initially the first slice, near the border is checked.
+The histogram of this slice is compared to the histogram of the center.
+If the correlation is high, it means that the two areas have no big difference, so nothing should get cut off, the algorithm returns.
+But if low correlation is shown, they are not part of the same unit, the slice comes supposedly from UI area.
+In this case the two histograms, the one of the first slice and the other of the center region, is kept as reference value.
+In the next step the other slices are compared with the two reference histograms starting at the border and heading to the middle area.
+At the beginning the correlation with the border histogram is high and with the center is low, which shows that the slice is still in the UI area, it matches the theme of the border widgets.
+But by the slices being near to the center this tendency turns.
+At the slice whose correlation with the center histogram is higher than the one with the border the algorithm stops, cuts every slices which were checked before, and it terminates.\par 
+This method is executed four times.
+In the first two cases the upper and the lower borders are investigated.
+The third and the fourth loop is adjusted to the sidebars.
+In the first step not a horizontal but a vertical line is searched, looking for a straight route, where the background color of the sidebar taking the whole space between the, already cropped, upper and lower borders of the image.
+Finally in the second checking loop the slices are defined also vertically. 
+
+\section{Saliency calculation}
+
+\section{Seam Carving}
 
 
 % Remove following line for the final thesis.
