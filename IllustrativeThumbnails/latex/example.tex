@@ -329,12 +329,158 @@ At the slice whose correlation with the center histogram is higher than the one 
 This method is executed four times.
 In the first two cases the upper and the lower borders are investigated.
 The third and the fourth loop is adjusted to the sidebars.
-In the first step not a horizontal but a vertical line is searched, looking for a straight route, where the background color of the sidebar taking the whole space between the, already cropped, upper and lower borders of the image.
-Finally in the second checking loop the slices are defined also vertically. 
+In the first step not a horizontal but a vertical line is searched, looking for a straight route, where the background color of the sidebar takes the whole space between the, already cropped, upper and lower borders of the image.
+Finally in the second checking loop the slices are defined vertically and not horizontally this time. 
 
 \section{Saliency calculation}
+In order to ignore that parts of the source image, which actually are unimportant, saliency calculation is needed.
+A saliency map is a grayscale image where the bright color of an area means that that region seems to be more interesting than other dark colored pixels.
+There are however many definitions and approaches, which pixels should be evaluated for salient or not salient.
+In this case the saliency is calculated in the way presented by Forras. 
+There are two reasons, why this algorithm is chosen.
+First it evaluates the low level visual informations.
+It means only the pixel is valued as important, which attracts the low level human visual system, like edges and color changes.
+Secondly it is scale invariant, so it is more robust than other similar but only singe scale approaches.\par 
+The algorithm converts the source into a uniform colorspace (Lu*v) first.
+After that, to make the approach scale invariant, a Gaussian contrast pyramid is built.
+Forras calculates the contrast value from the weighted sum of  the  differences between the pixel and its neighborhood.
+This approach needs to get slightly modified, and the calculation have to ignore the weighting value.
+This parameter is used because of the fact, that the central area of common real word images is more important than the margin regions.
+Investigating computer screens this is however not the case.
+A screenshot often does not have one defined focus point, where the most important information is shown.
+So the use of a weighting value would prefer the inner window, even though there is no significant correlation between the importance of the data and its placement on the screen.
+At the end the importance of each pixel is calculated summing up all levels of the pyramid into one final saliency map.\par
+In the case of computer screens the occurance of text is common, and its information content is usually very high.
+Therefore it is not permissible that regions with text content appear not so important on the saliency map.
+For that reason a further evaluation of the saliency map is needed, to check if text areas were evaluated as important data.\par 
+The text recognition algorithm is based on the one introduced in Forras.
+For the first step the whole input image is horizontally blurred, so that the letters and the neighboring words give a string together.
+After that is all coherent string is investigated if they possibly are words or they derive from other visual features of the source.
+The method, which verify the words, checks two aspects.
+The first is if the strings are high enough but not too high for being real letters.
+Furthermore if their width is not too small but not too big to be one word at least but not an endless sentence.
+The second loop evaluates the histograms of the area, where the strings are found.
+It is usual, that the letters being part of the same text data have the same color, while the background, for readability, does not have big color changes neither.
+Therefore the histogram of these areas has two accumulations, one for the letters and one for the color of the background.
+So if a string has a so special histogram it is evaluated as word, but even if it managed to pass the first check, without such a histogram, it is not possible to be labeled as word. \par 
+Finishing to calculate the final saliency map, which is used in the whole application, the regions evaluated as text need to get weighted.
+All area which passed the word checking test is automatically evaluated as highly important, and gets the biggest saliency value.
+In addition, to make sure that not even the space between the words is damaged, which is important because of readability, the area neighboring the text data is also weighted.
 
 \section{Seam Carving}
+To resize the image without damaging the important regions, seam carving Forras is used.
+Based on the saliency map paths are calculated, and these with minimal importance value are eliminated.
+This step is repeated until the desired size is reached or the importance value of the chosen path exceeds a predefined threshold.
+Because seam carving does not necessary eliminates only straight lines, the algorithm effects the layout of unimportant regions noticeably.
+Furthermore if the whole image has very high salient values, the resulting seams do not have remarkable smaller salient value than any randomly chosen straight line, chosen for resampling elimination.
+To save the image from unnecessary artifacts and make the application more performant, a threshold value is defined as proposed in Forras.
+To reach the final output size common resampling is used.\par 
+To find the most appropriate path, every possible solution needs to get checked using the backpacking method.
+A path map is generated, where the past possibilities are stored, and every new try can use it as a look up.
+In this was performance can be saved, and the algorithm gets faster.\par 
+To find the next pixel of a path a five-neighborhood of the previous member is examined.
+The algorithm runs from the top to the bottom, where the next member is chosen from the five nearest pixels of the next line.
+To calculate the costs of a possible switch between the columns the importance value of the neighboring pixels is weighted accordingly.
+In every case the pixel is chosen, whose importance value with the weighting parameter is the smallest.
+Two paths is calculated per loop, one horizontally and one vertically.
+But at the end only the pixels being part of the less salient path are eliminated.\par 
+Because the horizontal and vertical paths are eliminated independently, the picture being processed usually does not hold the aspect ratio.
+For that reason it is possible that the weight and height parameters do not reach the output size or the threshold value in the same time.
+In this case the seam carving algorithm continues for only one parameter until it reaches one of the conditions above. 
+Since the threshold parameter controls the algorithm, when to switch between seam carving and resampling, its value is essential. 
+It is calculated from the maximum salient path found after the first loop of the seam carving algorithm.
+The common resampling method eliminates straight lines chosen from the source image until the desired size is reached.
+Seam carving is used to avoid that paths with high salient value are cut off.
+But if the seams have as high importance value as any other from the source image, it does not make a difference if seam carving or usual resampling is used.
+
+\chapter{Implementation}
+The thumbnail creator application is developed in the programming language C++ using Microsoft Visual Studio 2015.
+Except the source image loading window, no operating system specific calls are performed.
+To make the application platform independent, only this part needs changes.
+For image processing purposes Open Source Computer Vision Library (OpenCV) is used.\par 
+OpenCV is apart of the computer vision a machine learning library too.     
+It has more than 2500 algorithms, which can be used for image processing or for machine learning tasks, just like object identifying, finding similar images, image stitching etc.
+Since the library supports not only Windows, but Linux, Mac OS and Android too, all methods taken from OpenCV count as platform independent.
+The library is used for loading and saving the images, and to perform several image processing tasks like converting between color spaces and image editing like bluring or filering.
+The actual use of the library will be discussed in the following section.
+
+\section{Working Pipeline}
+In the following the actual implementation of the application is described.
+Apart form the functionalities mentioned in the previous chapter, other vital helper methods are also discussed.
+To make the application configurable some essential parameters are set outside the application code. These parameters will be highlighted in the following sections.
+
+\subsection{Image loading}
+Before the thumbnail algorithm can start the source image needs to get loaded.
+To make the application more flexible a Windows call is performed, that after every start of the application a new source image can be chosen.
+The type \texttt{OPENFILENAME}, part of the Windows API, launches a file window, where the files can be browsed.
+It shows only image files with the extension \texttt{.jpeg} or \texttt{.png}.
+After the choice of any source, the file path can be read, and the OpenCV function \texttt{loadImage} opens the picture.
+
+\subsection{UI elimination}
+Near the margins the occurrence of UI elements is investigated.
+The application uses a configurable parameter, which defines which sections of the screen count as margin area. 
+Its default value is 20\%. 
+Starting from the border in direction to the most central point every row, and later column, is checked, if there are a line on the source having the same color and filling the whole space between the vertical, and later the horizontal, borders.
+In the case of success the OpenCV methods \texttt{rowRange} and \texttt{colRange} cut the input image.
+After that the histogram of the remaining margin area is examined and compared to the central region, where the margin is split into thin slices.
+The function \texttt{calcHist} calculates the histograms of the marginal and of the central window.
+If according to the function \texttt{compareHist} they do not correlate, the comparison is performed for the other slices and they are assigned as margin or as central window.
+If a slice is found which correlates with the margin histogram the image is cropped by the slice again. 
+The parameters of correlation and the width of the slices are also configurable.
+According to the tests, the best results are provided, if the correlation is between 1.3 and 2 and the width is 0.25\% of the window.
+
+\subsection{Saliancy map calculation}
+The saliency map is calculated from a Gaussian pyramid.
+But before the building of the pyramid the cropped source image have to get converted into a uniform colorspace.
+For this purpose the OpenCV function \texttt{cvtColor} is called.
+Then the levels of the pyramid is calculated using the \texttt{pyrDown} method.
+Afterwards a contrast map is calculated with the L2 norm from the four neighboring pixels for each level.
+The last step is the composition of the contrast images into one saliency map.
+Upsaceling of the levels is performed, so they have the same size like the the the cropped image.
+The pixel values of the saliency map is given from the sum of the pixels with the same coordinates of every level of the contrast pyramid. 
+In order to avoid any overflow, the pixel values are divided by the amount of the pyramid levels.
+
+\subsection{Text detection}
+To find as many words as possible the grayscale cropped source image is processed with the Laplacian operator, with the kernel size of three.
+Thank to the edge detection the layout of the letters is highlighted now.
+To make the series of letters related a horizontal blur is needed.
+The function \texttt{blur} is called with a configurable kernel size, but by default the width is set to 15 pixels.
+The OpenCV function  \texttt{findContours} is able to find the related regions and save their silhouette points in a \texttt{vector}.
+For each region the width and the height is calculated.
+If a region is at least double so wide than high, these attributes are examined, if they reach the minimum size for being an actual word.
+The size of the minimal word is configurable and set to 5X5 as default.
+In the case a region passes the test, it is marked as possible word and it is forwarded for further investigation.
+After labeling every region as word or non word, the average height of the possible words is calculated.
+If the height of a possible word is too much smaller or bigger than the average, it automatically gets sorted out.
+This confidence interval is also configurable and it is set for 50\% and for 1000\%. 
+The maximal word height is defined as big because of the possible size of title or headline words.
+After the height test the histogram of the possible word regions is checked.
+If it have exactly two accumulations, for the color of the letters and for the background, the region stays in the list of possible words, but otherwise it is sorted out.
+Finally the space above and below of the possible words is investigated.
+Words are usually written in lines, where because of the readability there is some space between them.
+Therefore if two possible word region have common points, they can not be real words and so they also need to get sorted out of the list.
+When the final list is ready, the regions of the words need to get marked on the saliency map.
+The value of every text data pixel is automatically increased.
+At the very end to avoid value overflow and other irregularities the whole map is normalized with the OpenCV function \texttt{normalize}.  
+
+\subsection{Seam carving}
+Seam carving is implemented only in one, vertical direction. 
+To be able to eliminate not only vertical, but also horizontal seams the cropped source image and the saliency map is rotated with the functions \texttt{transpose} and \texttt{flip}.
+For every loop a vertical and a horizontal seam is calculated, and the one with smaller saliency value is cut from the cropped source and from its saliency map.
+Until both sides reach the resampling value or the desired output size the seam carving algorithm is executed.
+The resampling value is calculated from the average pixel saliency value of the most salient seam on the cropped source image.
+The desired size and the resampling parameter are both customizable, they are set by default to 50\%. 
+The seam calculation algorithm works by filling a path map, where the previous paths and its saliency value is saved.
+At the beginning the first row of the map is filled with the saliency values of the saliency map.
+Afterwards for the next row for every pixel the less salient predecessor is searched, and the saliency value at the coordinates of the previous pixel is added to the current saliency value.
+The data about the predecessor pixel and the new saliency value is stored in the path map at the coordinates of the current pixel.
+By looking for the previous pixel the algorithm works with 5-neighborhood. 
+The saliency values of the five nearest pixels are weighted according to their position with $\sqrt{5}$, $\sqrt{2}$ and 1.
+That pixel is chosen as predecessor which finally the least salient is.
+When the algorithm reaches the last row, in the end row of path map the saliency values of the possible ways starting at the first row are stored.
+The final task is to find the smallest saliency value, and to follow the predecessor entities starting at the least salient pixel until the first row is reached again.
+The seam found in that way is afterwards eliminated not only from the cropped source image, but from its saliency map too.
+But if the saliency value of even the less expensive seam exceeds the resampling value, instead of cutting the path off, the usual resampling algorithm is applied using \texttt{resize} and the algorithm terminates.  
 
 
 % Remove following line for the final thesis.
