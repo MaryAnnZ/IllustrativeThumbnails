@@ -482,6 +482,61 @@ The final task is to find the smallest saliency value, and to follow the predece
 The seam found in that way is afterwards eliminated not only from the cropped source image, but from its saliency map too.
 But if the saliency value of even the less expensive seam exceeds the resampling value, instead of cutting the path off, the usual resampling algorithm is applied using \texttt{resize} and the algorithm terminates.  
 
+\chapter{Results and Evaluation}
+
+\chapter{Future Work}
+This application was proved to be useful for creating illustrative thumbnails, but there are certain implementations to extend its scope. 
+There are two main areas, where certain improvements can be applied, performance and the software methodology.
+Although the current application provides reasonable results, described in the chapter before, there are several approaches for the development, which make the present method even robuster and easier to use.
+The most important directions for development will be discussed in the following section.
+
+\section{Performance improvement} 
+The core task of a seam carving algorithm is the evaluation of the saliency map.
+In the best case every pixel and every possible path needs to be examined to find the most favorable path.
+Depending on the size of the input, the visiting and checking all pixels individually can take a long time.
+This process can be get however easily parallelized.
+In 2007, Nvidia released a parallel computing platform, called CUDA Forras, which exploits the computing performance of the GPUs.
+An application, using GPU computing, executes single threaded tasks on the CPU, while it splits the parallel precesses on the GPU. 
+In addition, the CUDA system can be simply integrated into the current application, since it is developed for the programming languages C, C++ and Fortran, and also C++ is used in this project.   
+
+\section{Methodology improvement}
+An essential challenge in seam carving problems is the construction of the saliency map and the calculation of the seams. 
+The methods implemented in the current project are able to handle the common cases, but with some improvement it can became more robust and usable in even more special cases.\par 
+There are several approaches, which besides the low level pixel data examination, also tries to find semantical objects on the input.
+They are building on the observation, that some objects, for example faces, even if their coloring is not especially particular, seem to be very important for the human viewer.
+The perceptual seam carving algorithm Forras based on the Human Attention Model calculates not only the color changes but the occurance of the facial information too.
+It includes the already implemented feature of OpenCV, so the application is able to generate a face map.
+The energy function, which calculates the pixel values in the saliency map, is then weighted with the data from the face map, so a more detailed saliency map is constructed.\par 
+Furthermore Forras uses apart from the face information, the gradient magnitude, Canny edge detection and Hugh line detection to make the saliency map as meaningful as possible. 
+It examines thoroughly both the semantic and the low level pixel data.
+There is however an other method to evaluate the pixel informations even more profoundly.
+Putting the information into a context makes the measurements more accurate, because it controls the information extremes.
+So no pixel seems to be more important or unimportant as it really is.
+Forras reaches it with the calculation of so called neighborhood inhomogeneity factor, which denotes the amount of inhomogeneous neighbors of every pixel. 
+This approach helps to find the important areas inside an object, where a simple line detection algorithm fails and indicate no salient regions.
+To find the coherent areas, which later can be defined as object, the mean shift algorithm can be used like Forras does. 
+Furthermore it makes the saliency calculation scale invariant, and decreases the chance to find misleading high important edges.\par 
+When the saliency map is final, the next step is to calculate the seams.
+In this project seams are defined as paths with the width of one pixel.
+But the release of this rule can provide better results with less artifacts and also increase of performance, like is does by Forras.
+This approach tries to find streams, seams wider than only one pixel, to eliminate bigger areas of the picture at once.
+Even if the cheapest seams are not neighboring, for the cost of eliminating a bit more salient regions, the number of needed loops for one image can be decreased.
+The most important precondition is, that the stream is not allowed to cross any salient line or region, for example faces, so the relative saliency value still needs to stay low. \par
+To eliminate the possible artifacts caused by cutting of seams and streams an algorithm presented in Forras can help.
+This approach is also based on the saliency calculation.
+If there is a big area, which needs to be filled up, it investigates the saliency map and the texture of the neighboring regions.
+The most salient points are labeled then as anchor points, and the actual task is to find a way between these anchors and to color the background.
+By seam carving it is not the goal to recreate the eliminated area, but with this algorithm it is possible to make the transition smoother.
+If a stream is taken a narrow, only a few pixel width path can be left behind, to let the algorithm work.
+In the case of seams however the neighboring edges can be modified according to the filling method taking some wider area around the seam as reference.\par 
+A further possibility to make the current algorithm faster and able to deal with the artifacts better is in Forras presented.
+This method has to slightly modify the pipeline of the project, since it employs usual resampling in the seam carving phase already.
+It classifies every pixel on the input image as foreground, very salient, related objects, and background, less salient, probably split up parts of the image.
+The seam carving method is applied only on the foreground data, the non salient regions are processed with simple resampling. 
+With this approach the properties of the background have no influence on the actual sequence of a seam.
+The calculation needs to take only the saliency values of the important foreground objects into account, so the resulting path can be more accurate and save the most important regions of the picture.
+Furthermore considering that an average seem is not as long as if it would be applied on the whole input the artifacts became smaller and less noticable.
+As an additional favorable side effect also the performance increases, since several areas are ignored for the seam calculation.    
 
 % Remove following line for the final thesis.
 %\input{intro.tex} % A short introduction to LaTeX.

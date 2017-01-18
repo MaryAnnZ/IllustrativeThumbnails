@@ -32,10 +32,14 @@
 \contentsline {subsection}{\numberline {4.1.3}Saliancy map calculation}{14}{subsection.4.1.3}
 \contentsline {subsection}{\numberline {4.1.4}Text detection}{14}{subsection.4.1.4}
 \contentsline {subsection}{\numberline {4.1.5}Seam carving}{15}{subsection.4.1.5}
-\contentsline {chapter}{List of Figures}{17}{section*.11}
-\contentsline {chapter}{List of Tables}{19}{section*.12}
-\contentsline {chapter}{List of Algorithms}{21}{chapter*.13}
-\contentsline {chapter}{Index}{23}{section*.14}
-\contentsline {chapter}{Glossary}{25}{section*.15}
-\contentsline {chapter}{Acronyms}{27}{section*.17}
-\contentsline {chapter}{Bibliography}{29}{section*.20}
+\contentsline {chapter}{\chapternumberline {5}Results and Evaluation}{17}{chapter.5}
+\contentsline {chapter}{\chapternumberline {6}Future Work}{19}{chapter.6}
+\contentsline {section}{\numberline {6.1}Performance improvement}{19}{section.6.1}
+\contentsline {section}{\numberline {6.2}Methodology improvement}{19}{section.6.2}
+\contentsline {chapter}{List of Figures}{23}{section*.11}
+\contentsline {chapter}{List of Tables}{25}{section*.12}
+\contentsline {chapter}{List of Algorithms}{27}{chapter*.13}
+\contentsline {chapter}{Index}{29}{section*.14}
+\contentsline {chapter}{Glossary}{31}{section*.15}
+\contentsline {chapter}{Acronyms}{33}{section*.17}
+\contentsline {chapter}{Bibliography}{35}{section*.20}
