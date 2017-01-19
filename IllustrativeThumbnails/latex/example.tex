@@ -144,7 +144,33 @@ which makes them more illustrative and easier to fulfill their purpose.
 \mainmatter
 
 \chapter{Introduction}
-\todo{Enter your text here.}
+With the increase of the usage of mobile devices and the need of multi tasking thumbnails became more and more important.
+Thumbnails are showed while switching between tasks and have the duty to represent the different windows and so the running applications.
+To keep the work uninterrupted it is essential to make the switching fast and as smooth as possible.
+The user needs to find the desired window quickly, the choice between the applications should not take more time than absolutely necessary. 
+But having more tabs and the same application several times running the common thumbnail system is not able to fulfill its actual purpose.
+Usual thumbnails take a simple screenshot of every application and they show it in smaller size.
+Because of the resampling process some areas and intresting parts of the window are no more recognizable and in addition the UI widgets of the same application take also the valuable place from the content elements.
+Furthermore with the usages of tablets, smart phones and smart watches the display, thus the thumbnail size needs to shrink even more, but the calculation algorithm does not take this fact into account.\par 
+This project introduces a new approach using seam carving to make thumbnails more illustrative even on small displays.
+Seam carving is a special resampling method, where related, but not necessarily straight lines are determined, and the least important of them will be eliminated.
+The definition of importance depends on the implementation, but it usually evaluates at least the color changes and the sequences of the edges on the source image.
+Since the the algorithm is used for calculation of thumbnails the usual seam carving algorithm is customized for this purpose.
+It takes into account that the input is a screenshot, so probably some UI elements are located on the picture.
+Additionally, considering that letters are more common on computer screens then on usual images, to calculate the salient regions the text content is also investigated.
+ 
+\section{Definition of the word illustrative}
+To provide the most satisfactory results a detailed and clear definition of the word illustrative is needed.
+It influences not only the measurement of pixel and region saliency, but it helps to evaluate the results and the future development.
+For the most fitting definition the fact needs to be taken into account, that the seam carving algorithm is used for screenshots and not for usual natural images.\par 
+To make a thumbnail more illustrative means that it is able to represent more information on a same sized picture than the other not illustrative thumbnail.
+In the case of a computer screen not only the usual visual features observed on real word images, like color changes and the location of edges, are crucial, but it has some special properties, which needs to be paid attention for.
+Most of the screenshots have UI widgets on it, which is classified as not illustrative.
+There are other ways to get information about the actual application, for example giving a title for the thumbnail, and it is rarely the case that a window is opened for an application itself and not for its content processing abilities.
+Furthermore text data has on the computer screen more important role then usual pictures.
+To transmit as much information as possible text data is not allowed to get damaged, even after the size reduction it needs to stay readable.\par 
+To conclude, in this project a thumbnail is called as illustrative, if its information content stays saved.
+To measure that property the contrast values, the color changes, the location of edegs, the text data and the presence of UI elements is evaluated and considered.            
 
 \chapter{Related Work}
 There are several image processing algorithms, which can be helpful by creating illustrative thumbnails.
@@ -538,6 +564,12 @@ The calculation needs to take only the saliency values of the important foregrou
 Furthermore considering that an average seem is not as long as if it would be applied on the whole input the artifacts became smaller and less noticable.
 As an additional favorable side effect also the performance increases, since several areas are ignored for the seam calculation.    
 
+\chapter{Conclusion}
+To make thumbnails more illustrative and usable even in small screens a thumbnail creating method was presented using seam carving.
+In order to have as informative results as possible the saliency calculation was adjusted to the special requirements of a screenshot.
+In addition to seam calculation the presence of UI elements on a computer screen were also taken into account.
+Because of the customized seam carving algorithm and its extension with other helpful methods, like UI parts elimination, text recognition and common resampling, the resulting thumbnails were more illustrative than their usual relatives, since their information content stayed better recognizable and the text region easier readable. 
+ 
 % Remove following line for the final thesis.
 %\input{intro.tex} % A short introduction to LaTeX.
 

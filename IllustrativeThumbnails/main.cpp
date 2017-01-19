@@ -28,18 +28,18 @@ void main()
 		Image* img = new Image(configData);
 
 		if (!img->getSourceImage().empty()) {
-			/*cvNamedWindow("saliency");
+			cvNamedWindow("saliency");
 			cv::imshow("saliency", img->getOriginalSaliencyMap());
 			cvNamedWindow("blurred");
-			cv::imshow("blurred", img->getBluredImage());*/
+			cv::imshow("blurred", img->getBluredImage());
 			cvNamedWindow("string");
 			cv::imshow("string", img->getStringImage());
-			/*cvNamedWindow("result");
+			cvNamedWindow("result");
 			cv::imshow("result", img->showSeamCarved());
 			cvNamedWindow("importanceMap");
 			cv::imshow("importanceMap", img->getSaliencyMap());
 			cvNamedWindow("seams");
-			cv::imshow("seams", img->showSeams());*/
+			cv::imshow("seams", img->showSeams());
 		}
 
 
