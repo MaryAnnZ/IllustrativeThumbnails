@@ -30,16 +30,16 @@ void main()
 		if (!img->getSourceImage().empty()) {
 			cvNamedWindow("saliency");
 			cv::imshow("saliency", img->getOriginalSaliencyMap());
-			cvNamedWindow("blurred");
+		/*	cvNamedWindow("blurred");
 			cv::imshow("blurred", img->getBluredImage());
 			cvNamedWindow("string");
-			cv::imshow("string", img->getStringImage());
+			cv::imshow("string", img->getStringImage());*/
 			cvNamedWindow("result");
 			cv::imshow("result", img->showSeamCarved());
-			cvNamedWindow("importanceMap");
+			/*cvNamedWindow("importanceMap");
 			cv::imshow("importanceMap", img->getSaliencyMap());
 			cvNamedWindow("seams");
-			cv::imshow("seams", img->showSeams());
+			cv::imshow("seams", img->showSeams());*/
 		}
 
 

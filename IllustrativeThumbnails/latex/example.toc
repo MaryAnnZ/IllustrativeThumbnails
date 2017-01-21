@@ -18,13 +18,13 @@
 \contentsline {section}{\numberline {1.1}Definition of the word illustrative}{2}{section.1.1}
 \contentsline {chapter}{\chapternumberline {2}Related Work}{3}{chapter.2}
 \contentsline {section}{\numberline {2.1}Processing as UI}{3}{section.2.1}
-\contentsline {section}{\numberline {2.2}Processing as common picture}{4}{section.2.2}
+\contentsline {section}{\numberline {2.2}Processing as common picture}{5}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Collage creating methods}{5}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}Resampling methods}{6}{subsection.2.2.2}
 \contentsline {subsection}{\numberline {2.2.3}Feature combining methods}{7}{subsection.2.2.3}
 \contentsline {chapter}{\chapternumberline {3}Methodology}{9}{chapter.3}
 \contentsline {section}{\numberline {3.1}Eliminating UI elements}{9}{section.3.1}
-\contentsline {section}{\numberline {3.2}Saliency calculation}{11}{section.3.2}
+\contentsline {section}{\numberline {3.2}Saliency calculation}{10}{section.3.2}
 \contentsline {section}{\numberline {3.3}Seam Carving}{12}{section.3.3}
 \contentsline {chapter}{\chapternumberline {4}Implementation}{13}{chapter.4}
 \contentsline {section}{\numberline {4.1}Working Pipeline}{13}{section.4.1}
@@ -34,14 +34,19 @@
 \contentsline {subsection}{\numberline {4.1.4}Text detection}{14}{subsection.4.1.4}
 \contentsline {subsection}{\numberline {4.1.5}Seam carving}{15}{subsection.4.1.5}
 \contentsline {chapter}{\chapternumberline {5}Results and Evaluation}{17}{chapter.5}
-\contentsline {chapter}{\chapternumberline {6}Future Work}{19}{chapter.6}
-\contentsline {section}{\numberline {6.1}Performance improvement}{19}{section.6.1}
-\contentsline {section}{\numberline {6.2}Methodology improvement}{19}{section.6.2}
-\contentsline {chapter}{\chapternumberline {7}Conclusion}{23}{chapter.7}
-\contentsline {chapter}{List of Figures}{25}{section*.10}
-\contentsline {chapter}{List of Tables}{27}{section*.11}
-\contentsline {chapter}{List of Algorithms}{29}{chapter*.12}
-\contentsline {chapter}{Index}{31}{section*.13}
-\contentsline {chapter}{Glossary}{33}{section*.14}
-\contentsline {chapter}{Acronyms}{35}{section*.16}
-\contentsline {chapter}{Bibliography}{37}{section*.19}
+\contentsline {section}{\numberline {5.1}Elimination of UI elements}{17}{section.5.1}
+\contentsline {section}{\numberline {5.2}Text detection}{18}{section.5.2}
+\contentsline {section}{\numberline {5.3}Resampling threshold}{18}{section.5.3}
+\contentsline {section}{\numberline {5.4}Comparison to Adobe Photoshop}{18}{section.5.4}
+\contentsline {section}{\numberline {5.5}Performance evaluation}{19}{section.5.5}
+\contentsline {chapter}{\chapternumberline {6}Future Work}{21}{chapter.6}
+\contentsline {section}{\numberline {6.1}Performance improvement}{21}{section.6.1}
+\contentsline {section}{\numberline {6.2}Methodology improvement}{21}{section.6.2}
+\contentsline {chapter}{\chapternumberline {7}Conclusion}{25}{chapter.7}
+\contentsline {chapter}{List of Figures}{27}{section*.10}
+\contentsline {chapter}{List of Tables}{29}{section*.11}
+\contentsline {chapter}{List of Algorithms}{31}{chapter*.12}
+\contentsline {chapter}{Index}{33}{section*.13}
+\contentsline {chapter}{Glossary}{35}{section*.14}
+\contentsline {chapter}{Acronyms}{37}{section*.16}
+\contentsline {chapter}{Bibliography}{39}{section*.19}

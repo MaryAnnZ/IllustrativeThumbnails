@@ -118,9 +118,9 @@
 \end{kurzfassung}
 
 \begin{abstract}
-Thumbnails are used to display the screens when switching between them on the computer
-and on mobile devices. These images make it easier to recognize the opened applications,
-and help to find the needed window quicker. Thumbnails display however only a screenshot
+Thumbnails are used to display a list of open windows or tabs when switching between them on the computer
+and on mobile devices. 
+These images make it easier to recognize the opened applications, and help to find the needed window quicker. Thumbnails display however only a screenshot
 of the windows, so they get potentially confusing if there are more opened windows or if the
 same application is opened multiple times. Depending on the resolution of the display, the
 screenshot size decreases as the number of opened windows increases. Furthermore,
@@ -130,7 +130,8 @@ There are several approaches that filter the important areas of the images to ma
 less obvious or enhance the main region. In this bachelor thesis an application
 is implemented that uses these methods on the screencaptured
 images. The less important
-areas of the screenshots are cut off, and the thumbnails show only important information,
+areas of the screenshots are cut off, and only if no more irrelevant information remains, a conventional downsampling algorithm is applied.
+So the thumbnails show only salient information,
 which makes them more illustrative and easier to fulfill their purpose.
 \end{abstract}
 
@@ -177,16 +178,16 @@ There are several image processing algorithms, which can be helpful by creating 
 The main difference between them is, if they consider the fact that the input images always are screenshots.
 Therefore, this section is divided into two parts.
 The first one discusses algorithms with UI processing segments.
-Algorithms, invented for retrieve visual data from common images, are examinated in the second section. 
-According to the information visualization method, like combining the most important parts in form of collages or simple resizing, two classes are divided.
+Algorithms, invented for resample natural images, are examinated in the second section. 
+According to the information presentation method, like combining the most important parts in form of collages or simple resizing, two classes are divided.
 In the following some of these methods are compared.
 
 \section{Processing as UI}
-Considering that the input is a screenshot, there is a high chance that common UI elements are shown on the screen.
+Considering that the input is a screenshot, there is a high chance that common UI elements, like buttons and menu bars, are shown on the screen.
 Exceptions are only the cases where graphics, images, videos or application containing these, e.g. video games, gallery program, video player are captured.
 The applications like that tend to hide all UI elements, "fullscreen" mode, or redefine them, e.g. game menu.\par
 Labeling the image parts as content and non-content, the metadata about the UI elements can be helpful.
-Forras uses already existing accessibility APIs to segment UI and non-UI data. 
+Forras uses already existing accessibility APIs, tested on Mac OS X and on Microsoft Windows, to segment UI and non-UI data. 
 Matching the metadata with the screen content provides a fast and robust result about the location of any kind of UI content.
 There are howerer several disadvantages, that need to be take into account when using such APIs.
 The range and the granularity of the support is often not wide enough.
@@ -216,7 +217,8 @@ With this cut off algorithm unnecessary widgets can be easily eliminated and mor
 According to the definition of "illustrative" of this thesis the UI elements of a screen has to get cut so the segmentation of the UI elements is not needed.
 Although the Prefab and Sikuli systems can be helpful for labeling the images as UI and content.
 But theses approaches has the drawback of the usage of the database and the slow template matching. 
-Since there is no need to know, which widgets are on the screen, and processing the actual content can already cause performance issues, the use these methods would overcomplicate the application without providing noteworthy advantages.
+Furthermore they are actually designed for other purpose, namely to segment and classify UI elements, so before their employment significant reworking is needed.
+At last there is no need to know, which widgets are on the screen, and processing the actual content can already cause performance issues, the use these methods would overcomplicate the application without providing noteworthy advantages.
 
 \section{Processing as common picture}
 There are several information retrieving methods for processing images with any content.
@@ -261,12 +263,12 @@ Collage methods are very useful to represent a large image dataset only in a sma
 They work with numerous input data, and taking the most important parts of them create a new image, that is not similar to any before.
 That is why they are more useful for making a thumbnail for a desktop but not for one application.
 Even though taking only the most important ROIs of one screen it would be possible to create an image more illustrative that any other, since the important content is the largest and the best readable.
-Cutting one screen apart and arranging some parts of them willingly would confuse the user, and even more time would be needed to recognize the screen.
+But classic collage assembly methods were developed for natural images, screenshot collages however have different requirements for image and text regions.
+In addition cutting one screen apart and arranging some parts of them willingly would confuse the user, and even more time would be needed to recognize the screen.
 
 \subsection{Resampling methods}
-Treating the input image as one unit, has a big advantage against the approaches mentioned before.
-Even after modification the result will be highly similar to the input.
-Resampling means, that some parts of the image will be eliminated, but all remaining areas will have the same proportion to each other, not like by the collage algorithms.
+If the location of the different regions needs to stay the same relatively to each other, resampling methods can work better than collage creating approaches.
+Resampling means, that some parts of the image equaly distributed on the source will be eliminated, but all remaining areas will have the same proportion to each other, not like by the collage algorithms.
 The image remains recognizable because of the same look, even though the most important areas are less readable.\par 
 To select areas, which needs to kept same, Forras uses several attention models, which defines Attention Objects (AO).
 AOs usually are objects from the real world, which catch the human eye, because of their familiarity, shape, color etc.
@@ -281,9 +283,10 @@ The algorithm expects an input image and a feature mask.
 A grid is generated, which lies on the input image.
 This grid can be modified in an optional shape, but the gridpoints on the feature mask are not allowed to change their proportion to each other.
 In that way the picture elements between the AOs fill the new shape, but the AOs get barely distorted\par 
-A detailed importance is essential by creating thumbnails, since a screen usually contain more information and ROIs than a common picture. 
+A detailed importance is essential by creating thumbnails, since a screen usually contain more sensitive information, for example text can get easily destroyed, and ROIs, there is no a clear focus point, than a common picture. 
 But the algorithms described above has aspects, like face recognition and grid calculation, which overcomplicate the calculations, causing performance issues without reaching better quality.
-A face on a computer screen is not so common as on usual photos, and it is not so important too than text for example.
+A face on a computer screen is not so common as on usual photos, and in addition it is not so sensitive than for example text data.
+In the case of down sampling a human face can stay recognizable, whereas text gets fast unreadable. 
 With a grid the input image can get reshaped in any other form, and in addition no important part needs to get damaged.
 But it is meant to form the input in completely other shape, not for resize it according to aspect ratio.
 Some aspects however, like definition of AOs, could be changed with the actual used approaches, this possibility will be discussed in the future work section.
@@ -308,25 +311,26 @@ So the use of such advanced methods like Poisson equation is pointless, since th
  
 
 \chapter{Methodology}
-The algorithm, which creates thumbnails more illustrative, has three main steps.
+The algorithm to create illustrative thumbnails has three main steps.
 At the beginning the UI elements are cut off.
-In the case of thumbnails there are other ways to get information about what application are actually opened, for example the labeling of the thumbnails.
+In the case of thumbnails there are other ways to get information about what application are actually opened, for example giving a title for it containing the running application's name.
 In addition it is usual that the same software is running many times for other purposes, for example the usage of text editor for writing and for reading some document.
-The content  not the surface of these application matters, although reading the title of the thumbnails is smaller than the software recognition through visual data, this aspect needs to take count for the better visualization of the actual content area.
+The content and not the surface of these applications matters.
+Although reading the title of the thumbnails is slower than the software recognition through visual data, this aspect needs to take count for the better visualization of the actual content area.%TODO{trade off} 
 The second step is the calculation of the importance map weighted on the place of text data.
 Unlike to common pictures from the real life the occurrence of text on computer screens is higher and more important.
 For this reason the calculation of the final importance map have two steps.
-First the importance value of every picture is generated according to the color changes of the source image.
-Second the color value is increased at the places where text is found.
+First the importance value of every picture is generated according to an image based energy function described in the next sections.
+Second the importance value is increased at the places where text is found.
 In that way not only the silhouette but the whole body of the letters seams to be salient.
 Lastly seam carving and simple resampling is performed  until the output size is reached.
 In this section these three main sections is discussed, and an overview about the algorithm is shown.
 
 \section{Eliminating UI elements}
 For the elimination of UI elements, they need to get identified first.
-In the search for UI widget, it is supposed, that they are placed near the border of the screen but not in the central area.
+In the search for UI widget a heuristic is developed, which supposes, that they are placed near the border of the screen but not in the central area.
 The middle of a screen works as reference data for the investigation, and it is not checked if there are some unimportant UI elements placed.
-The UI elimination algorithm works right on the source window, no further premodification is needed for this process.\par
+The UI elimination algorithm works right on the source window in a predefined, parametrized border area, no further premodification is needed for this process.\par
 Cropping the border first the horizontal then the vertical margins are checked, where the order is relevant.
 The algorithm is based on the observation, that there are the upper and the lower bars, which cover the whole width of the display.
 The sidebars, if they exist, run however only between the the upper and the lower bars, and cover the remaining area.
@@ -335,13 +339,13 @@ The UI matching method investigates slices of the screen running along the margi
 To get better results, it is important to investigate coherent data, and to not mix parts of different UI bars in one slice.
 That is why the order of margin cropping is chosen in the mentioned way.\par 
 To find the best cropping line, where the UI meets the content area a double checking method is performed.
-The first step is searching for a line having the same color and no interruption along the horizontal sides of the screen.
+The first step is searching for a line in the predefined border area, but near to the center having the same color and no interruption along the horizontal sides of the screen.
 This method is based on the consideration that toolbars often have a one color background.
 Therefore the task is to find a line, where no more widget is placed, but it still belongs to the UI area, so it is filled with a background color.\par
-If there are a defined UI are the method above works well, but there are several cases, where it is not able to provide any result.
+If there is a defined UI area the method above works well, but there are several cases, where it is not able to provide any result.
 Game applications usually uses their own graphical UI, but even by more traditional applications it can happen that the UI area is so overloaded, that no background line can be found.
 For that reason is it important to perform an other checking loop too.
-This step is based on the correlation value of the histograms of the border and the center.
+This step is based on the correlation value of the color histograms of the border and the center.
 The margin is split into thin slices.
 Initially the first slice, near the border is checked.
 The histogram of this slice is compared to the histogram of the center.
@@ -352,15 +356,16 @@ In the next step the other slices are compared with the two reference histograms
 At the beginning the correlation with the border histogram is high and with the center is low, which shows that the slice is still in the UI area, it matches the theme of the border widgets.
 But by the slices being near to the center this tendency turns.
 At the slice whose correlation with the center histogram is higher than the one with the border the algorithm stops, cuts every slices which were checked before, and it terminates.\par 
-This method is executed four times.
-In the first two cases the upper and the lower borders are investigated.
-The third and the fourth loop is adjusted to the sidebars.
-In the first step not a horizontal but a vertical line is searched, looking for a straight route, where the background color of the sidebar takes the whole space between the, already cropped, upper and lower borders of the image.
-Finally in the second checking loop the slices are defined vertically and not horizontally this time. 
+%This method is executed four times.
+%In the first two cases the upper and the lower borders are %investigated.
+%The third and the fourth loop is adjusted to the sidebars.
+%In the first step not a horizontal but a vertical line is %searched, looking for a straight route, where the %background color of the sidebar takes the whole space %between the, already cropped, upper and lower borders of %the image.
+%Finally in the second checking loop the slices are defined %vertically and not horizontally this time. 
 
 \section{Saliency calculation}
 In order to ignore that parts of the source image, which actually are unimportant, saliency calculation is needed.
-A saliency map is a grayscale image where the bright color of an area means that that region seems to be more interesting than other dark colored pixels.
+The saliency value of a pixel measures, how important the pixel is, how noticeable it is and how much attention it affects for the human eye.
+A saliency map is a grayscale image where the high value of an area means that that region seems to be more interesting than other pixels with lower value.
 There are however many definitions and approaches, which pixels should be evaluated for salient or not salient.
 In this case the saliency is calculated in the way presented by Forras. 
 There are two reasons, why this algorithm is chosen.
@@ -369,9 +374,9 @@ It means only the pixel is valued as important, which attracts the low level hum
 Secondly it is scale invariant, so it is more robust than other similar but only singe scale approaches.\par 
 The algorithm converts the source into a uniform colorspace (Lu*v) first.
 After that, to make the approach scale invariant, a Gaussian contrast pyramid is built.
-Forras calculates the contrast value from the weighted sum of  the  differences between the pixel and its neighborhood.
-This approach needs to get slightly modified, and the calculation have to ignore the weighting value.
-This parameter is used because of the fact, that the central area of common real word images is more important than the margin regions.
+Forras calculates the contrast value from the weighted sum of  the  differences between the pixel and its neighborhood using the L2 norm.
+This approach needs to get slightly modified, in way that the calculation has to ignore the weighting value.
+Forras uses this weighting parameter because of the fact, that the central area of common real word images is more important than the margin regions.
 Investigating computer screens this is however not the case.
 A screenshot often does not have one defined focus point, where the most important information is shown.
 So the use of a weighting value would prefer the inner window, even though there is no significant correlation between the importance of the data and its placement on the screen.
@@ -385,9 +390,10 @@ After that is all coherent string is investigated if they possibly are words or 
 The method, which verify the words, checks two aspects.
 The first is if the strings are high enough but not too high for being real letters.
 Furthermore if their width is not too small but not too big to be one word at least but not an endless sentence.
+All these size checking values are parametrized, their default value based on the size of one letter is mentioned in the next chapter. 
 The second loop evaluates the histograms of the area, where the strings are found.
 It is usual, that the letters being part of the same text data have the same color, while the background, for readability, does not have big color changes neither.
-Therefore the histogram of these areas has two accumulations, one for the letters and one for the color of the background.
+Therefore the histogram of these areas are bimodal, one for the letters and one for the color of the background.
 So if a string has a so special histogram it is evaluated as word, but even if it managed to pass the first check, without such a histogram, it is not possible to be labeled as word. \par 
 Finishing to calculate the final saliency map, which is used in the whole application, the regions evaluated as text need to get weighted.
 All area which passed the word checking test is automatically evaluated as highly important, and gets the biggest saliency value.
@@ -395,7 +401,7 @@ In addition, to make sure that not even the space between the words is damaged, 
 
 \section{Seam Carving}
 To resize the image without damaging the important regions, seam carving Forras is used.
-Based on the saliency map paths are calculated, and these with minimal importance value are eliminated.
+Seam carving calculates paths according to the saliency map, and eliminates these with minimal importance value.
 This step is repeated until the desired size is reached or the importance value of the chosen path exceeds a predefined threshold.
 Because seam carving does not necessary eliminates only straight lines, the algorithm effects the layout of unimportant regions noticeably.
 Furthermore if the whole image has very high salient values, the resulting seams do not have remarkable smaller salient value than any randomly chosen straight line, chosen for resampling elimination.
@@ -415,13 +421,17 @@ For that reason it is possible that the weight and height parameters do not reac
 In this case the seam carving algorithm continues for only one parameter until it reaches one of the conditions above. 
 Since the threshold parameter controls the algorithm, when to switch between seam carving and resampling, its value is essential. 
 It is calculated from the maximum salient path found after the first loop of the seam carving algorithm.
+Since with every loop one unsalient pixel is eliminated from the horizontal or from the vertical paths, the relative saliency of the seams increase permanently.
+Therefore in most of the cases even the less salient seam needs to hit the relative value of the most salient path on the original image, where every unsalient pixel were included. 
 The common resampling method eliminates straight lines chosen from the source image until the desired size is reached.
 Seam carving is used to avoid that paths with high salient value are cut off.
-But if the seams have as high importance value as any other from the source image, it does not make a difference if seam carving or usual resampling is used.
+But if the seams have as high importance value as any other from the source image, regular resampling has already more advantages.
+First the algorithm is faster then the implemented seam carving method.
+And second it applies an interpolating algorithm between the borders of the eliminated area, so it saves ultimately more information than seam carving in this case.   
 
 \chapter{Implementation}
-The thumbnail creator application is developed in the programming language C++ using Microsoft Visual Studio 2015.
-Except the source image loading window, no operating system specific calls are performed.
+The illustrative thumbnail creator application is developed in the programming language C++.
+Except the source image file browsing window, no operating system specific calls are performed.
 To make the application platform independent, only this part needs changes.
 For image processing purposes Open Source Computer Vision Library (OpenCV) is used.\par 
 OpenCV is apart of the computer vision a machine learning library too.     
@@ -450,7 +460,8 @@ Starting from the border in direction to the most central point every row, and l
 In the case of success the OpenCV methods \texttt{rowRange} and \texttt{colRange} cut the input image.
 After that the histogram of the remaining margin area is examined and compared to the central region, where the margin is split into thin slices.
 The function \texttt{calcHist} calculates the histograms of the marginal and of the central window.
-If according to the function \texttt{compareHist} they do not correlate, the comparison is performed for the other slices and they are assigned as margin or as central window.
+If according to the function \texttt{compareHist}, which measures the correlation of two histograms,%\TODO{formel}
+ they do not correlate, the comparison is performed for the other slices and they are assigned as margin or as central window.
 If a slice is found which correlates with the margin histogram the image is cropped by the slice again. 
 The parameters of correlation and the width of the slices are also configurable.
 According to the tests, the best results are provided, if the correlation is between 1.3 and 2 and the width is 0.25\% of the window.
@@ -470,11 +481,11 @@ In order to avoid any overflow, the pixel values are divided by the amount of th
 To find as many words as possible the grayscale cropped source image is processed with the Laplacian operator, with the kernel size of three.
 Thank to the edge detection the layout of the letters is highlighted now.
 To make the series of letters related a horizontal blur is needed.
-The function \texttt{blur} is called with a configurable kernel size, but by default the width is set to 15 pixels.
+The function \texttt{blur} is called with a configurable kernel size, but in the default settings of the project the height is set to 1, the width to 15 pixels.
 The OpenCV function  \texttt{findContours} is able to find the related regions and save their silhouette points in a \texttt{vector}.
 For each region the width and the height is calculated.
 If a region is at least double so wide than high, these attributes are examined, if they reach the minimum size for being an actual word.
-The size of the minimal word is configurable and set to 5X5 as default.
+The size of the minimal word is configurable and set to 5x5, approximately the font size of 5pt in order to take also the smallest fonts into account, as default.
 In the case a region passes the test, it is marked as possible word and it is forwarded for further investigation.
 After labeling every region as word or non word, the average height of the possible words is calculated.
 If the height of a possible word is too much smaller or bigger than the average, it automatically gets sorted out.
@@ -484,7 +495,7 @@ After the height test the histogram of the possible word regions is checked.
 If it have exactly two accumulations, for the color of the letters and for the background, the region stays in the list of possible words, but otherwise it is sorted out.
 Finally the space above and below of the possible words is investigated.
 Words are usually written in lines, where because of the readability there is some space between them.
-Therefore if two possible word region have common points, they can not be real words and so they also need to get sorted out of the list.
+Therefore if two possible word region have common points at the top or at the bottom, they can not be real words and so they also need to get sorted out of the list.
 When the final list is ready, the regions of the words need to get marked on the saliency map.
 The value of every text data pixel is automatically increased.
 At the very end to avoid value overflow and other irregularities the whole map is normalized with the OpenCV function \texttt{normalize}.  
@@ -509,9 +520,72 @@ The seam found in that way is afterwards eliminated not only from the cropped so
 But if the saliency value of even the less expensive seam exceeds the resampling value, instead of cutting the path off, the usual resampling algorithm is applied using \texttt{resize} and the algorithm terminates.  
 
 \chapter{Results and Evaluation}
+To make the project configurable the application uses a \texttt{config.txt} file, where every parameter can be set as needed.
+In order to find the configuration, which provides reasonable results in as many cases as possible several tests were performed.
+There is a test database having 14 pictures, showing seven different applications, captured on Windows 10.
+In the following the test cases of the elimination of UI elements, text detection and for the value of resampling threshold are presented and evaluated, which possibility provides the desired results.
+At last the application is compared to Adobe PhotoShop Forras, their advantages and disadvantages are discussed.
+\section{Elimination of UI elements} 
+Depending on the investigation area for UI elements different regions of the border area can be cropped. 
+If the border region is defined as too small (10\% of the image size) the algorithm terminates too early and not all UI widget is cut off.
+But determining the border too big (40\% of the image size) is also dangerous, because eventually the reference value for the central area can be chosen wrong, and finally not only the border area get cropped.
+Foto google, pdf \par 
+Since the histograms of the border area, the central area and the slices between them is sequentially compared, the value of its correlation is crucial by assigning them to one or to the other part of the image.
+If the correlation between the central area and the slice is set for too high, it means their correlation value has to be small (1), some content elements near the border can get rid of, by low correlation however some UI widgets can be labeled as important content. 
+foto ppt, blizzard\par 
+The thickness of the slices influences, how refined the algorithm is when looking through the border area.
+If the slices are really slim (5\% of the image size) the performance slightly decreases, but in exchange it is able to find a really close cropping point, where the UI and the content actually meets.
+foto desktop\par
+\section{Text detection}
+If the lines are already blurred on the grayscale image, the color of the letters and their area is slightly modified. 
+With a threshold a minimal pixel color value is defined to get the pixel labeled as possible text.
+If this parameter is small (50) every bright area can be classified as text, even if the region is only near to a word or part of a text.
+But if it is set to a bigger value (200) only the core of a word can reach it, so no region will actually contour its related word's shape.
+foto 444\par
+The properties of a possible word is also parametrized.
+The set of possible words need to be sorted first, if they according to their size they actually can be words.
+The parameters for minimum height and width need to be chosen carefully, since if they are too big (width is set to 100, by font size of 12pt more than 6 letters or height to 20, font size of 14pt), almost every word can get excluded from the list.
+foto mindegy 
+From the set of the possible words the average size is calculated, and it is customizable how much the words are allowed to vary.
+For example if the difference can be only 80\% the smaller words can easily get sorted out, while by 50\% they can also manage to stay in the possible words set.
+foto pdf2\par 
+With the inversion of the algorithm, setting the weight of the words for negative, the functionality of the application can be changed.
+For experimental investigations the text areas were set for not salient, so the images and not the words on the image is saved. 
+To save the image data is useful, when the thumbnail needs to get really small, so that it is no more possible, that the text remains readable. 
+The experimental results are presented below.
+foto 
+\section{Resampling threshold}
+The resampling thershold controls, when the application switches from seam carving to usual resampling. 
+If the value is small (0.1) only a few seam carving loop is performed, and the application behaves similar to a common down sampling algorithm.
+the performance is positively affected by fewer seam carving loops, but it also loses its advantage against simple resampling methods, and the important areas are no more so easily recognizable.
+foto diablo 
+\section{Comparison to Adobe Photoshop} 
+To compare the algorithm to an already existing tool the seam carving feature of Adobe Photoshop CS 5 Forras was used.
+There are two test cases, the first one takes the same source like the illustrative thumbnail creator algorithm.
+The input image of the second case is however the cropped source image produced by this application after the elimination of the UI elements.
+In the first test it is investigated, how seam carving invented for usual photos works on screenshots.
+Comparing the images to the outputs of the thumbnail algorithm, it is striking how much smaller and less readable the the word are.
+Because this project applies not only seam carving but also heuristics to cut off the border region, to compare the actual seam carving algorithms Photoshop needs the same input as this application has, when it start the seam calculation.
+The second test case is needed for this reason.
+The quality of the output improves definitely, since a smaller image needs to get shrunk to the same size.
+The main difference between the two methods seems to be the weighting of the content.
+This approach pays more attention for the text and image data can easily get ignored.
+Photoshop however tries to keep both of the regions, perhaps the image content seems to be slightly more important.
+Since the thumbnail creator algorithm has a ranking between the elements, text before images, the output is clear, even if the image data is lost, the text stays readable.
+The output of Photoshop is rather disorganized, the text and image regions flow in each other.
+The images are significantly better recognizable, but the words are notably more damaged.  
+  
+\section{Performance evaluation}
+The test are performed on Windows 10 with the CPU Intel i3-2310, 2.1GHZ and 2 Cores and with the Grafic card AMD Radeon HD 7400M.
+During the tests some performance issues turned up, the application needed up to 3.5 minutes but in average 1 minute  to terminate.\par 
+The performance bottleneck is caused by the seam calculation.
+Every time, when a seam is eliminated, the whole saliency map is recalculated.
+Having a new saliency map the possible seam paths also needs to get redetermined.
+If the UI cropping algorithm is not able to cut a bigger area or the resampling threshold is reached later, then many seam carving loop is performed. 
+So screenshots with bigger and clearly defined UI areas have shorter run time, whereas inputs like gallery applications and computer games take longer time. 
 
 \chapter{Future Work}
-This application was proved to be useful for creating illustrative thumbnails, but there are certain implementations to extend its scope. 
+This application according to the vhapter before is useful for creating illustrative thumbnails, but there are certain implementations to extend its scope. 
 There are two main areas, where certain improvements can be applied, performance and the software methodology.
 Although the current application provides reasonable results, described in the chapter before, there are several approaches for the development, which make the present method even robuster and easier to use.
 The most important directions for development will be discussed in the following section.
@@ -522,7 +596,6 @@ In the best case every pixel and every possible path needs to be examined to fin
 Depending on the size of the input, the visiting and checking all pixels individually can take a long time.
 This process can be get however easily parallelized.
 In 2007, Nvidia released a parallel computing platform, called CUDA Forras, which exploits the computing performance of the GPUs.
-An application, using GPU computing, executes single threaded tasks on the CPU, while it splits the parallel precesses on the GPU. 
 In addition, the CUDA system can be simply integrated into the current application, since it is developed for the programming languages C, C++ and Fortran, and also C++ is used in this project.   
 
 \section{Methodology improvement}
