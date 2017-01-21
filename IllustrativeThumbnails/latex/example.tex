@@ -215,16 +215,16 @@ Although the Prefab and Sikuli systems are proved to be helpful at distinguishin
 Furthermore they are actually designed for another purpose, namely to segment and classify UI elements, so before their employment significant reworking is needed.
 Since it is not essential to know, which exact widgets appear on the screen, and processing their actual content may cause performance issues, the use of the above methods would overcomplicate the application without providing noteworthy advantages.
 
-\section{Processing as common picture}
-There are several information retrieving methods for processing images with any content.
-Furthermore in case of making any kind of image more illustrative, there are important tasks like interesting point recognition, Region of Interest (ROI) selection, image or feature composition etc. which they can handle easily.
-According to the manner of the input data there are two different groups of these algorithms, which need to be discussed in the following sections.
-The first category works with more than one picture in the same time.
-Its strength is to choose singe features which represents the most the whole input data. 
+\section{Processing as a regular picture}
+There are several information retrieving methods for processing images with any kind of content.
+Furthermore, these methods can also handle a series of important tasks such as interesting point recognition, Region of Interest (ROI) selection, image or feature composition, i.e. tasks that are in order to make any kind of images more illustrative.
+Based on the type of input data, there are two groups of the above algorithms that will be discussed in the following sections.
+The first category works with more than one picture at the same time.
+Its strength is to choose singe features that best represents the whole input data. 
 In exchange it is likely that no input image will be recognizable on the result.
-On the other hand there are the methods in the second group, which take only one picture for input and process it as one unit.
-So the result is similar to the input data, but therefore the chance is high that not only the unimportant but the areas with high information ratio are damaged
-At the very and of this section some approaches are presented, which can help the work of both of the above mentioned groups.
+To the contrary, there are the methods in the second group that take only one picture for input and process it as one unit.
+The resulting image is similar to the input data, however thus it is likely that not only the unimportant but also the areas with high information ratio are damaged.
+Finally, in the subsection below some approaches are presented that assist with the work of both of the above mentioned groups.
 
 \subsection{Collage creating methods} 
 A collage is an assembled image, containing parts of a bunch of input images and being representative for the whole input data.
