@@ -242,14 +242,14 @@ While transition cost stands for the smooth transition between every two images.
 At last, the parameter object sensitivity holds the results of object recognition, and it helps in the arrangement, that every object has a reasonable placement.\par
 Forras concentrates however only at the first two parameters above.
 It clusters the images according to their source and the time, and measures the quality.
-Thank for the clustering by the choice of the final images it is clear,  which images are the same or have similar content.
+Thank for the clustering, by the choice of the final images it is clear,  which images are the same or have similar content.
 This feature, accordingly modified, can be useful by sorting ROIs of a screenshot, i.e.: text content, image content etc. or of the running applications of the desktop, i.e.: textprocessing, gallery application etc.
 The parameter quality summarizes the value of the results of the following calculations: blurriness, compression, contrast and color balance.
 Since in this case only screenshots, thus computer generated pictures, can be the input, these measurements invented for camera data would provide less meaningful results than the algorithm above.\par 
 Having the best ROIs for the collage the last task is to merge them into one output picture.
 For this purpose Forras uses a method called ROI packing.
-First the central point of every ROI needs to get chosen and every pixel on the canvas needs to get assigned to one of the using the k-Means algorithm.
-After that the ROIs can be placed on the area calculated for them.
+First the central point of every ROI needs to get chosen and every pixel on the canvas needs to get assigned to one of them using k-Means algorithm.
+After that, the ROIs can be placed on the  for them calculated  area.
 To fill the place between the ROIs they have to grow, keeping the aspect ratio, until they overlap. 
 Then every ROI is shifted to the middle of its area.
 This method can be repeated until no ROI grows anymore.
