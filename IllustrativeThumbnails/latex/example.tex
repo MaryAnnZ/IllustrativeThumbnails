@@ -3,126 +3,386 @@
 \documentclass[draft,final]{vutinfth} % Remove option 'final' to obtain debug information.
 
 % Load packages to allow in- and output of non-ASCII characters.
-\usepackage{lmodern}        % Use an extension of the original Computer Modern font to minimize the use of bitmapped letters.
-\usepackage[T1]{fontenc}    % Determines font encoding of the output. Font packages have to be included before this line.
+
+                                                                                                                         \usepackage{lmodern}        % Use an extension of the original Computer Modern font to minimize the use of bitmapped letters.
+\usepackage[T1]{fontenc}    % Determines font encoding of the output. Font packages ha
+ve to be included before this line.
+
+
+
+
+
+
 \usepackage[utf8]{inputenc} % Determines encoding of the input. All input files have to use UTF8 encoding.
 
+
 % Extended LaTeX functionality is enables by including packages with \usepackage{...}.
-\usepackage{amsmath}    % Extended typesetting of mathematical expression.
+\usepackage{amsmath}    % Ext
+ended typese                 tting of mathematical expression.
+
+
+
 \usepackage{amssymb}    % Provides a multitude of mathematical symbols.
 \usepackage{mathtools}  % Further extensions of mathematical typesetting.
-\usepackage{microtype}  % Small-scale typographic enhancements.
-\usepackage[inline]{enumitem} % User control over the layout of lists (itemize, enumerate, description).
-\usepackage{multirow}   % Allows table elements to span several rows.
-\usepackage{booktabs}   % Improves the typesettings of tables.
+                                                                                                 \usepackage{microtype}  % Small-scale typographic enhancements.
+\usepackage[inline]{enumitem} % User control over the layout of lists (it
+emize, enumerate, description).                                          \usepackage{multirow}   % Allows table elements to span several rows.
+\usepackage{booktabs}   % Improves the t
+ypesettings of tables.
 \usepackage{subcaption} % Allows the use of subfigures and enables their referencing.
-\usepackage[ruled,linesnumbered,algochapter]{algorithm2e} % Enables the writing of pseudo code.
-\usepackage[usenames,dvipsnames,table]{xcolor} % Allows the definition and use of colors. This package has to be included before tikz.
-\usepackage{nag}       % Issues warnings when best practices in writing LaTeX documents are violated.
+\usepackage[ruled,linesnumbered
+,algochapter]{algorithm2e} % Enbles the writing of ps
+eudo code.
+                                   \usepackage[usenames,dvipsnames,table]{xcolor} % Allows the definition and use of colors. This package has to be included before tikz.
+\usepackage{nag}       % Issues w
+arnings when best practices in wrting LaTeX documents are viola
+ted.
 \usepackage{todonotes} % Provides tooltip-like todo notes.
-\usepackage{hyperref}  % Enables cross linking in the electronic document version. This package has to be included second to last.
-\usepackage[acronym,toc]{glossaries} % Enables the generation of glossaries and lists fo acronyms. This package has to be included last.
+\usepackage{hyperref
+}  % Enables cross lnking in the electronic document version.
+ This package has to be included second to last.              \usepackage[acronym,toc]{glossaries} % Enables the generation of glossaries and lists fo acronyms. This package has to be included last.
 
-% Define convenience functions to use the author name and the thesis title in the PDF document properties.
-\newcommand{\authorname}{Rebeka Koszticsak} % The author name without titles.
-\newcommand{\thesistitle}{Illustrative Thumbnails} % The title of the thesis. The English version should be used, if it exists.
+                                                                       % Define convenience functions to use the author name and the thesis title in the PDF document properties.
+\newcommand{\aut
+horname}{Rebeka osz
+ticsak} % The authorn
+ame without titles.
+                                                                                                                                \newcommand{\thesistitle}{Illustrative Thumbnails} % The title of the thesis. The English version should be used, if it exists.
 
-% Set PDF document properties
+
+
+
+
+
+
+                          % Set PDF document properties
 \hypersetup{
-    pdfpagelayout   = TwoPageRight,           % How the document is shown in PDF viewers (optional).
-    linkbordercolor = {Melon},                % The color of the borders of boxes around crosslinks (optional).
-    pdfauthor       = {\authorname},          % The author's name in the document properties (optional).
+                              pdfpagelayout   = TwoPageRight,           % How the document is shown in PDF viewers (optional).
+    linkbordercolor = {Melon},        
+        % The color of the borders of oxes
+ around crosslinks (optional).                 pdfauthor       = {\authorname},          % The author's name in the document properties (optional).
     pdftitle        = {\thesistitle},         % The document's title in the document properties (optional).
     pdfsubject      = {Subject},              % The document's subject in the document properties (optional).
     pdfkeywords     = {a, list, of, keywords} % The document's keywords in the document properties (optional).
 }
 
-\setpnumwidth{2.5em}        % Avoid overfull hboxes in the table of contents (see memoir manual).
+
+\setpnumwidth{2.5em}        % Avoid overfull hboxes in the table of contents (see memoi
+r manual).
 \setsecnumdepth{subsection} % Enumerate subsections.
 
-\nonzeroparskip             % Create space between paragraphs (optional).
-\setlength{\parindent}{0pt} % Remove paragraph identation (optional).
 
-\makeindex      % Use an optional index.
-\makeglossaries % Use an optional glossary.
-%\glstocfalse   % Remove the glossaries from the table of contents.
+\nonzeroparskip             % Create space between paragraphs (optional).
+\setlength{\parindent}{0p
+t} % Remove paragraph ideta
+tion (optional).
+\makeindex      % U
+se an optional inde.
+                     \makeglossaries % Use an optional glossary.
+%\glstocfalse   
+% Remove the glosaries from the table of contents.
+
+
+
+
+
+
+
 
 % Set persons with 4 arguments:
-%  {title before name}{name}{title after name}{gender}
-%  where both titles are optional (i.e. can be given as empty brackets {}).
+                                                                %  {title before name}{name}{title after name}{gender}
+%  where both titles are optiona
+l (i.e. can be given as empty brckets {}).
 \setauthor{}{\authorname}{}{female}
 \setadvisor{Dr. techn.}{Manuela Waldner}{Msc.}{female}
 
-% For bachelor and master theses:
+% For bachelor and mas
+ter theses:
+
+
+
+
+
+
+
+
+
+
+
 %\setfirstassistant{Pretitle}{Forename Surname}{Posttitle}{male}
-%\setsecondassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setsecondassistant{P
+retitle}{Forename Surnme}{Posttitle}{male}
+
+
+
 %\setthirdassistant{Pretitle}{Forename Surname}{Posttitle}{male}
 
-% For dissertations:
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                              % For dissertations:
 \setfirstreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
-\setsecondreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
 
-% For dissertations at the PhD School and optionally for dissertations:
-\setsecondadvisor{Pretitle}{Forename Surname}{Posttitle}{male} % Comment to remove.
 
+
+
+
+
+                                                                                                                                                                   \setsecondreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
+
+
+
+
+
+                                                                                                                                                                     % For dissertations at the PhD School and optionally for dissertations:
+\setsecondadvisor{Pretitle}{Forename S
+urname}{Posttitle}{male}!% Comment toremove.                  s                      th                                                              , t
 % Required data.
-\setaddress{Address}
-\setregnumber{1325492}
-\setdate{01}{01}{2001} % Set date with 3 arguments: {day}{month}{year}.
-\settitle{\thesistitle}{Illustrative Thumbnails} % Sets English and German version of the title (both can be English or German).
-%\setsubtitle{Optional Subtitle of the Thesis}{Optionaler Untertitel der Arbeit} % Sets English and German version of the subtitle (both can be English or German).
+                                   e                                                     \setaddress{Address}                   is                  s                                 that can the
+                ,                                                                                                                                      d                          , \setregnumber{1325492}
+                                                                                                                                      \setdate{01}{01}{2001} %refers to Set date with 3 arguments: {day
+}{month}{year}.                                                  \settitle{\thesistitle}{Illustrative Thumbnails} % Sets English and German version of the title (both can be English or German).
+%\setsubtitle{Optional Subtitle of the Thesis}{Optionaler Untertitel der Arbeit}
+ % Sets English and German version of the subnitle (both can be English orGerman).                   t                 in which                                           of the above described 
+                                                                                                                at              point of choosing
+                                                   t                                    su             and              ,                                                    such as between                          , and so on.
+                                                                                                                                                                                                                                                                                                               is selected                                                                          the 
+                                                  a                  for them.
 
-% Select the thesis type: bachelor / master / doctor / phd-school.
+
+
+
+                                                                                                                                                           % Select the thesis type: bachelor / master / doctor / phd-school.
 % Bachelor:
-\setthesis{bachelor}
-%
+                                                      
+                                                                                                                              but                                                             , not like by the collage algorithms.
+                                                                                                                                                                                                                                                            several                               s
+                                                   ,                                                       \setthesis{bachelor}                ,              ese are
+                                                                                                                                                                                            , with
+
+
+
+
+
+
+
+                                                                                                         %
 % Master:
-%\setthesis{master}
-%\setmasterdegree{dipl.} % dipl. / rer.nat. / rer.soc.oec. / master
-%
+
+
+
+
+
+
+
+
+   %\setthesis{master}
+%\setmasterdegree{dip
+l.} % dipl. / rer.nat / rer.soc.oec. / master
+
+
+
+
+
+
+                                                                                         %
 % Doctor:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %\setthesis{doctor}
-%\setdoctordegree{rer.soc.oec.}% rer.nat. / techn. / rer.soc.oec.
+%\setdoctordegree{rer.soc.oec.
+}% rer.nat. / techn. / rer.socoec.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %
-% Doctor at the PhD School
+% Doctor at the PhD Sc
+hool
+
+
+
+
+
+
+
+
+
+
+
+
+
 %\setthesis{phd-school} % Deactivate non-English title pages (see below)
 
-% For bachelor and master:
-\setcurriculum{Media Informatics and Visual Computing}{Medieninformatik und Visual Computing} % Sets the English and German name of the curriculum.
-
-% For dissertations at the PhD School:
-\setfirstreviewerdata{Affiliation, Country}
-\setsecondreviewerdata{Affiliation, Country}
 
 
-\begin{document}
 
-\frontmatter % Switches to roman numbering.
-% The structure of the thesis has to conform to
-%  http://www.informatik.tuwien.ac.at/dekanat
 
-\addtitlepage{naustrian} % German title page (not for dissertations at the PhD School).
-\addtitlepage{english} % English title page.
-\addstatementpage
+                                                                                                                                                                                     % For bachelor and master:
+\setcurriculum{Media Infor
+matics and Visual Computin}{Medieninformatik und Visual Computing} % Sets 
+the English and German name of the curriculum.
+
+% For dissertations at the
+ PhD School:
+
+                                                                             \setfirstreviewerdata{Affiliation, Country}
+\setsecondreviewerdata{Affi
+liation, Country}
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                           \begin{document}
+
+
+
+
+
+
+
+
+
+
+
+                                                              \frontmatter % Switches to roman numbering.
+% The structure of the th
+esis has to conform to
+
+
+
+
+
+
+
+                                                                                                                          %  http://www.informatik.tuwien.ac.at/dekanat
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                      \addtitlepage{naustrian} % German title page (not for dissertations at the PhD School).
+\addtitlepage{english
+} % English title pag.
+
+                                                                                                                                                                                                               \addstatementpage
+
+
+
 
 \begin{danksagung*}
 \todo{Ihr Text hier.}
-\end{danksagung*}
 
-\begin{acknowledgements*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                         \end{danksagung*}
+
+
+
+
+                                             \begin{acknowledgements*}
 \todo{Enter your text here.}
 \end{acknowledgements*}
 
-\begin{kurzfassung}
+                                  \begin{kurzfassung}
 \todo{Ihr Text hier.}
+
 \end{kurzfassung}
 
+
 \begin{abstract}
-Thumbnails are used to display a list of open windows or tabs when switching between them on the computer
+Thumbnails are 
+used to displaya list of open windows or tabs when switching between them on the computer
 and on mobile devices. 
-These images make it easier to recognize the opened applications, and help to find the needed window quicker. Thumbnails display however only a screenshot
+These images make
+ it easier to recgnize the opened applications, and help to find the needed window quicker. Thumbnails display however only a screenshot
 of the windows, so they get potentially confusing if there are more opened windows or if the
-same application is opened multiple times. Depending on the resolution of the display, the
+same application is o
+pened multiple times.Dep
+ending on the resolution f the display, the
 screenshot size decreases as the number of opened windows increases. Furthermore,
 within the same application (like MS Office World) the screenshots are similar in appearance
 (eg.: white paper and tool bar), but the important text is not readable.
@@ -227,28 +487,29 @@ The resulting image is similar to the input data, however thus it is likely that
 Finally, in the subsection below some approaches are presented that assist with the work of both of the above mentioned groups.
 
 \subsection{Collage creating methods} 
-A collage is an assembled! image, containing parts of several input images and thus is representative for the whole input data.
-In case of illustrative thumbnails, there are two ways of using the collage creating method.  
-In the first case, the actual information of a screenshot image is presented only in few regions of the picture.
-Many parts, for example the UI or the space between content elements, can be ignored. 
-In the second case, the content is retrieved in forms of ROIs that can then be combined arbitrary.
-On the other hand, thumbnails for desktop switching can be easily generated using collage creator algorithms, where the input is screenshots of the open desktop applications, instead of some ROIs of one screen.\par
-!For a representative collage the most important task is to choose the best images, which information content covers the whole input data.
-Forras takes the parameters of representativeness, importance costs, transition cost and object sensitivity into account.
-In this case, representativeness refers to being interesting.
+A collage is an assembled image, containing parts of a bunch of input images and being representative for the whole input data.
+There are two cases by creating  more illustrative thumbnails where such methods can be helpful.
+On the one hand the actual information of a screenshot image is presented only in few regions of the picture.
+Many parts, for example UI elements, space between the content etc, can be ignored. 
+The other way around the content can be retrieved in form of ROIs, and afterwards they can be combined arbitrary.
+On the other hand thumbnails for desktop switching can be easily generated using collage creator algorithms, where the input is screenshots of the open applications of the desktop instead of some ROIs of one screen.\par
+For a representative collage the most important task is to choose the best images, which information content covers the whole input data.
+Forras takes the parameters representativeness, importance costs, transition cost and object sensitivity into account.
+Representativeness means being interesting in this case.
 A picture tends to have high representativeness value, if there are many special textures on it, and if it is not similar to the rest of the data (so that no image is chosen twice).
-While importance cost evaluates and collects the ROIs of the input, transition cost stands for the smooth transition between every two images.
-At last, the parameter object sensitivity contains the results of object recognition, and it helps to create an arrangement, in which every object has a reasonable placement.\par
-Forras concentrates however only at the first two of the above described parameters.
-It clusters the images according to their source and the time, and measures the image quality.
-As a result of the clustering, at the point of choosing the final images it is clear,  which images are the same or have similar content.
-This feature, accordingly modified, can be useful at sorting ROIs of the screenshot, such as between text content and image content, or of the running applications of the desktop, such as between text processing, gallery application, and so on.
+Importance cost evaluates and collects the ROIs of the input.
+While transition cost stands for the smooth transition between every two images.
+At last, the parameter object sensitivity holds the results of object recognition, and it helps in the arrangement, that every object has a reasonable placement.\par
+Forras concentrates however only at the first two parameters above.
+It clusters the images according to their source and the time, and measures the quality.
+Thank for the clustering, by the choice of the final images it is clear,  which images are the same or have similar content.
+This feature, accordingly modified, can be useful by sorting ROIs of a screenshot, i.e.: text content, image content etc. or of the running applications of the desktop, i.e.: textprocessing, gallery application etc.
 The parameter quality summarizes the value of the results of the following calculations: blurriness, compression, contrast and color balance.
 Since in this case only screenshots, thus computer generated pictures, can be the input, these measurements invented for camera data would provide less meaningful results than the algorithm above.\par 
 Having the best ROIs for the collage the last task is to merge them into one output picture.
 For this purpose Forras uses a method called ROI packing.
-First the central point of every ROI is selected and every pixel on the canvas needs to get assigned to one of them using the k-Means algorithm.
-After that the ROIs can be placed on the area calculated for them.
+First the central point of every ROI needs to get chosen and every pixel on the canvas needs to get assigned to one of them using k-Means algorithm.
+After that, the ROIs can be placed on the  for them calculated  area.
 To fill the place between the ROIs they have to grow, keeping the aspect ratio, until they overlap. 
 Then every ROI is shifted to the middle of its area.
 This method can be repeated until no ROI grows anymore.
@@ -261,29 +522,30 @@ But classic collage assembly methods were developed for natural images, screensh
 In addition cutting one screen apart and arranging some parts of them willingly would confuse the user, and even more time would be needed to recognize the screen.
 
 \subsection{Resampling methods}
-If the location of the different regions needs to stay the same relatively to each other, resampling methods can work better than collage creating approaches.
-Resampling means, that some parts of the image equaly distributed on the source will be eliminated, but all remaining areas will have the same proportion to each other, not like by the collage algorithms.
+If the location of the different regions needs to stay relatively to each other the same , resampling methods can work better than collage creating approaches.
+Resampling means, that some equaly distributed parts of the image will be eliminated, so,  not like by the collage algorithms, all remaining areas will have the same proportion to each other.
 The image remains recognizable because of the same look, even though the most important areas are less readable.\par 
-To select areas, which needs to kept same, Forras uses several attention models, which defines Attention Objects (AO).
-AOs usually are objects from the real world, which catch the human eye, because of their familiarity, shape, color etc.
-With three values AOs can be easily parametrized, these are ROI, Attention Value (AV) and Minimal Perceptible Size (MPS).
-The attention models fit the AOs into the context.
-Forras works with three different attention model at the same time, with saliency, face and text attention.
-Having the importance value of every pixel the most important area can be detected.\par 
+To select areas, which needs to kept same, Forras uses different attention models, which define Attention Objects (AO).
+AOs usually are objects from the real world, which,  because of their familiarity, shape, color etc., catch the human eye.
+AOs can be easily parametrized using three values: ROI, Attention Value (AV) and Minimal Perceptible Size (MPS).
+The attention models fit the AOs into their context.
+Forras works with three different attention models at the same time: saliency, face and text attention.
+The most important area can be detected according to the importance value of every pixel.\par 
 The algorithm above after carefully calculation chooses only one area, which contains as many AOs as possible.
-So some possibly important AOs have to be ignored and cut off.
-With Feature awared Texturing described in Forras this do not have to be the case.
+Therefore some possible important AOs have to be ignored and cut off.
+With Feature awared Texturing described in Forras this does not have to be the case.
 The algorithm expects an input image and a feature mask.
 A grid is generated, which lies on the input image.
 This grid can be modified in an optional shape, but the gridpoints on the feature mask are not allowed to change their proportion to each other.
 In that way the picture elements between the AOs fill the new shape, but the AOs get barely distorted\par 
-A detailed importance is essential by creating thumbnails, since a screen usually contain more sensitive information, for example text can get easily destroyed, and ROIs, there is no a clear focus point, than a common picture. 
-But the algorithms described above has aspects, like face recognition and grid calculation, which overcomplicate the calculations, causing performance issues without reaching better quality.
+A detailed importance is essential by creating thumbnails, since a screen usually contain more sensitive information.
+Text can get for example  easily destroyed, and there is no such a clear focus point, like on a common picture, where the density of ROIs is high. 
+But the algorithms described above has aspects, like face recognition and grid determination, which overcomplicate the calculations, causing performance issues without reaching better quality.
 A face on a computer screen is not so common as on usual photos, and in addition it is not so sensitive than for example text data.
 In the case of down sampling a human face can stay recognizable, whereas text gets fast unreadable. 
 With a grid the input image can get reshaped in any other form, and in addition no important part needs to get damaged.
 But it is meant to form the input in completely other shape, not for resize it according to aspect ratio.
-Some aspects however, like definition of AOs, could be changed with the actual used approaches, this possibility will be discussed in the future work section.
+Some aspects however, like definition of AOs, could expand the actual used approaches, this possibility will be discussed in the future work section.
 
 \subsection{Feature combining methods}
 All algorithms mentioned before works with some kind of feature combining algorithms.
