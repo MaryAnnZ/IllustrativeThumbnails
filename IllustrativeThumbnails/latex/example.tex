@@ -288,21 +288,21 @@
 	!Some aspects however, like definition of AOs, could expand the actual used approaches, this possibility will be discussed in the future work section.
 	
 	\subsection{Feature combining methods}
-	All algorithms mentioned before works with some kind of feature combining algorithms.
-	After choosing the interesting areas, which need to stay recognizable on the resulting image too, they will be merged according to their methods into one output picture.
-	In this process it is usual that some artifacts show up near the joining are.\par 
-	A possible solution for this problem is the Piosson equation for image processing, introduced by forras.
-	A modified Poission equation using a guidance field needs to be solved for every color in the color space, where the guidance field is calculated right from the gradients of the input image.
-	This algorithm is actually invented for seamless cloning, but it is helpful, when some not neighboring parts of the same image needs to be placed near each other.
-	To make the Poisson calculation more efficient an algorithm suggested by forras can help.
-	It proposes to solve the equation on an image pyramid built from the source and its destination image, so from the two regions, which needs to be combined in this case.
-	To reach the smoothest result forras works with gradient-domain fusion developed from the Poisson equation.
-	It collects the color gradients of the source images into a composite vector field.
-	Afterwards  a color composite is calculated, where the gradient fits in the vector field as much as possible. \par 
-	Combining and accumulating the color data promises very smooth results, joining areas, which appears naturally.
-	These algorithms are invented however for combining pictures from the real world, and not for computer generated images.
-	In case of thumbnails, it is less important to make the transitions less edgy, since the source does not seem to be natural neater. 
-	So the use of such advanced methods like Poisson equation is pointless, since the offer, providing natural edges and smooth transition, matches not even the input screenshot. 
+All before mentioned approaches work with some kind of feature combining algorithms.
+After choosing the interesting areas, which need to stay recognizable also on the resulting image, they will be merged into one output picture according to their methods.
+It is usual in this process  that some artifacts show up near the joining area.\par 
+A possible solution for this problem is the Poisson equation for image processing, introduced by forras.
+A modified Poission equation using a guidance field needs to be solved for every color in the color space, where the guidance field is calculated from the gradients of the input image.
+This algorithm is actually invented for seamless cloning, but it is helpful, when some not neighboring parts of the same image needs to be placed near each other.
+To make the Poisson calculation more efficient an algorithm suggested by forras can help.
+It proposes to solve the equation on an image pyramid built from the source and its destination image, so from the two regions, which needs to be combined in this case.??
+To reach the smoothest result forras works with gradient-domain fusion developed from the Poisson equation.
+It collects the color gradients of the source images into a composite vector field.
+Afterwards  a color composite is calculated, where the gradient fits in the vector field as much as possible. \par 
+Combining and accumulating the color data promises very smooth results, naturally appearing joining areas.
+These algorithms however are invented for combining pictures from the real world, and not for computer generated images.
+In case of thumbnails, it is less important to make the transitions less edgy, since the source does not seem to be natural neater. 
+So the use of such advanced methods like Poisson equation is pointless, since the offer, providing natural edges and smooth transition, matches not even the input screenshot. 
 	
 	
 	
