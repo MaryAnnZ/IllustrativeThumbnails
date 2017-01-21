@@ -145,80 +145,75 @@ which makes them more illustrative and easier to fulfill their purpose.
 \mainmatter
 
 \chapter{Introduction}
-With the increase of the usage of mobile devices and the need of multi tasking thumbnails became more and more important.
-Thumbnails are showed while switching between tasks and have the duty to represent the different windows and so the running applications.
-To keep the work uninterrupted it is essential to make the switching fast and as smooth as possible.
-The user needs to find the desired window quickly, the choice between the applications should not take more time than absolutely necessary. 
-But having more tabs and the same application several times running the common thumbnail system is not able to fulfill its actual purpose.
-Usual thumbnails take a simple screenshot of every application and they show it in smaller size.
-Because of the resampling process some areas and intresting parts of the window are no more recognizable and in addition the UI widgets of the same application take also the valuable place from the content elements.
-Furthermore with the usages of tablets, smart phones and smart watches the display, thus the thumbnail size needs to shrink even more, but the calculation algorithm does not take this fact into account.\par 
+With the increased use of mobile devices and reliance on multi-tasking thumbnails are becoming increasingly important.
+Thumbnails appear when switching between tasks, representing the concurrent windows i.e. the running applications.
+To keep a continuous and effective workflow, it is essential to make the process of switching as fast and smooth as possible by allowing the user to quickly identify and choose between the given tabs. 
+The current thumbnail system is not, however, fit for this purpose. Due to the fact that standard thumbnail applications simply take the screenshot of each application and present them in a smaller size, the relevant parts of the window are no longer recognizable. For example, the user interface widgets, especially in case of the multiple windows! of the same application!, take up valuable place that could otherwise be used to present more important content elements, such as actual file names or other unique characteristics of the window.
+Furthermore with the use of tablets, smart phones and smart watches the display, thus the thumbnail size needs to shrink even more, but the original calculation algorithm does not take this into account.\par 
 This project introduces a new approach using seam carving to make thumbnails more illustrative even on small displays.
-Seam carving is a special resampling method, where related, but not necessarily straight lines are determined, and the least important of them will be eliminated.
-The definition of importance depends on the implementation, but it usually evaluates at least the color changes and the sequences of the edges on the source image.
-Since the the algorithm is used for calculation of thumbnails the usual seam carving algorithm is customized for this purpose.
-It takes into account that the input is a screenshot, so probably some UI elements are located on the picture.
-Additionally, considering that letters are more common on computer screens then on usual images, to calculate the salient regions the text content is also investigated.
+Seam carving is a special re-sampling method, where not necessarily straight lines are determined, and the least important of them are then eliminated.
+The definition of importance depends on the implementation, but it in any case evaluates color changes and identifies the edges that shape the outline of the element on the source image.
+Following a similar logic, the algorithm presented in this paper uses a customized seam carving method.
+Furthermore, it takes into account that the given input is essentially a screenshot thus will probably contain some UI elements on the picture.
+Additionally, considering that letters are more common on computer screens than on usual images, the text content is also investigated to calculate its salient regions.
  
-\section{Definition of the word illustrative}
-To provide the most satisfactory results a detailed and clear definition of the word illustrative is needed.
-It influences not only the measurement of pixel and region saliency, but it helps to evaluate the results and the future development.
-For the most fitting definition the fact needs to be taken into account, that the seam carving algorithm is used for screenshots and not for usual natural images.\par 
-To make a thumbnail more illustrative means that it is able to represent more information on a same sized picture than the other not illustrative thumbnail.
-In the case of a computer screen not only the usual visual features observed on real word images, like color changes and the location of edges, are crucial, but it has some special properties, which needs to be paid attention for.
-Most of the screenshots have UI widgets on it, which is classified as not illustrative.
-There are other ways to get information about the actual application, for example giving a title for the thumbnail, and it is rarely the case that a window is opened for an application itself and not for its content processing abilities.
+\section{Definition of the word illustrative} 
+To provide satisfactory results a detailed and clear definition of the word illustrative is needed.
+Not only it influences the calculation of the pixel and region saliency value, but also acts at the selection of result outputs, and !is useful for future software development! .
+! Also, for a fitting definition it needs to be taken into account that in this case the seam carving algorithm is used for screenshots and not for usual photographs.\par 
+The expression 'illustrative thumbnail' also comprehends that it is able to represent more information on a same sized picture than the other not illustrative thumbnail.
+Unlike usual visual features observed on real world images, such as color changes and location of edges, as mentioned above, computer screens have additional special properties that require further consideration.
+For example, most screenshots include UI widgets, that are classified as not illustrative.
+Namely, it is rarely the case that the relevant part of an application is its UI and not its the actual content processing features, furthermore, the identification of the a window in question is also possible by reading its title.
 Furthermore text data has on the computer screen more important role then usual pictures.
-To transmit as much information as possible text data is not allowed to get damaged, even after the size reduction it needs to stay readable.\par 
-To conclude, in this project a thumbnail is called as illustrative, if its information content stays saved.
-To measure that property the contrast values, the color changes, the location of edegs, the text data and the presence of UI elements is evaluated and considered.            
+To transmit as much information as possible, text data is not allowed to get damaged, i.e. even after size reduction it needs to stay readable.\par 
+Summing up, in this project a thumbnail is called 'illustrative' if its informative content preserves.
+To measure this property, contrast values, color changes, location of edges, text data and the presence of UI elements are evaluated and considered.            
 
 \chapter{Related Work}
-There are several image processing algorithms, which can be helpful by creating illustrative thumbnails.
-The main difference between them is, if they consider the fact that the input images always are screenshots.
+There are several image processing algorithms that can be helpful at creating illustrative thumbnails.
+The main difference between thus algorithms is whether they consider the input as an actual application window or just as a regular image.
 Therefore, this section is divided into two parts.
 The first one discusses algorithms with UI processing segments.
-Algorithms, invented for resample natural images, are examinated in the second section. 
-According to the information presentation method, like combining the most important parts in form of collages or simple resizing, two classes are divided.
-In the following some of these methods are compared.
+Algorithms, invented for resampling natural images, are examined in the second section. 
+Moreover, there are two classes of information presentation methods are to be distinguished, namely, simple resizing and collages, the latter combining the most important parts of the image. 
+In the following, these methods are compared.
 
 \section{Processing as UI}
-Considering that the input is a screenshot, there is a high chance that common UI elements, like buttons and menu bars, are shown on the screen.
-Exceptions are only the cases where graphics, images, videos or application containing these, e.g. video games, gallery program, video player are captured.
-The applications like that tend to hide all UI elements, "fullscreen" mode, or redefine them, e.g. game menu.\par
+When the input is a screenshot, there is a high chance that the usual UI elements, like buttons and menu bars, are shown on the screen.
+Exceptions for this are only cases when graphics, images, videos or application are presented, such as video games, gallery program or video players.
+Such applications tend to hide all UI elements and operate in "fullscreen" mode, or use a redefined UI e.g. game menu bars.\par
 Labeling the image parts as content and non-content, the metadata about the UI elements can be helpful.
 Forras uses already existing accessibility APIs, tested on Mac OS X and on Microsoft Windows, to segment UI and non-UI data. 
 Matching the metadata with the screen content provides a fast and robust result about the location of any kind of UI content.
-There are howerer several disadvantages, that need to be take into account when using such APIs.
+There are however several disadvantages, that need to be taken into account when using such APIs.
 The range and the granularity of the support is often not wide enough.
-The use of an accessibilty API does not make sure, that every UI element will be recognized, because some metadata is not reachable or it will be ignored by the application.\par
-Because of that Forras Prefab works with its own prototypes. 
-In the database models and  prototypes of common UI elements are saved.
-The (components of) UI elements has to be matched with the prototypes in the data base, and after that the predefined metadata can be accessed.
-Since the Prefab system is able to split complex widgets into their base elements, the database does not need to be unnecessary big, but it is still able to cover the most common UI elements.
-In the case of special or rare UI widgets, like in a video game application or elements of a not not widely used software, the system fails.
-If a widget is not saved in the database, there is no way, that it will be recognized.\par
-Forras Sikuli offers a solution not for the incompleteness of the database, but for the granularity issues too.
+The use of an accessibility API is unable to ensure that every UI elements are recognized, because some metadata are not reachable or they will be ignored by the application.\par
+Consequently, Forras Prefab uses an adapted of such prototypes. 
+In the database, models and  prototypes of common UI elements are saved.
+The (components of) UI elements are then matched with the prototypes from the database, allowing a consequent access to the predefined metadata.
+Since the Prefab system is able to split complex widgets to their constructing elements, the database does not need to be unnecessary big, though it is still able to cover the most common UI elements.
+In the case of special or rare UI widgets, like in a video game application or elements of a not widely used software, the system fails to recognize them, since these rare widgets are not included in the given database.\par
+Forras Sikuli offers a solution not only for the incompleteness of !such! database, but for issues around granularity, too.
 It uses its own templates just like the Prefab system, but only in case of small icons and widgets.
-Since in case of larger objects template matching would be too expensive, after the processing of a training pattern, the Sikuli system is able to create new object models too.
-Although this feature is used in the application for other purpose, i.e. reduce the matching cost, it can solve the problem of database and of the granularity.
-Sikuli makes it possible to expand the database and to make the database entry afterwards more detailed.\par
-But in case of accessibility APIs not only the availability of metadata causes possible problems.
-It has also no information about the actual visibilty of the UI elements.
-One window or rather one widget can hide an other one, some content can be out of the range of the borders of the screen etc.    
-Forras is based on the Prefab system, but it builds a hierarchical tree from the widgets. 
-The content is found at the leafs, and the parents are the widget, where the child is built in.
+Since in case of larger objects template matching would be too expensive/demanding/not cost-efficient/expensive IN TERMS OF TIME AND SPACE/ would not be time and storage efficient , after accomplishing a training pattern, the Sikuli system is able to create new object models too.
+Although in the original/Sikuli application this feature is used for another purpose, i.e. to reduce matching costs, it can effectively used to solve the problem of database and granularity.
+With other words, Sikuli allows the expansion the of database and thus creating a more detailed database !entry bemenetet? !.\par
+
+On the other hand, in case of accessibility APIs, it is not only the availability of the metadata that may cause problems, but also it does not provide information about the actual visibility of the UI elements.
+One window or rather one widget can overlap with or even fully cover another, some content can be out of the range of the borders of the screen etc.    
+Forras is built on the Prefab system, but additionally it creates a hierarchical tree of the widgets. 
+The content is found at the leafs, and the parents are the widget, where the child is built in.!
 With the help of this tree the order of the UI elements gets clear, and so the misleading information can be eliminated.\par
-After the labeling of the UI elements correctly, they can be processed as needed.
+After the labeling of the UI elements correctly, they can be 'process' helyett: applied/manipulated/operated with as needed.
 They can cut off as whole or processed according to the information content.
-Forras invented an algorithm to eliminate objects of a picture and fill their place with the texture of the object behind them using the z-buffer information.
+Forras invented an algorithm that eliminates the picture objects and fill their place with the texture of the object behind them using the z-buffer information.
 The tree mentioned above works as a z-buffer in this case.
-With this cut off algorithm unnecessary widgets can be easily eliminated and more important elements of the UI can so get better visible.\par
-According to the definition of "illustrative" of this thesis the UI elements of a screen has to get cut so the segmentation of the UI elements is not needed.
-Although the Prefab and Sikuli systems can be helpful for labeling the images as UI and content.
-But theses approaches has the drawback of the usage of the database and the slow template matching. 
-Furthermore they are actually designed for other purpose, namely to segment and classify UI elements, so before their employment significant reworking is needed.
-At last there is no need to know, which widgets are on the screen, and processing the actual content can already cause performance issues, the use these methods would overcomplicate the application without providing noteworthy advantages.
+With this cut off algorithm, unnecessary widgets can easily be eliminated and more important elements of the UI can thus get more visible.\par
+According to the definition of "illustrative", the UI elements of a screen in any case are to be excluded, consequently the segmentation of the UI elements is not required.
+Although the Prefab and Sikuli systems are proved to be helpful at distinguishing between UI and content parts of the image, these approaches have their disadvantage at their reliance on database usage and at their slow template matching performance. 
+Furthermore they are actually designed for another purpose, namely to segment and classify UI elements, so before their employment significant reworking is needed.
+Since it is not essential to know, which exact widgets appear on the screen, and processing their actual content may cause performance issues, the use of the above methods would overcomplicate the application without providing noteworthy advantages.
 
 \section{Processing as common picture}
 There are several information retrieving methods for processing images with any content.
