@@ -307,11 +307,11 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	
 	
 	\chapter{Methodology}
-	The algorithm to create illustrative thumbnails has three main steps.
+	The illustrative thumbnail creating algorithm has three main steps.
 	At the beginning the UI elements are cut off.
-	In the case of thumbnails there are other ways to get information about what application are actually opened, for example giving a title for it containing the running application's name.
+	In the case of thumbnails there are other ways to get information about what application are actually opened, for example giving a title containing the running application's name.
 	In addition it is usual that the same software is running many times for other purposes, for example the usage of text editor for writing and for reading some document.
-	The content and not the surface of these applications matters.
+	The content matters and not the surface of these applications.
 	Although reading the title of the thumbnails is slower than the software recognition through visual data, this aspect needs to take count for the better visualization of the actual content area.%TODO{trade off} 
 	The second step is the calculation of the importance map weighted on the place of text data.
 	Unlike to common pictures from the real life the occurrence of text on computer screens is higher and more important.
@@ -320,7 +320,7 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	Second the importance value is increased at the places where text is found.
 	In that way not only the silhouette but the whole body of the letters seams to be salient.
 	Lastly seam carving and simple resampling is performed  until the output size is reached.
-	In this section these three main sections is discussed, and an overview about the algorithm is shown.
+	In this section these three main sections are discussed, and an overview about the algorithm is shown.
 	
 	\section{Eliminating UI elements}
 	For the elimination of UI elements, they need to get identified first.
