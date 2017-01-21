@@ -227,28 +227,27 @@ The resulting image is similar to the input data, however thus it is likely that
 Finally, in the subsection below some approaches are presented that assist with the work of both of the above mentioned groups.
 
 \subsection{Collage creating methods} 
-A collage is an assembled image, containing parts of a bunch of input images and being representative for the whole input data.
-There are two cases by creating  more illustrative thumbnails where such methods can be helpful.
-On the one hand the actual information of a screenshot image is presented only in few regions of the picture.
-Many parts, for example UI elements, space between the content etc, can be ignored. 
-The other way around the content can be retrieved in form of ROIs, and afterwards they can be combined arbitrary.
-On the other hand thumbnails for desktop switching can be easily generated using collage creator algorithms, where the input is screenshots of the open applications of the desktop instead of some ROIs of one screen.\par
-For a representative collage the most important task is to choose the best images, which information content covers the whole input data.
-Forras takes the parameters representativeness, importance costs, transition cost and object sensitivity into account.
-Representativeness means being interesting in this case.
+A collage is an assembled! image, containing parts of several input images and thus is representative for the whole input data.
+In case of illustrative thumbnails, there are two ways of using the collage creating method.  
+In the first case, the actual information of a screenshot image is presented only in few regions of the picture.
+Many parts, for example the UI or the space between content elements, can be ignored. 
+In the second case, the content is retrieved in forms of ROIs that can then be combined arbitrary.
+On the other hand, thumbnails for desktop switching can be easily generated using collage creator algorithms, where the input is screenshots of the open desktop applications, instead of some ROIs of one screen.\par
+!For a representative collage the most important task is to choose the best images, which information content covers the whole input data.
+Forras takes the parameters of representativeness, importance costs, transition cost and object sensitivity into account.
+In this case, representativeness refers to being interesting.
 A picture tends to have high representativeness value, if there are many special textures on it, and if it is not similar to the rest of the data (so that no image is chosen twice).
-Importance cost evaluates and collects the ROIs of the input.
-While transition cost stands for the smooth transition between every two images.
-At last, the parameter object sensitivity holds the results of object recognition, and it helps in the arrangement, that every object has a reasonable placement.\par
-Forras concentrates however only at the first two parameters above.
-It clusters the images according to their source and the time, and measures the quality.
-Thank for the clustering by the choice of the final images it is clear,  which images are the same or have similar content.
-This feature, accordingly modified, can be useful by sorting ROIs of a screenshot, i.e.: text content, image content etc. or of the running applications of the desktop, i.e.: textprocessing, gallery application etc.
+While importance cost evaluates and collects the ROIs of the input, transition cost stands for the smooth transition between every two images.
+At last, the parameter object sensitivity contains the results of object recognition, and it helps to create an arrangement, in which every object has a reasonable placement.\par
+Forras concentrates however only at the first two of the above described parameters.
+It clusters the images according to their source and the time, and measures the image quality.
+As a result of the clustering, at the point of choosing the final images it is clear,  which images are the same or have similar content.
+This feature, accordingly modified, can be useful at sorting ROIs of the screenshot, such as between text content and image content, or of the running applications of the desktop, such as between text processing, gallery application, and so on.
 The parameter quality summarizes the value of the results of the following calculations: blurriness, compression, contrast and color balance.
 Since in this case only screenshots, thus computer generated pictures, can be the input, these measurements invented for camera data would provide less meaningful results than the algorithm above.\par 
 Having the best ROIs for the collage the last task is to merge them into one output picture.
 For this purpose Forras uses a method called ROI packing.
-First the central point of every ROI needs to get chosen and every pixel on the canvas needs to get assigned to one of the using the k-Means algorithm.
+First the central point of every ROI is selected and every pixel on the canvas needs to get assigned to one of them using the k-Means algorithm.
 After that the ROIs can be placed on the area calculated for them.
 To fill the place between the ROIs they have to grow, keeping the aspect ratio, until they overlap. 
 Then every ROI is shifted to the middle of its area.
