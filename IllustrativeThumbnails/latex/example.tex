@@ -429,22 +429,23 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	The illustrative thumbnail creator application is developed in the programming language C++.
 	Except the source image file browsing window, no operating system specific calls are performed.
 	To make the application platform independent, only this part needs changes.
-	For image processing purposes Open Source Computer Vision Library (OpenCV) is used.\par 
-	OpenCV is apart of the computer vision a machine learning library too.     
+	For image processing purposes Open Source Computer Vision Library (OpenCV) is used Forras.\par 
+	OpenCV is apart of the computer vision also a machine learning library.     
 	It has more than 2500 algorithms, which can be used for image processing or for machine learning tasks, just like object identifying, finding similar images, image stitching etc.
-	Since the library supports not only Windows, but Linux, Mac OS and Android too, all methods taken from OpenCV count as platform independent.
-	The library is used for loading and saving the images, and to perform several image processing tasks like converting between color spaces and image editing like bluring or filering.
+	Since the library supports not only Windows, but also Linux, Mac OS and Android, all methods taken from OpenCV count as platform independent functions.
+	The library is used for loading and saving the images, and to perform several image processing tasks like converting between color spaces and image editing like bluring or filtering.
 	The actual use of the library will be discussed in the following section.
 	
 	\section{Working Pipeline}
 	In the following the actual implementation of the application is described.
 	Apart form the functionalities mentioned in the previous chapter, other vital helper methods are also discussed.
-	To make the application configurable some essential parameters are set outside the application code. These parameters will be highlighted in the following sections.
+	To make the application configurable some essential parameters are set outside the application code. 
+	These parameters will be highlighted in the following sections.
 	
 	\subsection{Image loading}
 	Before the thumbnail algorithm can start the source image needs to get loaded.
-	To make the application more flexible a Windows call is performed, that after every start of the application a new source image can be chosen.
-	The type \texttt{OPENFILENAME}, part of the Windows API, launches a file window, where the files can be browsed.
+	To make the application more flexible a Windows call is performed allowing that after every start of the application a new source image can be chosen.
+	The type \texttt{OPENFILENAME} Forras, part of the Windows API, launches a file window, where the files can be browsed.
 	It shows only image files with the extension \texttt{.jpeg} or \texttt{.png}.
 	After the choice of any source, the file path can be read, and the OpenCV function \texttt{loadImage} opens the picture.
 	
@@ -452,9 +453,9 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	Near the margins the occurrence of UI elements is investigated.
 	The application uses a configurable parameter, which defines which sections of the screen count as margin area. 
 	Its default value is 20\%. 
-	Starting from the border in direction to the most central point every row, and later column, is checked, if there are a line on the source having the same color and filling the whole space between the vertical, and later the horizontal, borders.
+	Starting from the border in direction of the middle of the source every row, and later column, is checked, if there are a line on the source having the same color and filling the whole space between the vertical, and later the horizontal, borders.
 	In the case of success the OpenCV methods \texttt{rowRange} and \texttt{colRange} cut the input image.
-	After that the histogram of the remaining margin area is examined and compared to the central region, where the margin is split into thin slices.
+	After that, the histogram of the remaining margin area is examined and compared to the central region, where the margin is split into thin slices.
 	The function \texttt{calcHist} calculates the histograms of the marginal and of the central window.
 	If according to the function \texttt{compareHist}, which measures the correlation of two histograms,%\TODO{formel}
 	they do not correlate, the comparison is performed for the other slices and they are assigned as margin or as central window.
@@ -464,21 +465,21 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	
 	\subsection{Saliancy map calculation}
 	The saliency map is calculated from a Gaussian pyramid.
-	But before the building of the pyramid the cropped source image have to get converted into a uniform colorspace.
+	But before the building of the pyramid the cropped source image has to get converted into a uniform colorspace.
 	For this purpose the OpenCV function \texttt{cvtColor} is called.
-	Then the levels of the pyramid is calculated using the \texttt{pyrDown} method.
+	Then the levels of the pyramid are determined using the \texttt{pyrDown} method.
 	Afterwards a contrast map is calculated with the L2 norm from the four neighboring pixels for each level.
 	The last step is the composition of the contrast images into one saliency map.
-	Upsaceling of the levels is performed, so they have the same size like the the the cropped image.
-	The pixel values of the saliency map is given from the sum of the pixels with the same coordinates of every level of the contrast pyramid. 
+	Upsaceling of the levels is performed, so they have the same size like the cropped image.
+	The pixel value of the saliency map is given from the sum of the pixels with the same coordinates of every level of the contrast pyramid. 
 	In order to avoid any overflow, the pixel values are divided by the amount of the pyramid levels.
 	
 	\subsection{Text detection}
-	To find as many words as possible the grayscale cropped source image is processed with the Laplacian operator, with the kernel size of three.
-	Thank to the edge detection the layout of the letters is highlighted now.
+	To find as many words as possible the grayscale cropped source image is processed with the Laplacian operator, with the kernel size of 3.
+	Thank to the edge detection the layout of the letters is now highlighted.
 	To make the series of letters related a horizontal blur is needed.
 	The function \texttt{blur} is called with a configurable kernel size, but in the default settings of the project the height is set to 1, the width to 15 pixels.
-	The OpenCV function  \texttt{findContours} is able to find the related regions and save their silhouette points in a \texttt{vector}.
+	The OpenCV function  \texttt{findContours} is able to find the related regions and save their silhouette points into a 2 dimensional \texttt{vector}.
 	For each region the width and the height is calculated.
 	If a region is at least double so wide than high, these attributes are examined, if they reach the minimum size for being an actual word.
 	The size of the minimal word is configurable and set to 5x5, approximately the font size of 5pt in order to take also the smallest fonts into account, as default.
@@ -487,14 +488,14 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	If the height of a possible word is too much smaller or bigger than the average, it automatically gets sorted out.
 	This confidence interval is also configurable and it is set for 50\% and for 1000\%. 
 	The maximal word height is defined as big because of the possible size of title or headline words.
-	After the height test the histogram of the possible word regions is checked.
-	If it have exactly two accumulations, for the color of the letters and for the background, the region stays in the list of possible words, but otherwise it is sorted out.
-	Finally the space above and below of the possible words is investigated.
+	After the height test, the histogram of the possible word regions is checked.
+	If it have exactly two accumulations, for the color of the letters and for the background, the region stays in the list of possible words, but it is sorted out otherwise.
+	Finally the space above and below the possible words is investigated.
 	Words are usually written in lines, where because of the readability there is some space between them.
 	Therefore if two possible word region have common points at the top or at the bottom, they can not be real words and so they also need to get sorted out of the list.
 	When the final list is ready, the regions of the words need to get marked on the saliency map.
 	The value of every text data pixel is automatically increased.
-	At the very end to avoid value overflow and other irregularities the whole map is normalized with the OpenCV function \texttt{normalize}.  
+	At the very end the whole map is normalized with the OpenCV function \texttt{normalize} to avoid value overflow and other irregularities.  
 	
 	\subsection{Seam carving}
 	Seam carving is implemented only in one, vertical direction. 
@@ -503,16 +504,16 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	Until both sides reach the resampling value or the desired output size the seam carving algorithm is executed.
 	The resampling value is calculated from the average pixel saliency value of the most salient seam on the cropped source image.
 	The desired size and the resampling parameter are both customizable, they are set by default to 50\%. 
-	The seam calculation algorithm works by filling a path map, where the previous paths and its saliency value is saved.
+	The seam calculation algorithm works by filling a path map, where the previous paths and their saliency value is saved.
 	At the beginning the first row of the map is filled with the saliency values of the saliency map.
-	Afterwards for the next row for every pixel the less salient predecessor is searched, and the saliency value at the coordinates of the previous pixel is added to the current saliency value.
-	The data about the predecessor pixel and the new saliency value is stored in the path map at the coordinates of the current pixel.
-	By looking for the previous pixel the algorithm works with 5-neighborhood. 
+	Afterwards for the next row for every pixel the less salient successor is searched, and the saliency value at the coordinates of the current pixel is added to the successor saliency value.
+	If the new saliency value is smaller than the already stored at the coordinates of the successor pixel, then the entry is updated and a better path is saved.
+	By looking for the sucessor pixel the algorithm works with 5-neighborhood. 
 	The saliency values of the five nearest pixels are weighted according to their position with $\sqrt{5}$, $\sqrt{2}$ and 1.
-	That pixel is chosen as predecessor which finally the least salient is.
-	When the algorithm reaches the last row, in the end row of path map the saliency values of the possible ways starting at the first row are stored.
+	That pixel is chosen as successor which is finally the least salient.
+	When the algorithm finishes, in the end row of path map the saliency values of the possible ways starting at the first row are stored.
 	The final task is to find the smallest saliency value, and to follow the predecessor entities starting at the least salient pixel until the first row is reached again.
-	The seam found in that way is afterwards eliminated not only from the cropped source image, but from its saliency map too.
+	The seam found in that way is afterwards eliminated not only from the cropped source image, but also from its saliency map.
 	But if the saliency value of even the less expensive seam exceeds the resampling value, instead of cutting the path off, the usual resampling algorithm is applied using \texttt{resize} and the algorithm terminates.  
 	
 	\chapter{Results and Evaluation}
