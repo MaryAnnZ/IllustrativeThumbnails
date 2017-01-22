@@ -399,33 +399,31 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	
 	\section{Seam Carving}
 	To resize the image without damaging the important regions, seam carving Forras is used.
-	Seam carving calculates paths according to the saliency map, and eliminates these with minimal importance value.
+	Seam carving calculates paths according to the saliency map, and eliminates those with minimal importance value.
 	This step is repeated until the desired size is reached or the importance value of the chosen path exceeds a predefined threshold.
-	Because seam carving does not necessary eliminates only straight lines, the algorithm effects the layout of unimportant regions noticeably.
-	Furthermore if the whole image has very high salient values, the resulting seams do not have remarkable smaller salient value than any  for resampling randomly chosen straight line.
-	To save the image from unnecessary artifacts and make the application more performant, a threshold value is defined as proposed in Forras.
+	Because seam carving does not necessary eliminates only the straight lines, the algorithm noticeably effects the layout of the unimportant regions.
+	! Furthermore, if the whole image has very high salient values, the resulting seams do not have a remarkably smaller salient value than any straight line would have had when chosen randomly for resampling.
+	To save the image from unnecessary artifacts and increase the application performance, a threshold value is defined as proposed in Forras.
 	To reach the final output size common resampling is applied.\par 
-	To find the most appropriate path, every possible solution needs to get checked using the backpacking method.
-	A path map is generated, where the past possibilities are stored, and every new try can use it as a look up.
-	In this was performance can be saved, and the algorithm gets faster.\par 
-	To find the next pixel of a path a five-neighborhood of the previous member is examined.
+	To find the most appropriate path, every possible solution need to be examined using the backpacking method.
+	A path map is thus generated, where all past possibilities are stored, and that every new try can use as a look up.
+	This way performance can be saved and the algorithm becomes faster.\par 
+	! To find the next pixel of the path, five-neighborhood of the previous member is/are? examined. Five pieces of neighborh = are, a five-neighborhood + NOUN e.g. circle = is
 	The algorithm runs from the top to the bottom, where the next member is chosen from the five nearest pixels of the next line.
-	To calculate the costs of a possible switch between the columns the importance value of the neighboring pixels is weighted accordingly.
-	In every case the pixel is chosen, whose importance value with the weighting parameter is the smallest.
-	Two paths is calculated per loop, one horizontally and one vertically.
-	But at the end only the pixels being part of the less salient path are eliminated.\par 
+	To calculate the costs of a possible switch between the columns the importance value of the neighboring pixels are weighted accordingly.
+	In each case the chosen pixel is the one whose importance value with the weighting parameter is the smallest.
+	Two paths per loop are calculated, one horizontally and one vertically, however, in the end only the pixels of the least salient path become eliminated.\par 
 	Because the horizontal and vertical paths are eliminated independently, the picture being processed usually does not hold the aspect ratio.
-	For that reason it is possible that the weight and height parameters do not reach the output size or the threshold value in the same time.
-	In this case the seam carving algorithm continues for only one parameter until it reaches one of the conditions above. 
-    The value of the threshold parameter value is essential,	since it controls the algorithm, when to switch between seam carving and resampling 
+	For this reason it is plausible that the weight and height parameters do not reach the output size or the threshold value at the same time.
+	In this case the seam carving algorithm continues only for the remaining parameter until it reaches one of the conditions above. 
+    The value of the threshold parameter is essential,	since it determines when the algorithm should /is to ha nem akarsz shouldot/ switch between seam carving and resampling. 
 	It is calculated from the maximum salient path found after the first loop of the seam carving algorithm.
-	Since with every loop one unsalient pixel is eliminated from the horizontal or from the vertical paths, the relative saliency of the seams increase permanently.
-	Therefore in most of the cases even the less salient seam needs to hit the relative value of the most salient path on the original image some time, where every unsalient pixel were included. 
-	The common resampling method eliminates straight lines chosen from the source image until the desired size is reached.
-	Seam carving is used to avoid that paths with high salient value are cut off.
-	But if the seams have as high importance value as any other from the source image, regular resampling has already more advantages.
-	First the algorithm is faster then the implemented seam carving method.
-	And second it applies an interpolating algorithm between the borders of the eliminated area, so in this case it saves ultimately more information than seam carving.   
+	Since with every loop one unsalient pixel is eliminated from the horizontal or from the vertical path, the relative saliency of the seams constantly increases.
+	Therefore, in most cases, even the least salient seam will get more salient than the most salient seam of the original image. 
+	The common resampling method eliminates the straight lines chosen from the source image until the desired size is reached.
+	Seam carving is also applied to prevent paths with high salient value to be cut off.
+	On the other hand, if the seams have as high importance value as any other of the source image, regular resampling has additional advantages.
+	First, the algorithm is faster than the implemented seam carving method, and second, it applies an interpolating algorithm between the borders of the eliminated area, so in this case it ultimately saves more information than seam carving.   
 	
 	\chapter{Implementation}
 	The illustrative thumbnail creator application is developed in the programming language C++.
