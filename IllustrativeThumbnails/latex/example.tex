@@ -518,122 +518,122 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	\chapter{Results and Evaluation}
 	To make the project configurable the application uses a \texttt{config.txt} file, where every parameter can be set as needed.
 	In order to find the configuration, which provides reasonable results in as many cases as possible, several tests were performed.
-	There is a test database having 14 pictures, showing seven different applications, captured on Windows 10.
-	In the following the test cases of the elimination of UI elements, text detection and for the value of resampling threshold are presented and evaluated, which possibility provides the desired results.
-	Then the application is compared to Adobe Photoshop Forras, their advantages and disadvantages are described.
+	There is a test database including 14 pictures, showing seven different applications, captured on Windows 10.
+	In the following the test cases of the elimination of UI elements, text detection and for the value of resampling threshold are presented and evaluated in respect to which of them is best able to provide the desired results.
+	Then the application is compared to Adobe Photoshop Forras, with their advantages and disadvantages are described.
 	At last the performace issues of the application is discussed briefly.
 	\section{Elimination of UI elements} 
-	Depending on the investigation area for UI elements, different regions of the border area can be cropped. 
-	If the border region is defined as too small (10\% of the image size) the algorithm terminates too early and not all UI widget is cut off.
-	But determining the border too big (40\% of the image size) is also dangerous, because eventually the reference value for the central area can be chosen wrong, and finally not only the border area get cropped.
+	Depending on the investigation area for UI elements, various regions of the border area may be cropped. 
+	If the border region is defined too small (10\% of the image size) the algorithm terminates too early and not all UI widgets are cut off.
+	But setting the border value too big (40\% of the image size) is also dangerous, because eventually the reference value for the central area can be chosen wrong, resulting in cropping from additional, non-border areas.
 	Foto google, pdf \par 
-	Since the histograms of the border area, the central area and the slices between them are sequentially compared, the value of their correlation is crucial by assigning them to one or to the other part of the image.
-	If the correlation between the central area and the slice is set for too high, it means their correlation value has to be small (1), some content elements near the border can get rid of, by low correlation however some UI widgets can be labeled as important content. 
+	Starting from the histograms of the border area, the central area and the slices between them are sequentially compared, the value of their correlation is crucial for assigning them to one or another part of the image.
+	If the correlation between the central area and the slice is set for too high, it means their correlation value has to be small (1), some content elements near the border can be eliminated, at low correlation however some UI widgets can be labeled as important content. 
 	foto ppt, blizzard\par 
-	The thickness of the slices influences, how refined the algorithm is when looking through the border area.
-	If the slices are really slim (5\% of the image size) the performance slightly decreases, but in exchange it is able to find a really close cropping point, where the UI and the content actually meets.
+	The thickness of the slices influences how refined! alapos? throughout the algorithm is when searching through the border area.
+	If the slices are really slim (5\% of the image size) the performance slightly decreases, but in exchange it is able to find a really close cropping point, i.e. where the UI and the content actually meets.
 	foto desktop\par
 	\section{Text detection}
 	If the lines are already blurred on the grayscale image, the color of the letters and their area is slightly modified. 
-	With a threshold a minimal pixel color value is defined to get the pixel labeled as possible text.
-	If this parameter is small (50) every bright area can be classified as text, even if the region is only neighboring to a word.
-	But if it is set to a bigger value (200) only the core of a word can reach it, so no region will actually contour its related word's shape.
+	With the implementation of a threshold range a minimal pixel color value is defined that is in place to have the pixel labeled as possible text.
+	If this parameter is small (50) any bright area can be classified as text, even if the given region is only neighboring a word.
+	But if it is set to a high value (200), only the core of a word will reach it, so no region will actually contour its related word's shape.
 	foto 444\par
 	The properties of a possible word is also parametrized.
-	The set of possible words need to be sorted first, if they actually can be words according to their size.
-	The parameters for minimum height and width need to be chosen carefully, since if they are too big (width is set to 100, by font size of 12pt more than 6 letters or height to 20, font size of 14pt), almost every word can get excluded from the list.
+	The set of possible words needs to be sorted first, depending on how likely they are potential words when considering their size.
+	The parameters for minimum height and width need to be chosen carefully, since if they are too big (width is set to 100, font size of 12pt, more than 6 letters or height to 20, font size of 14pt), almost every word will get excluded from the list.
 	foto mindegy 
-	From the set of the possible words the average size is calculated, and it is customizable how much the words are allowed to vary.
-	For example if the difference can be only 80\% the smaller words can easily get sorted out, while by 50\% they can also manage to stay in the possible words set.
+	From the set of the possible words the average word size is calculated, but thenafter it is still further customizable how much the words are allowed to vary from this value.
+	For example if the allowed difference is set to 80\% the smaller words can easily get sorted out, while at 50\% they also manage to stay in the possible words set.
 	foto pdf2\par 
-	With the inversion of the algorithm, setting the weight of the words for negative, the functionality of the application can be changed.
-	For experimental investigations the text areas were set for not salient, so the images and not the words is saved. 
-	 When the thumbnail needs to get really small, it  is better to save the image data instead of the text,since it would be impossible, that the remaining text is still  readable. 
+	! With the inversion! visszaforditas of the algorithm, setting the weight of the words for negative, the functionality! hasznalhatosaga of the application can be changed.
+	For experimental investigation the text areas were set non-salient, so only images and no words are saved. 
+	When really small thumbnails are required, it  is advisable to save and present the image data instead of texts, since they would be illegible due to their minuscule size.  
 	The experimental results are presented below.
 	foto 
 	\section{Resampling threshold}
-	The resampling thershold controls, when the application switches from seam carving to usual resampling. 
-	If the value is small (0.1) only a few seam carving loop is performed, and the application behaves similar to a common down sampling algorithm.
-	The performance is positively affected by fewer seam carving loops, but it also loses its advantage against simple resampling methods, and the important areas are no more so easily recognizable.
-	When the threshold is set hovewer for a bigger value, the application switches at the very end of the process.
-	In this case the the application works noticeably slower, and additionally in causes more artifacts then usual resampling.
+	The resampling threshold determines when the application switches from seam carving to usual resampling. 
+	If the value is small (0.1) only a few seam carving loops are performed, and the application behaves similar to a common down sampling algorithm.
+	The performance is positively affected by fewer seam carving loops, but it also loses its advantage against simple resampling methods, with the important areas being no longer easily recognizable.
+	When the threshold is set, however, to a bigger value, the application switches at the very end of the process.
+	In this case the application works noticeably slower and additionally in causes more artifacts than usual resampling.
 	foto diablo 
 	\section{Comparison to Adobe Photoshop} 
 	To compare the algorithm to an already existing tool the seam carving feature of Adobe Photoshop CS 5 Forras was used.
-	There are two test cases, the first one takes the same source like the illustrative thumbnail creator algorithm.
-	The input image of the second case is however the cropped source image produced by this application after the elimination of the UI elements.
-	In the first test it is investigated, how seam carving invented for usual photos works on screenshots.
-	Comparing the images to the outputs of the thumbnail algorithm, it is striking how much smaller and less readable the words are.
-	Because this project applies not only seam carving but also heuristics to cut off the border region, to compare the actual seam carving algorithms Photoshop needs the same input as this application has, when it start the seam calculation.
-	The second test case is needed for this reason.
-	The quality of the output improves definitely, since a smaller image needs to get shrunk to the same size.
-	The main difference between the two methods seems to be the weighting of the content.
-	This approach pays more attention for the text and image data can easily get ignored.
-	Photoshop however tries to keep both of the regions, perhaps the image content seems to be slightly more important.
-	Since the thumbnail creator algorithm has a ranking between the elements, text before images, the output is clear, even if the image data is lost, the text stays readable.
-	The output of Photoshop is rather disorganized, the text and image regions flow in each other.
-	The images are significantly better recognizable, but the words are notably more damaged.  
+	There are two test scenarios; the first takes the same source to the illustrative thumbnail creator algorithm.
+	The input image in the second case is however the cropped source image produced by this application after the elimination of the UI elements.
+	In the first test it is investigated how seam carving invented for usual photos works on screenshots.
+	Comparing  /photoshop/ images to outputs of the thumbnail algorithm, it is striking how much smaller and less readable the words appear.
+	Because this project applies not only seam carving but also heuristics to cut off the border region, to compare the actual seam carving algorithms, Photoshop, to begin with seam calculation, it needs the same input as this application has.
+	The second test scenario is in place for this reason.
+	! The quality of the  output definitely improves, since an already smaller image needs to shrunk to the same size. / Hogyan  tud valami "same sized"-jára kicsinyedni?
+	The main difference between the two methods seems to lay on the weighting of the content.
+	This approach pays more attention to the text, with image data being easily ignored.
+	Photoshop, however, attempts to sustain both regions, perhaps with a slightly more emphasize on the image content.
+	Since the thumbnail creator algorithm has a ranking between the elements, holding texts before images, the output is not dubious: even in case of image data loss, the text remains readable.
+	The output of Photoshop is rather disorganized, the text and image regions flow into each other.
+	The images are significantly better recognizable, but in exchange the words are noticeably more damaged.  
 	
 	\section{Performance evaluation}
-	The test are performed on Windows 10 with the CPU Intel i3-2310, 2.1GHZ and 2 Cores and with the Grafic card AMD Radeon HD 7400M.
-	During the tests some performance issues turned up, the application needed up to 3.5 minutes but in average 1 minute  to terminate.\par 
-	The performance bottleneck is caused by the seam calculation.
-	Every time, when a seam is eliminated, the whole saliency map is recalculated.
+	The tests were performed on Windows 10 with CPU Intel i3-2310, 2.1GHZ and 2 Cores, using Grafic card AMD Radeon HD 7400M.
+	During the tests some performance issues occurred, the application occasionally needed up to 3.5 minutes performance time, however remaining in a one-minute termination average.\par 
+	The performance bottleneck is caused by seam calculation.
+	Every time when a seam is eliminated, the whole saliency map is recalculated.
 	Having a new saliency map the possible seam paths also need to get redetermined.
-	If the UI cropping algorithm is not able to cut a bigger area or the resampling threshold is reached later, then many seam carving loop is performed. 
-	So screenshots with bigger and clearly defined UI areas have shorter run time, whereas inputs like gallery applications and computer games take longer. 
+	If the UI cropping algorithm is not able to cut a bigger area or the resampling threshold is reached later, several seam carving loops are performed. 
+	Therefore, screenshots with bigger and clearly defined UI areas have shorter run time, whereas inputs like images of gallery applications and of computer games take longer. 
 	
 	\chapter{Future Work}
-	This application according to the chapter before is useful for creating illustrative thumbnails, but there are certain implementations to extend its scope. 
-	There are two main areas, where certain improvements can be applied: performance and the software methodology.
-	Although the current application provides reasonable results, described in the chapter before, there are several approaches, which make the present method even robuster and easier to use.
+	This application, according to the chapter above, is effective at creating illustrative thumbnails, but there are certain implementations to extend its scope. 
+	There are two main improvement areas to investigate: performance and software methodology.
+	Although the current application provides reasonable results, as described in the preceding chapters, there are several approaches, to make the present method even more robust and easier to use.
 	The most important directions for development will be discussed in the following section.
 	
 	\section{Performance improvement} 
 	The core task of a seam carving algorithm is the evaluation of the saliency map.
-	In the best case every pixel and every possible path needs to be examined to find the most favorable path.
-	Depending on the size of the input, the visiting and checking all pixels individually can take a long time.
-	This process can be get however easily parallelized.
+	Optimally, every pixel and every possible path are needed to be examined in order to find the most favorable path.
+	Depending on the size of the input, visiting and checking all pixels individually can take a long time.
+	This process can be get, however, easily parallelized.
 	In 2007, Nvidia released a parallel computing platform, called CUDA Forras, which exploits the computing performance of the GPU.
-	In addition, the CUDA system can be simply integrated into the current application, since it is developed for the programming languages C, C++ and Fortran, and C++ is used also in this project.   
+	In addition, the CUDA system can be simply integrated into the current application, since it is developed for programming languages C, C++ and Fortran, that includes the C++ used in this project.   
 	
 	\section{Methodology improvement}
-	An essential challenge in seam carving problems is the construction of the saliency map and the calculation of the seams. 
-	The in the current project implemented methods  are able to handle the common cases, but it can became more robust and usable in even more special cases with some improvement.\par 
-	There are several approaches, which besides the low level pixel data examination, tries to find also semantical objects on the input.
-	They are building on the observation, that some objects, for example faces, even if their coloring is not especially particular, seem to be very important for the human viewer.
-	The perceptual seam carving algorithm Forras based on the Human Attention Model calculates not only the color changes but also the occurance of the facial information.
-	It includes the already implemented feature of OpenCV, so the application is able to generate a face map.
-	The energy function, which calculates the pixel values in the saliency map, is then weighted with the data from the face map, so a more detailed saliency map is constructed.\par 
-	Furthermore Forras uses apart from the face information, the gradient magnitude, Canny edge detection and Hugh line detection to make the saliency map as meaningful as possible. 
-	It examines thoroughly both the semantic and the low level pixel data.
-	There is however an other method to evaluate the pixel informations even more profoundly.
-	Putting the information into a context makes the measurements more accurate, because it controls the information extremes.
-	So no pixel seems to be more important or unimportant as it really is.
-	Forras reaches it with the calculation of so called neighborhood inhomogeneity factor, which denotes the amount of inhomogeneous neighbors of every pixel. 
-	This approach helps to find the important areas inside an object, where a simple line detection algorithm fails and indicate no salient regions.
-	To find the coherent areas, which later can be defined as object, the mean shift algorithm can be used like Forras does. 
-	Furthermore it makes the saliency calculation scale invariant, and decreases the chance to find misleading high important edges.\par 
+	An essential challenge in seam carving is the construction of the saliency map and the calculation of the seams. 
+	The methods inplemented in the current project are able to handle most standard cases, on the other hand, with some improvements it has the potential to became more robust and usable in even more special cases.\par 
+	There are several approaches that besides the low level pixel data examination, aims to find also semantical objects in the input.
+	They are building on the observation, that some objects, for example faces, even if their coloring is not special, are very important for human viewers.
+	The perceptual seam carving algorithm from Forras, based on the Human Attention Model, calculates not only the color changes but also the occurrence of facial information.
+	It includes an already implemented feature of OpenCV, with which the application is able to generate a face map.
+	The energy function, which calculates the pixel values in the saliency map, is then weighted with the data from the face map, so an even more detailed saliency map is constructed.\par 
+	Furthermore, apart from the face information, Forras also uses gradient magnitude, Canny edge detection and Hugh line detection to make the saliency map as meaningful as possible. 
+	It thoroughly examines both the semantic and the low level pixel data.
+	There is, however, another method to evaluate the pixel information in an even more profound manner.
+	! Putting the information into a context makes the measurements more accurate, because it controls for information extremities.! itt ezt akartad mondani?
+	Consequently, no pixel will appear more important - or unimportant - than it really is.
+	Forras obtains this with the calculation of a so-called neighborhood inhomogeneity factor, which denotes the amount of inhomogeneous neighbors of every pixel. 
+	This approach helps to find the important areas inside an object, where a simple line detection algorithm fails i.e. indicate no salient regions.
+	To find the coherent areas that later can be defined as objects, the use of a mean shift algorithm, as in Forras, would be effective. 
+	Furthermore, it! what? makes the saliency calculation scale invariant!? constant/stable/unchanged?, and decreases the chance of finding misleadingly high important edges!.\par 
 	When the saliency map is final, the next step is to calculate the seams.
-	In this project seams are defined as paths with the width of one pixel.
-	But the release of this rule can provide better results with less artifacts and also increase of performance, like is does by Forras.
+	In this project seams are defined as paths with the width information of each pixel.
+	On the other hand,  mitigation/moderation/ignoring-of of this rule can provide better results with less artifacts and also increases of performance, as obtained by Forras.
 	This approach tries to find streams, seams wider than only one pixel, to eliminate bigger areas of the picture at once.
-	Even if the cheapest seams are not neighboring, for the cost of eliminating a bit more salient regions, the number of needed loops for one image can be decreased.
-	The most important precondition is, that the stream is not allowed to cross any salient line or region, for example faces, so the relative saliency value still needs to stay low. \par
-	To eliminate the possible artifacts caused by cutting of seams and streams an algorithm presented in Forras can help.
-	This approach is also based on the saliency calculation.
+	Even if the cheapest seams are not neighboring, for the cost of eliminating a slightly greater salient region, the number of needed loops per image can be decreased.
+	The most important precondition is that the stream is not allowed to cross any salient line or region, for example faces, so the relative saliency value still needs to stay low. \par
+	In order to eliminate the possible artifacts caused by cutting of seams and streams an algorithm presented in Forras offers help.
+	This approach is also based on saliency calculation.
 	If there is a big area, which needs to be filled up, it investigates the saliency map and the texture of the neighboring regions.
-	The most salient points are labeled then as anchor points, and the actual task is to find a way between these anchors and to color the background.
-	In case of seam carving it is not the goal to recreate the eliminated area, but with this algorithm it is possible to make the transition smoother.
-	If a stream is taken, a narrow, only a few pixel width path can be left behind, to let the algorithm work.
-	In the case of seams however the neighboring edges can be modified according to the filling method taking some wider area around the seam as reference.\par 
-	A further possibility to make the current algorithm faster and able to deal with the artifacts better is in Forras presented.
+	The most salient points are then labeled as anchor points; the actual task is to find !a way!? between these anchors and to color the background.
+	In case of seam carving the goal is not to recreate the eliminated areas but with the above algorithm it is possible to make transition areas smoother.
+	! If a stream is taken, a narrow, only a few pixel wide path can be !left behind!, to let the algorithm work.
+	In the case of seams however the neighboring edges can be modified according to the filling method, taking some wider area around the seam as reference.\par 
+	A further possibility to make the current algorithm faster and able to deal with the artifacts better is presented in Forras.
 	This method has to slightly modify the pipeline of the project, since it employs usual resampling in the seam carving phase already.
-	It classifies every pixel on the input image as foreground, very salient, related objects, and background, less salient, probably split up parts of the image.
-	The seam carving method is applied only on the foreground data, the non salient regions are processed with simple resampling. 
-	With this approach the properties of the background have no influence on the actual sequence of a seam.
-	The calculation needs to take only the saliency values of the important foreground objects into account, so the resulting path can be more accurate and save the most important regions of the picture.
-	Furthermore, considering that an average seem is not as long as if it would be applied on the whole input, the artifacts became smaller and less noticable.
+	It classifies every pixel on the input image as foreground, very salient, related objects, and background, less salient, !probably split up parts of the image.!
+	The seam carving method is applied only on the foreground data, the non-salient regions are processed with simple resampling. 
+	With this approach the properties of the background have no influence on the actual sequence of seam.
+	The calculation needs to take only the saliency values of the important foreground objects into account, therefore the resulting path can be more accurate and retrain the most important regions of the picture.
+	! Furthermore, considering that an average seem is not as long as it if it would be applied on the whole input, the artifacts became smaller and less noticable.
 	As an additional favorable side effect, the performance also increases, since several areas are ignored for the seam calculation.    
 	
 	\chapter{Conclusion}
