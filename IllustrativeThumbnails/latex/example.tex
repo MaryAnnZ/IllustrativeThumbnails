@@ -288,18 +288,18 @@
 	!Some aspects however, like definition of AOs, could expand the actual used approaches, this possibility will be discussed in the future work section.
 	
 	\subsection{Feature combining methods}
-All before mentioned approaches work with some kind of feature combining algorithms.
-After choosing the interesting areas, which need to stay recognizable also on the resulting image, they will be merged into one output picture according to their methods.
+All the above mentioned approaches work with some kind of feature combining algorithms.
+After choosing the relevant areas that need to stay recognizable also on the resulting image, they are merged into one output picture according to their methods.
 It is usual in this process  that some artifacts show up near the joining area.\par 
 A possible solution for this problem is the Poisson equation for image processing, introduced by forras.
-A modified Poission equation using a guidance field needs to be solved for every color in the color space, where the guidance field is calculated from the gradients of the input image.
-This algorithm is actually invented for seamless cloning, but it is helpful, when some not neighboring parts of the same image needs to be placed near each other.
-To make the Poisson calculation more efficient an algorithm suggested by forras can help.
-It proposes to solve the equation on an image pyramid built from the source and its destination image, so from the two regions, which needs to be combined in this case.??
-To reach the smoothest result forras works with gradient-domain fusion developed from the Poisson equation.
+A modified Poission equation using a guidance field needs to be solved/applied for every color in the color space where the guidance field is calculated from the gradients of the input image.
+This algorithm is actually invented for seamless cloning, but it is helpful when some not-neighboring parts of the same image need to be placed near each other.
+To make the Poisson calculation more efficient an algorithm suggested by forras offers help.
+It proposes to solve the equation of/with! an image pyramid that is built from the source and the destination image, or, as in this case, from the two image regions to be combined.
+To reach the most optimal result, forras works with gradient-domain fusion developed from the Poisson equation.
 It collects the color gradients of the source images into a composite vector field.
-Afterwards  a color composite is calculated, where the gradient fits in the vector field as much as possible. \par 
-Combining and accumulating the color data promises very smooth results, naturally appearing joining areas.
+Afterwards,  a color !composite!composition? is calculated, where the gradient fits as well in the vector field as possible. \par 
+Combining and accumulating the color data promises very smooth results with a natural appearance at the joining areas. 
 These algorithms however are invented for combining pictures from the real world, and not for computer generated images.
 In case of thumbnails, it is less important to make the transitions less edgy, since the source does not seem to be natural neater. 
 So the use of such advanced methods like Poisson equation is pointless, since the offer, providing natural edges and smooth transition, matches not even the input screenshot. 
@@ -309,18 +309,18 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	\chapter{Methodology}
 	The algorithm to create illustrative thumbnails has three main steps.
 	At the beginning the UI elements are cut off.
-	In the case of thumbnails there are other ways to get information about what application are actually opened, for example giving a title for it containing the running application's name.
-	In addition it is usual that the same software is running many times for other purposes, for example the usage of text editor for writing and for reading some document.
-	The content and not the surface of these applications matters.
-	Although reading the title of the thumbnails is slower than the software recognition through visual data, this aspect needs to take count for the better visualization of the actual content area.%TODO{trade off} 
-	The second step is the calculation of the importance map weighted on the place of text data.
-	Unlike to common pictures from the real life the occurrence of text on computer screens is higher and more important.
+	In the case of thumbnails there are other ways to get information about what application are actually opened, for example by giving a title for it, containing the running application's name.
+	In addition, it is rather usual that the same software is running multiple times, possibly for other purposes, e.g. using the text editor for both writing one and reading another document.
+	Consequently, the actual content and not the surface of these applications makes a difference.
+	! Although reading the title of the thumbnails is slower than the software recognition through visual data, this aspect needs to take count for the better visualization of the actual content area.%TODO{trade off} 
+	The second step is the calculation of the importance map !weighted on! based on? the place/location? of text data.
+	Unlike at regular real-life pictures the occurrence of text on computer screens is higher and more important.
 	For this reason the calculation of the final importance map have two steps.
 	First the importance value of every picture is generated according to an image based energy function described in the next sections.
 	Second the importance value is increased at the places where text is found.
-	In that way not only the silhouette but the whole body of the letters seams to be salient.
-	Lastly seam carving and simple resampling is performed  until the output size is reached.
-	In this section these three main sections is discussed, and an overview about the algorithm is shown.
+	This way not only the silhouette but also the whole body of the letters seems to be salient.
+	Lastly, seam carving and simple resampling is performed  until the correct output size is reached.
+	In this section these three main sections are discussed, and an overview of the algorithm is presented.
 	
 	\section{Eliminating UI elements}
 	For the elimination of UI elements, they need to get identified first.
