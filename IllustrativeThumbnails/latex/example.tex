@@ -309,7 +309,6 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	\chapter{Methodology}
 	The illustrative thumbnail creating algorithm has three main steps.
 	At the beginning the UI elements are cut off.
-<<<<<<< HEAD
 	In the case of thumbnails there are other ways to get information about what application are actually opened, for example by giving a title for it, containing the running application's name.
 	In addition, it is rather usual that the same software is running multiple times, possibly for other purposes, e.g. using the text editor for both writing one and reading another document.
 	Consequently, the actual content and not the surface of these applications makes a difference.
@@ -322,7 +321,7 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	This way not only the silhouette but also the whole body of the letters seems to be salient.
 	Lastly, seam carving and simple resampling is performed  until the correct output size is reached.
 	In this section these three main sections are discussed, and an overview of the algorithm is presented.
-=======
+
 	
 	
 	\section{Eliminating UI elements}
@@ -403,9 +402,9 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	Seam carving calculates paths according to the saliency map, and eliminates these with minimal importance value.
 	This step is repeated until the desired size is reached or the importance value of the chosen path exceeds a predefined threshold.
 	Because seam carving does not necessary eliminates only straight lines, the algorithm effects the layout of unimportant regions noticeably.
-	Furthermore if the whole image has very high salient values, the resulting seams do not have remarkable smaller salient value than any randomly chosen straight line, chosen for resampling elimination.
+	Furthermore if the whole image has very high salient values, the resulting seams do not have remarkable smaller salient value than any  for resampling randomly chosen straight line.
 	To save the image from unnecessary artifacts and make the application more performant, a threshold value is defined as proposed in Forras.
-	To reach the final output size common resampling is used.\par 
+	To reach the final output size common resampling is applied.\par 
 	To find the most appropriate path, every possible solution needs to get checked using the backpacking method.
 	A path map is generated, where the past possibilities are stored, and every new try can use it as a look up.
 	In this was performance can be saved, and the algorithm gets faster.\par 
@@ -418,15 +417,15 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	Because the horizontal and vertical paths are eliminated independently, the picture being processed usually does not hold the aspect ratio.
 	For that reason it is possible that the weight and height parameters do not reach the output size or the threshold value in the same time.
 	In this case the seam carving algorithm continues for only one parameter until it reaches one of the conditions above. 
-	Since the threshold parameter controls the algorithm, when to switch between seam carving and resampling, its value is essential. 
+    The value of the threshold parameter value is essential,	since it controls the algorithm, when to switch between seam carving and resampling 
 	It is calculated from the maximum salient path found after the first loop of the seam carving algorithm.
 	Since with every loop one unsalient pixel is eliminated from the horizontal or from the vertical paths, the relative saliency of the seams increase permanently.
-	Therefore in most of the cases even the less salient seam needs to hit the relative value of the most salient path on the original image, where every unsalient pixel were included. 
+	Therefore in most of the cases even the less salient seam needs to hit the relative value of the most salient path on the original image some time, where every unsalient pixel were included. 
 	The common resampling method eliminates straight lines chosen from the source image until the desired size is reached.
 	Seam carving is used to avoid that paths with high salient value are cut off.
 	But if the seams have as high importance value as any other from the source image, regular resampling has already more advantages.
 	First the algorithm is faster then the implemented seam carving method.
-	And second it applies an interpolating algorithm between the borders of the eliminated area, so it saves ultimately more information than seam carving in this case.   
+	And second it applies an interpolating algorithm between the borders of the eliminated area, so in this case it saves ultimately more information than seam carving.   
 	
 	\chapter{Implementation}
 	The illustrative thumbnail creator application is developed in the programming language C++.
