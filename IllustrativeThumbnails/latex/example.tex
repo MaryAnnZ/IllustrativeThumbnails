@@ -364,39 +364,39 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	\section{Saliency calculation}
 	In order to ignore that parts of the source image that are actually unimportant, saliency calculation is applied.
 	The saliency value of a pixel measures how important the pixel is, how noticeable it is and how much attention it affects for the human eye.
-	A saliency map is a grayscale image where the high value of an area means that that region seems to be more interesting than other pixels with lower value.
-	There are however many definitions and approaches, which pixels should be evaluated for salient or not salient.
-	In this case the saliency is calculated in the way presented by Forras. 
+	A saliency map is a grayscale image where the high value of an area means that the region is more interesting than other pixels with lower values.
+	There are, however, many definitions and approaches about which pixels should be evaluated as salient or not salient.
+	In this case the saliency is calculated as presented by Forras. 
 	There are two reasons, why this algorithm is chosen.
-	First it evaluates the low level visual informations.
-	It means only the pixel is valued as important, which attracts the low level human visual system, like edges and color changes.
-	Secondly it is scale invariant, so it is more robust than other similar but only singe scale approaches.\par 
+	First, it evaluates the low level visual informations.
+	It means that only those pixels are valued as important that activate the low level human visual system, for example due to their sharp edges and color change characteristics.
+	Secondly, it is scale invariant, so it is more robust than other similar but only singe scale approaches.\par 
 	The algorithm converts the source into a uniform colorspace (Lu*v) first.
 	After that, to make the approach scale invariant, a Gaussian contrast pyramid is built.
-	Forras calculates the contrast value from the weighted sum of  the  differences between the pixel and its neighborhood using the L2 norm.
-	This approach needs to get slightly modified, in way that the calculation has to ignore the weighting value.
-	Forras uses this weighting parameter because of the fact, that the central area of common real word images is more important than the margin regions.
-	Investigating computer screens this is however not the case.
-	A screenshot often does not have one defined focus point, where the most important information is shown.
-	So the use of a weighting value would prefer the inner window, even though there is no significant correlation between the importance of the data and its placement on the screen.
-	At the end the importance of each pixel is calculated summing up all levels of the pyramid into one final saliency map.\par
-	In the case of computer screens the occurance of text is common, and its information content is usually very high.
-	Therefore it is not permissible that regions with text content appear not so important on the saliency map.
-	For that reason a further evaluation of the saliency map is needed, to check if text areas were evaluated as important data.\par 
+	Forras calculates the contrast value from the weighted sum of difference between the pixel and its neighborhood, using the L2 norm.
+	This approach needs to get slightly modified, in way that the calculation ignores the weighting value.
+	Forras uses this weighting parameter because of the fact that the central area of regular real word images is more important than the margin regions.
+	When investigating computer screens, however, this is not the case.
+	A screenshot often does not have a defined focus point where the most important information is shown.
+	By using the weighting value, the focus would be on the inner window, despite the fact that there is no actual significant correlation between the importance of the data and its position on the screen.
+	At the end, the importance value of each pixel is calculated by summing up all levels of the pyramid into one final saliency map.\par
+	In the case of computer screens, texts are fairly common, and their information content is usually also very high.
+	Therefore, it would be rather impractical not to reflect the importance of such text regions on the saliency map. 
+	For that reason a further evaluation of the saliency map is needed, to check whether text areas were evaluated as important data.\par 
 	The text recognition algorithm is based on the one introduced in Forras.
-	For the first step the whole input image is horizontally blurred, so that the letters and the neighboring words give a string together.
-	After that is all coherent string is investigated if they possibly are words or they derive from other visual features of the source.
-	The method, which verify the words, checks two aspects.
-	The first is if the strings are high enough but not too high for being real letters.
-	Furthermore if their width is not too small but not too big to be one word at least but not an endless sentence.
-	All these size checking values are parametrized, their default value based on the size of one letter is mentioned in the next chapter. 
-	The second loop evaluates the histograms of the area, where the strings are found.
-	It is usual, that the letters being part of the same text data have the same color, while the background, for readability, does not have big color changes neither.
-	Therefore the histogram of these areas are bimodal, one for the letters and one for the color of the background.
-	So if a string has a so special histogram it is evaluated as word, but even if it managed to pass the first check, without such a histogram, it is not possible to be labeled as word. \par 
-	Finishing to calculate the final saliency map, which is used in the whole application, the regions evaluated as text need to get weighted.
-	All area which passed the word checking test is automatically evaluated as highly important, and gets the biggest saliency value.
-	In addition, to make sure that not even the space between the words is damaged, which is important because of readability, the area neighboring the text data is also weighted.
+	For the first step the whole input image is horizontally blurred, so that the letters and the neighboring words form a string together.
+	After that, all of these coherent strings are investigated and consorted depending on whether they are representations of actual words or if they derive from another visual feature of the source.
+	The method that identifies the words examines two aspects.
+	The first is if the strings are high enough but not too high to indicate real letters.
+	Second, whether their width is not too small but also not too big to form at least one word but not an endless sentence.
+	Both of these size !informal'checking' values are parametrized, with their default value based on the size of one letter, as explained in the next chapter. 
+	The second loop evaluates the histograms of the area, where the strings were found.
+	Normally the letters, if belonging to the same text data, have the same color, while the background, for optimal readability, does not change its color underneath the text, either.
+	Therefore, the histograms of these areas are bimodal, namely one for the letters and one for the color of the background.
+	To sum up, to identify a string as a word, it is not sufficient to pass the first check, it  also need  to have a corresponding special histogram to be labeled as word. \par 
+	The final step for the calculation of the final saliency map, which is consequently used in the whole application, is to get the identified text regions weighted. 
+	All area which passed the word checking test is automatically evaluated as highly important, and gets the highest saliency value.
+	In addition, to make sure that even the space between the words remains undamaged, which is important because of greater readability, the area neighboring the text data is also weighted.
 	
 	\section{Seam Carving}
 	To resize the image without damaging the important regions, seam carving Forras is used.
