@@ -632,15 +632,15 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	It classifies every pixel on the input image as foreground, very salient, related objects, and background, less salient, !probably split up parts of the image.!
 	The seam carving method is applied only on the foreground data, the non-salient regions are processed with simple resampling. 
 	With this approach the properties of the background have no influence on the actual sequence of seam.
-	The calculation needs to take only the saliency values of the important foreground objects into account, therefore the resulting path can be more accurate and retrain the most important regions of the picture.
-	! Furthermore, considering that an average seem is not as long as it if it would be applied on the whole input, the artifacts became smaller and less noticable.
-	As an additional favorable side effect, the performance also increases, since several areas are ignored for the seam calculation.    
+	The calculation needs to take only the saliency values of the important foreground objects into account, therefore the resulting path will be more accurate and consist the most important regions of the picture.
+	Furthermore, in this case a seam is shorter than it would be when it was be applied to the whole input, as it is only calculated for certain foreground objects, causing significantly smaller and less noticeable artifacts.
+	As an additional favorable side effect, also the performance increases due to the decreased amount of areas to be considered for the seam calculation.    
 	
 	\chapter{Conclusion}
-	To make thumbnails more illustrative and usable even in small screens a thumbnail creating method was presented using seam carving.
-	In order to have as informative results as possible the saliency calculation was adjusted to the special requirements of a screenshot.
-	In addition to seam calculation the presence of UI elements on a computer screen were also taken into account.
-	Because of the customized seam carving algorithm and its extension with other helpful methods, like UI parts elimination, text recognition and common resampling, the resulting thumbnails were more illustrative than their usual relatives, since their information content stayed better recognizable and the text region easier readable. 
+	To make thumbnails more illustrative and applicable even on small screens, a thumbnail creating method using seam carving was presented in this paper.
+	In order to obtain the most informative results possible the saliency calculation was adjusted to the special requirements of a screenshot.
+	In addition to seam calculation, the presence of UI elements on a computer screen were also taken into account.
+	As a combined results of the customized seam carving algorithm and its extensions with other helpful methods such as UI part elimination, text recognition and common resampling, the created thumbnails are more illustrative than their usual relatives, since their information content is better recognizable and the text regions are easier to read. 
 	
 	% Remove following line for the final thesis.
 	%\input{intro.tex} % A short introduction to LaTeX.
