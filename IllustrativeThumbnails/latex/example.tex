@@ -23,6 +23,11 @@
 \usepackage{hyperref}  % Enables cross linking in the electronic document version. This package has to be included second to last.
 \usepackage[acronym,toc]{glossaries} % Enables the generation of glossaries and lists fo acronyms. This package has to be included last.
 
+
+\newenvironment{conditions}
+{\par\vspace{\abovedisplayskip}\noindent\begin{tabular}{>{$}l<{$} @{${}={}$} l}}
+	{\end{tabular}\par\vspace{\belowdisplayskip}}
+
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
 \newcommand{\authorname}{Rebeka Koszticsak} % The author name without titles.
 \newcommand{\thesistitle}{Illustrative Thumbnails} % The title of the thesis. The English version should be used, if it exists.
@@ -148,23 +153,43 @@
 	With the increased use of mobile devices and reliance on multi-tasking thumbnails are becoming increasingly important.
 	Thumbnails appear when switching between tasks, representing the concurrent windows i.e. the running applications.
 	To keep a continuous and effective workflow, it is essential to make the process of switching as fast and smooth as possible by allowing the user to quickly identify and choose between the given tabs. 
-	The current thumbnail system is not, however, fit for this purpose. Due to the fact that standard thumbnail applications simply take the screenshot of each application and present them in a smaller size, the relevant parts of the window are no longer recognizable. For example, the user interface widgets, especially in case of the multiple windows! of the same application!, take up valuable place that could otherwise be used to present more important content elements, such as actual file names or other unique characteristics of the window.
-	Furthermore with the use of tablets, smart phones and smart watches the display, thus the thumbnail size needs to shrink even more, but the original calculation algorithm does not take this into account.\par 
+	However, the current thumbnail system is not fit for this purpose. 
+	Due to the fact that standard thumbnail applications simply take the screenshot of each application and present them in a smaller size, the relevant parts of the window are no longer recognizable. 
+	For example, the user interface widgets, especially in case of the multiple windows of the same application, take up valuable place that could otherwise be used to present more important content elements, such as actual file names or other unique characteristics of the window.
+	Furthermore with the use of tablets, smart phones and smart watches the display, thus the thumbnail size needs to shrink even more, but the original calculation algorithm does not take this into account.
+	Figure~\ref{fig:introo} shows a possible output of the current (Figure~\ref{fig:introo:org}) and the new (Figure~\ref{fig:introo:res}) thumbnail creating algorithms.\par 
+	\begin{figure}[h]
+		\centering
+		\begin{subfigure}[b]{0.45\columnwidth}
+			\centering
+			\includegraphics[width=\textwidth]{orgBlizzard}
+			\subcaption{Currently used thumbnail}
+			\label{fig:introo:org}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\columnwidth}
+			\centering
+			\includegraphics[width=\textwidth]{resultBlizzard}
+			\subcaption{Thumbnail created by the new algorithm}
+			\label{fig:introo:res}
+		\end{subfigure}
+		\caption{The result using the two different approaches}
+		\label{fig:introo} % \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
+	\end{figure}
 	This project introduces a new approach using seam carving to make thumbnails more illustrative even on small displays.
 	Seam carving is a special re-sampling method, where not necessarily straight lines are determined, and the least important of them are then eliminated.
 	The definition of importance depends on the implementation, but it in any case evaluates color changes and identifies the edges that shape the outline of the element on the source image.
-	Following a similar logic, the algorithm presented in this paper uses a customized seam carving method.
+	Following a similar logic, the algorithm presented in this thesis uses a customized seam carving method.
 	Furthermore, it takes into account that the given input is essentially a screenshot thus will probably contain some UI elements on the picture.
 	Additionally, considering that letters are more common on computer screens than on usual images, the text content is also investigated to calculate its salient regions.
 	
 	\section{Definition of the word illustrative} 
 	To provide satisfactory results a detailed and clear definition of the word illustrative is needed.
-	Not only it influences the calculation of the pixel and region saliency value, but also acts at the selection of result outputs, and !is useful for future software development! .
-	! Also, for a fitting definition it needs to be taken into account that in this case the seam carving algorithm is used for screenshots and not for usual photographs.\par 
+	Not only it influences the calculation of the pixel and region saliency value, but also acts at the selection of result outputs, and is useful for future software development.
+	Also, for a fitting definition it needs to be taken into account that in this case the seam carving algorithm is used for screenshots and not for usual photographs.\par 
 	The expression 'illustrative thumbnail' also comprehends that it is able to represent more information on a same sized picture than the other not illustrative thumbnail.
 	Unlike usual visual features observed on real world images, such as color changes and location of edges, as mentioned above, computer screens have additional special properties that require further consideration.
 	For example, most screenshots include UI widgets, that are classified as not illustrative.
-	Namely, it is rarely the case that the relevant part of an application is its UI and not its the actual content processing features, furthermore, the identification of the a window in question is also possible by reading its title.
+	Namely, it is rarely the case that the relevant part of an application is its UI and not its the actual content processing features, additionally, the identification of the a window in question is also possible by reading its title.
 	Furthermore text data has on the computer screen more important role then usual pictures.
 	To transmit as much information as possible, text data is not allowed to get damaged, i.e. even after size reduction it needs to stay readable.\par 
 	Summing up, in this project a thumbnail is called 'illustrative' if its informative content preserves.
@@ -182,32 +207,31 @@
 	\section{Processing as UI}
 	When the input is a screenshot, there is a high chance that the usual UI elements, like buttons and menu bars, are shown on the screen.
 	Exceptions for this are only cases when graphics, images, videos or application are presented, such as video games, gallery program or video players.
-	Such applications tend to hide all UI elements and operate in "fullscreen" mode, or use a redefined UI e.g. game menu bars.\par
+	Such applications tend to hide all UI elements and operate in 'fullscreen' mode, or use a redefined UI e.g. game menu bars.\par
 	Labeling the image parts as content and non-content, the metadata about the UI elements can be helpful.
-	Forras uses already existing accessibility APIs, tested on Mac OS X and on Microsoft Windows, to segment UI and non-UI data. 
+	Chang et al. ~\cite{chang2011associating} uses already existing accessibility APIs, tested on Mac OS X and on Microsoft Windows, to segment UI and non-UI data. 
 	Matching the metadata with the screen content provides a fast and robust result about the location of any kind of UI content.
 	There are however several disadvantages, that need to be taken into account when using such APIs.
 	The range and the granularity of the support is often not wide enough.
 	The use of an accessibility API is unable to ensure that every UI elements are recognized, because some metadata are not reachable or they will be ignored by the application.\par
-	Consequently, Forras Prefab uses an adapted of such prototypes. 
+	Consequently, Prefab ~\cite{dixon2010prefab} uses an adapted of such prototypes. 
 	In the database, models and  prototypes of common UI elements are saved.
 	The (components of) UI elements are then matched with the prototypes from the database, allowing a consequent access to the predefined metadata.
 	Since the Prefab system is able to split complex widgets to their constructing elements, the database does not need to be unnecessary big, though it is still able to cover the most common UI elements.
 	In the case of special or rare UI widgets, like in a video game application or elements of a not widely used software, the system fails to recognize them, since these rare widgets are not included in the given database.\par
-	Forras Sikuli offers a solution not only for the incompleteness of !such! database, but for issues around granularity, too.
+	Sikuli ~\cite{yeh2009sikuli} offers a solution not only for the incompleteness of such database, but for issues around granularity, too.
 	It uses its own templates just like the Prefab system, but only in case of small icons and widgets.
-	Since in case of larger objects template matching would be too expensive/demanding/not cost-efficient/expensive IN TERMS OF TIME AND SPACE/ would not be time and storage efficient , after accomplishing a training pattern, the Sikuli system is able to create new object models too.
-	Although in the original/Sikuli application this feature is used for another purpose, i.e. to reduce matching costs, it can effectively used to solve the problem of database and granularity.
-	With other words, Sikuli allows the expansion the of database and thus creating a more detailed database !entry bemenetet? !.\par
-	
+	Since in case of larger objects template matching would be too expensive in terms of time and space, after accomplishing a training pattern, the Sikuli system is able to create new object models too.
+	Although in the original application this feature is used for another purpose, i.e. to reduce matching costs, it can effectively used to solve the problem of database and granularity.
+	With other words, Sikuli allows the expansion of the database and thus creating a more detailed database entries.\par	
 	On the other hand, in case of accessibility APIs, it is not only the availability of the metadata that may cause problems, but also it does not provide information about the actual visibility of the UI elements.
 	One window or rather one widget can overlap with or even fully cover another, some content can be out of the range of the borders of the screen etc.    
-	Forras is built on the Prefab system, but additionally it creates a hierarchical tree of the widgets. 
-	The content is found at the leafs, and the parents are the widget, where the child is built in.!
+	The algorithm of Dixon et al. ~\cite{dixon2011content} is built on the Prefab system, but additionally it creates a hierarchical tree of the widgets. 
+	The content is found at the leafs, and the parents are the widget, where the child is built in.
 	With the help of this tree the order of the UI elements gets clear, and so the misleading information can be eliminated.\par
-	After the labeling of the UI elements correctly, they can be 'process' helyett: applied/manipulated/operated with as needed.
+	After the labeling of the UI elements correctly, they can be manipulated as needed.
 	They can cut off as whole or processed according to the information content.
-	Forras invented an algorithm that eliminates the picture objects and fill their place with the texture of the object behind them using the z-buffer information.
+	Mirkamali et al. ~\cite{mirkamali2015object} invented an algorithm that eliminates the picture objects and fill their place with the texture of the object behind them using the z-buffer information.
 	The tree mentioned above works as a z-buffer in this case.
 	With this cut off algorithm, unnecessary widgets can easily be eliminated and more important elements of the UI can thus get more visible.\par
 	According to the definition of "illustrative", the UI elements of a screen in any case are to be excluded, consequently the segmentation of the UI elements is not required.
@@ -220,7 +244,7 @@
 	Furthermore, these methods can also handle a series of important tasks such as interesting point recognition, Region of Interest (ROI) selection, image or feature composition, i.e. tasks that are in order to make any kind of images more illustrative.
 	Based on the type of input data, there are two groups of the above algorithms that will be discussed in the following sections.
 	The first category works with more than one picture at the same time.
-	Its strength is to choose singe features that best represents the whole input data. 
+	Its strength is to choose single features that best represents the whole input data. 
 	In exchange it is likely that no input image will be recognizable on the result.
 	To the contrary, there are the methods in the second group that take only one picture for input and process it as one unit.
 	The resulting image is similar to the input data, however thus it is likely that not only the unimportant but also the areas with high information ratio are damaged.
@@ -230,30 +254,38 @@
 	A collage is an assembled image, containing parts of a bunch of input images and being representative for the whole input data.
 	There are two cases by creating  more illustrative thumbnails where such methods can be helpful.
 	On the one hand the actual information of a screenshot image is presented only in few regions of the picture.
-	Many parts, for example UI elements, space between the content etc, can be ignored. 
+	Many parts, for example UI elements, space between the content etc., can be ignored. 
 	The other way around the content can be retrieved in form of ROIs, and afterwards they can be combined arbitrary.
 	On the other hand thumbnails for desktop switching can be easily generated using collage creator algorithms, where the input is screenshots of the open applications of the desktop instead of some ROIs of one screen.\par
 	For a representative collage the most important task is to choose the best images, which information content covers the whole input data.
-	Forras takes the parameters representativeness, importance costs, transition cost and object sensitivity into account.
+	Rother et al. ~\cite{rother2006autocollage} takes the parameters representativeness, importance costs, transition cost and object sensitivity into account.
+	\[ E(L)=E_{rep}(L)+w_{imp}E_{imp}(L)+w_{trans}E_{trans}(L)+w_{obj}E_{obj}(L) \]
 	Representativeness means being interesting in this case.
 	A picture tends to have high representativeness value, if there are many special textures on it, and if it is not similar to the rest of the data (so that no image is chosen twice).
 	Importance cost evaluates and collects the ROIs of the input.
 	While transition cost stands for the smooth transition between every two images.
 	At last, the parameter object sensitivity holds the results of object recognition, and it helps in the arrangement, that every object has a reasonable placement.\par
-	Forras concentrates however only at the first two parameters above.
+	Egorova et al. ~\cite{egorova2008collage} concentrates however only at the first two parameters above.
 	It clusters the images according to their source and the time, and measures the quality.
 	Thank for the clustering, by the choice of the final images it is clear,  which images are the same or have similar content.
 	This feature, accordingly modified, can be useful by sorting ROIs of a screenshot, i.e.: text content, image content etc. or of the running applications of the desktop, i.e.: textprocessing, gallery application etc.
 	The parameter quality summarizes the value of the results of the following calculations: blurriness, compression, contrast and color balance.
 	Since in this case only screenshots, thus computer generated pictures, can be the input, these measurements invented for camera data would provide less meaningful results than the algorithm above.\par 
+	\begin{figure}[h]
+		\centering		
+		\includegraphics[width=0.5\textwidth]{ROIpacking}
+		\caption{The whole ROI packing process ~\cite{lee2010mobile} (a) K-means clustering (b) ROI's center at the beginning of the algoritm (c) Layout of the ROIs at the beginning of the algorithm (d) Shifting of the ROIs (e) Expanding the ROIs (f) Output after some iterations}
+		\label{fig:ROIpacking}
+	\end{figure}
 	Having the best ROIs for the collage the last task is to merge them into one output picture.
-	For this purpose Forras uses a method called ROI packing.
-	First the central point of every ROI is selected and every pixel on the canvas needs to get assigned to one of them using the k-Means algorithm.
+	For this purpose Lee et al. ~\cite{lee2010mobile} uses a method called ROI packing.
+	First the central point of every ROI is selected and every pixel on the canvas needs to get assigned to one of them using the K-Means algorithm.
 	After that the ROIs can be placed on the area calculated for them.
 	To fill the place between the ROIs they are increased, keeping the aspect ratio, until they overlap. 
 	Then every ROI is shifted to the middle of its area.
 	This method is repeated until there are no further increases in the ROI anymore.
 	To fill the white areas and eliminate any empty place, neighboring ROIs are allowed to partially cover each other.
+	Figure~\ref{fig:ROIpacking} shows the different steps of the ROI packing algorithm.\par 
 	Collage methods are excellent at representing a large image dataset in a small place.
 	They work with numerous input data, take the most important parts of them and create a new image, that is not similar to any previous one.
 	That is why they are more useful for making a thumbnail for a desktop while not being much so in case of applications.
@@ -265,83 +297,106 @@
 	To attain a constant relative position among regions, applying a resampling method is more effective than the above described collage creating approaches.
 	Resampling means that some equally distributed parts of the image will be eliminated, thus, unlike by the collage algorithms, all remaining areas will have the same relation to each other.
 	Therefore, the image itself remains recognizable because it has a highly similar appearance, in spite of having the most important areas less readable.\par 
-	To select the invariable areas Forras suggests various attention models that are able to define the so-called Attention Objects (AO).
+	To select the invariable areas Chen et al. ~\cite{chen2003visual} suggests various attention models that are able to define the so-called Attention Objects (AO).
 	AOs are usually real-world objects that due to their familiarity, shape, color etc., attract the human eye.
 	AOs can easily be parametrized using three values: ROI, Attention Value (AV) and Minimal Perceptible Size (MPS).
 	The attention models fit the AOs into their context.
-	Forras works with three different attention models at the same time: saliency, face and text attention.
+	The algorithm works with three different attention models at the same time: saliency, face and text attention.
 	The most important areas can be detected according to the importance value of each given pixel.\par 
-	The algorithm above, after careful calculations, chooses the only area that contains the highest possible amount of AOs.
-	To accomplish this, some possibly important AOs have to be ignored and cut off.
-	With Feature awared Texturing described in Forras this does not have to be the case.
+	\begin{figure}[h]
+		\centering		
+		\includegraphics[width=0.5\textwidth]{useOfAOs}
+		\caption{Possible solutions of the algorithm of Chen et al. ~\cite{chen2003visual}}
+		\label{fig:useOfAOs}
+	\end{figure}
+	The approach above, after careful calculations, chooses the only area that contains the highest possible amount of AOs.
+	To accomplish this, some possibly important AOs have to be ignored and cut off, like shown on Figure~\ref{fig:useOfAOs}.
+	With Feature-aware Texturing described in ~\cite{gal2006feature} this does not have to be the case.
 	The algorithm expects an input image and a feature mask.
 	A grid is generated, which lies on the input image.
 	This grid can be modified in an optional shape, but the gridpoints on the feature mask are not allowed to change their proportion to each other.
-	In that way the picture elements between the AOs fill the new shape, but the AOs get barely distorted. \par 
+	In that way the picture elements between the AOs fill the new shape, but the AOs get barely distorted, illustrated on Figure~\ref{fig:fat}.\par 
+	 \begin{figure}[h]
+		\includegraphics[width=.3\textwidth]{featureAwareTexturing1}\hfill
+		\includegraphics[width=.3\textwidth]{featureAwareTexturing2}\hfill
+		\includegraphics[width=.3\textwidth]{featureAwareTexturing3}
+		\caption{The resulting image and grid from a certain input image and its feature mask of the Feature-aware Texturnig algorithm ~\cite{gal2006feature} }
+		\label{fig:fat}
+	\end{figure}
 	A detailed importance is essential at creating thumbnails, since a screen usually contains a greater amount of sensitive information.
 	For example, a text can get easily destroyed, since they do not include such a clear focus point as regular pictures, where the density of ROIs is high. 
 	But the algorithms described above has aspects like face recognition and grid determination that over-complicate the calculations, causing performance issues without reaching better quality.
 	A face on a computer screen is not as frequent as on usual photos, and in addition it is not as sensitive as for example a text data.
 	In the case of down sampling a human face can stay recognizable, whereas texts quickly become illegible. 
 	With a grid the input image can get reshaped to any other form with no additional damage to the important areas.
-	!But it is meant to form the input in completely other shape, not for resize it according to aspect ratio.
-	!Some aspects however, like definition of AOs, could expand the actual used approaches, this possibility will be discussed in the future work section.
+	But it is meant to form the input in completely other shape, not for resize it according to aspect ratio.
+	Some aspects however, like definition of AOs, could expand the actual used approaches, this possibility will be discussed in the \hyperref[futureWork]{future work} section.
 	
 	\subsection{Feature combining methods}
-All the above mentioned approaches work with some kind of feature combining algorithms.
-After choosing the relevant areas that need to stay recognizable also on the resulting image, they are merged into one output picture according to their methods.
-It is usual in this process  that some artifacts show up near the joining area.\par 
-A possible solution for this problem is the Poisson equation for image processing, introduced by forras.
-A modified Poission equation using a guidance field needs to be solved/applied for every color in the color space where the guidance field is calculated from the gradients of the input image.
-This algorithm is actually invented for seamless cloning, but it is helpful when some not-neighboring parts of the same image need to be placed near each other.
-To make the Poisson calculation more efficient an algorithm suggested by forras offers help.
-It proposes to solve the equation of/with! an image pyramid that is built from the source and the destination image, or, as in this case, from the two image regions to be combined.
-To reach the most optimal result, forras works with gradient-domain fusion developed from the Poisson equation.
-It collects the color gradients of the source images into a composite vector field.
-Afterwards,  a color !composite!composition? is calculated, where the gradient fits as well in the vector field as possible. \par 
-Combining and accumulating the color data promises very smooth results with a natural appearance at the joining areas. 
-These algorithms however are invented for combining pictures from the real world, and not for computer generated images.
-In case of thumbnails, it is less important to make the transitions less edgy, since the source does not seem to be natural neater. 
-So the use of such advanced methods like Poisson equation is pointless, since the offer, providing natural edges and smooth transition, matches not even the input screenshot. 
+	All the above mentioned approaches work with some kind of feature combining algorithms.
+	After choosing the relevant areas that need to stay recognizable also on the resulting image, they are merged into one output picture according to their methods.
+	It is usual in this process  that some artifacts show up near the joining area.\par 
+	A possible solution for this problem is the Poisson equation for image processing, introduced by Perez et al. ~\cite{perez2003poisson}.
+	A modified Poisson equation using a guidance field needs to be solved for every color in the color space where the guidance field is calculated from the gradients of the input image.
+	This algorithm is actually invented for seamless cloning, but it is helpful when some not-neighboring parts of the same image need to be placed near each other.
+	To make the Poisson calculation more efficient an algorithm suggested by Hussain et al. ~\cite{hussain2016efficient} offers help.
+	It proposes to solve the equation with an image pyramid that is built from the source and the destination image, or, as in this case, from the two image regions to be combined.
+	To reach the most optimal result, Agarwala et al. ~\cite{agarwala2004interactive} works with gradient-domain fusion developed from the Poisson equation.
+	It collects the color gradients of the source images into a composite vector field.
+	Afterwards,  a color composition is calculated, where the gradient fits as well in the vector field as possible. \par 
+	Combining and accumulating the color data promises very smooth results with a natural appearance at the joining areas. 
+	These algorithms however are invented for combining pictures from the real world, and not for computer generated images.
+	In case of thumbnails, it is less important to make the transitions less edgy, since the source does not seem to be natural neater. 
+	So the use of such advanced methods like Poisson equation is pointless, since the offer, providing natural edges and smooth transition, matches not even the input screenshot. 
 	
 	
 	
 	\chapter{Methodology}
-	The illustrative thumbnail creating algorithm has three main steps.
+	\begin{figure}
+		\centering		
+		\includegraphics[width=\textwidth]{flowChart}
+		\caption{Flow chart of the algorithm}
+		\label{fig:flowChart}
+	\end{figure}
+	The illustrative thumbnail creating algorithm has three main steps, as shown on Figure ~\ref{fig:flowChart}.
 	At the beginning the UI elements are cut off.
 	In the case of thumbnails there are other ways to get information about what application are actually opened, for example by giving a title for it, containing the running application's name.
 	In addition, it is rather usual that the same software is running multiple times, possibly for other purposes, e.g. using the text editor for both writing one and reading another document.
 	Consequently, the actual content and not the surface of these applications makes a difference.
-	! Although reading the title of the thumbnails is slower than the software recognition through visual data, this aspect needs to take count for the better visualization of the actual content area.%TODO{trade off} 
-	The second step is the calculation of the importance map !weighted on! based on? the place/location? of text data.
+	Although reading the title of the thumbnails is slower than the software recognition through visual data, this aspect needs to take count for the better visualization of the actual content area.%TODO{trade off} 
+	The second step is the calculation of the importance map weighted on the location of text data.
 	Unlike at regular real-life pictures the occurrence of text on computer screens is higher and more important.
 	For this reason the calculation of the final importance map have two steps.
 	First the importance value of every picture is generated according to an image based energy function described in the next sections.
 	Second the importance value is increased at the places where text is found.
 	This way not only the silhouette but also the whole body of the letters seems to be salient.
-	Lastly, seam carving and simple resampling is performed  until the correct output size is reached.
-	In this section these three main sections are discussed, and an overview of the algorithm is presented.
-
-	
+	Lastly, seam carving and simple re-sampling is performed  until the correct output size is reached.
+	In this section these three main sections are discussed, and an overview of the algorithm is presented.	
 	
 	\section{Eliminating UI elements}
-	For the elimination of UI elements, first their identification must be accomplished. y need to be identified first.
+	For the elimination of UI elements, first their identification must be accomplished. 
 	For the search of UI widget a heuristic is developed, which implies that these elements are located near the border of the screen and not in central areas.
 	Thus, the middle of the screen is taken as reference data for the investigation and is not checked for the unimportant UI elements.
 	The UI elimination algorithm works right on the source window in a predefined, parametrized border area, i.e. no further premodification is required for this process.\par
-	Cropping the borders, first the horizontal, then the vertical margins are investigated, allowing for cases where their order is relevant.
-	The algorithm is based on the observation that upper and bars expand through the whole width of the display.
-	! The sidebars, if they exist, run however between the upper and the lower bars, and cover the remaining areas of the margin.
+	Cropping the borders, first the horizontal, then the vertical margins are investigated, allowing where their order is relevant.
+	The algorithm is based on the observation that upper and lower bars expand through the whole width of the display.
+	The sidebars, if they exist, run however between the upper and the lower bars, and cover the remaining areas of the margin.
 	Furthermore, occasionally the sidebar have a slightly different style than the other UI widgets mentioned above.
 	The UI matching method investigates slices of the screen running along the margins and examines whether they belong to the UI or to the middle area of the window.
 	To get better results, it is important to investigate a coherent data, and not to mix parts of different UI bars to the same slice.
-	! The above described process with an established order of margin cropping is fit for this purpose. \par 
-	To identify the best cropping line, indicating where the UI meets the content area, a double-checking!/reexamination/verification/validation method is performed.
-	The first step evolves searching for a line in the predefined border area, located however near to its center, having the same color and no interruption along the horizontal sides of the screen.
-	This method is based on the consideration that toolbars often have a unicolor background.
+	The above described process with an established order of margin cropping is fit for this purpose. \par 
+	To identify the best cropping line, indicating where the UI meets the content area, a double validation method is performed.
+	The first step evolves searching for a line in the predefined border area, located however near to the center of the source, having the same color and no interruption along the horizontal sides of the screen.
+	This method is based on the consideration that toolbars often have a unicolor background, as the examples illustrates on Figure~\ref{fig:lines}.
 	Therefore, the task is to find a line, where widgets are no longer located, but it still belongs to the UI area, so it contains a background color.\par
+	\begin{figure}[h]
+		\centering		
+		\includegraphics[width=\textwidth]{UIlines}
+		\caption{Unicolor line at the edge of the UI area}
+		\label{fig:lines}
+	\end{figure}
 	In case of predefined UI areas the method above works well, on the other hand, there are several specific occasions where it is not able to provide any results.
-	Outstandingly, game applications usually use their own graphical UI, but even at more traditional applications it is plausible that the UI area is so overloaded that no background line can be found.
+	Outstandingly, game applications usually use their own graphical UI, but even at more traditional applications it is plausible that the UI area is so overloaded or designed that no background line can be found.
 	For this reason it is important to perform an additional checking loop, too.
 	This step is based on the correlation value of the border and center's color histogram.
 	The margin is split into thin slices.
@@ -352,8 +407,15 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	In this case, the two histograms, the one with the first slice and the other from the center region, are kept for/as reference values.
 	In the next step, the remaining slices are compared with the two reference histograms, starting at the border and heading towards the middle area.
 	At the beginning the correlation with the border histogram is high and with the center is low, which shows that the slice is still in the UI area i.e. it matches the theme of the border widgets.
-	As the slices approach the center regions this tendency reverses.
-	At the slice whose correlation with the center histogram is higher than the one with the border histogram, the algorithm stops, cuts all of the previously examined slices, and then terminates.\par 
+	This tendency reverses however as the slices approach the center regions.
+	At the slice whose correlation with the center histogram is higher than the one with the border histogram, the algorithm stops, cuts all of the previously examined slices, and then terminates.
+	Figure~\ref{fig:cropped} shows the borders between the content and UI regions found by the UI cropping heuristic.\par 
+	\begin{figure}[h]
+		\centering		
+		\includegraphics[width=0.5\textwidth]{cropped}
+		\caption{The border of the content}
+		\label{fig:cropped}
+	\end{figure}
 	%This method is executed four times.
 	%In the first two cases the upper and the lower borders are %investigated.
 	%The third and the fourth loop is adjusted to the sidebars.
@@ -365,16 +427,32 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	The saliency value of a pixel measures how important the pixel is, how noticeable it is and how much attention it affects for the human eye.
 	A saliency map is a grayscale image where the high value of an area means that the region is more interesting than other pixels with lower values.
 	There are, however, many definitions and approaches about which pixels should be evaluated as salient or not salient.
-	In this case the saliency is calculated as presented by Forras. 
+	In this case the saliency is calculated as presented by Niu et al.~\cite{niu2012image}. 
 	There are two reasons, why this algorithm is chosen.
 	First, it evaluates the low level visual informations.
 	It means that only those pixels are valued as important that activate the low level human visual system, for example due to their sharp edges and color change characteristics.
 	Secondly, it is scale invariant, so it is more robust than other similar but only singe scale approaches.\par 
 	The algorithm converts the source into a uniform colorspace (Lu*v) first.
 	After that, to make the approach scale invariant, a Gaussian contrast pyramid is built.
-	Forras calculates the contrast value from the weighted sum of difference between the pixel and its neighborhood, using the L2 norm.
+	It calculates the contrast value from the weighted sum of difference between the pixel and its neighborhood, using the L2 norm:	
+	\[ C_{i,j,l}=\sum\limits_{q\in\Theta}w_{i,j,l}d(p_{i,j,l},p_{q}) \]
+	\[ w_{i,j,l}=1-\left(\frac{r_{i,j,l}}{r_{l,max}}\right) \]
+	where:
+	\begin{center}
+		\begin{conditions}
+			C & Contrast value \\
+			(i, j) & pixel coordinates \\
+			l & pyramid level \\
+			\Theta & neighborhood \\
+			w & weight \\
+			d & difference \\
+			p & color of the pixel \\
+			r & distance from the image center \\
+			r_{l, max} & maximum possible distance on the image
+		\end{conditions}
+	\end{center}
 	This approach needs to get slightly modified, in way that the calculation ignores the weighting value.
-	Forras uses this weighting parameter because of the fact that the central area of regular real word images is more important than the margin regions.
+	The weighting parameter is used because of the fact that the central area of regular real word images is more important than the margin regions.
 	When investigating computer screens, however, this is not the case.
 	A screenshot often does not have a defined focus point where the most important information is shown.
 	By using the weighting value, the focus would be on the inner window, despite the fact that there is no actual significant correlation between the importance of the data and its position on the screen.
@@ -382,20 +460,45 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	In the case of computer screens, texts are fairly common, and their information content is usually also very high.
 	Therefore, it would be rather impractical not to reflect the importance of such text regions on the saliency map. 
 	For that reason a further evaluation of the saliency map is needed, to check whether text areas were evaluated as important data.\par 
-	The text recognition algorithm is based on the one introduced in Forras.
+	The text recognition algorithm is based on the one introduced in ~\cite{chang2011associating}.
 	For the first step the whole input image is horizontally blurred, so that the letters and the neighboring words form a string together.
 	After that, all of these coherent strings are investigated and consorted depending on whether they are representations of actual words or if they derive from another visual feature of the source.
 	The method that identifies the words examines two aspects.
 	The first is if the strings are high enough but not too high to indicate real letters.
 	Second, whether their width is not too small but also not too big to form at least one word but not an endless sentence.
-	Both of these size !informal'checking' values are parametrized, with their default value based on the size of one letter, as explained in the next chapter. 
+	Both of these size examining values are parametrized, with their default value based on the size of one letter, as explained in the \hyperref[Implementation]{next chapter}. 
 	The second loop evaluates the histograms of the area, where the strings were found.
 	Normally the letters, if belonging to the same text data, have the same color, while the background, for optimal readability, does not change its color underneath the text, either.
 	Therefore, the histograms of these areas are bimodal, namely one for the letters and one for the color of the background.
-	To sum up, to identify a string as a word, it is not sufficient to pass the first check, it  also need  to have a corresponding special histogram to be labeled as word. \par 
-	The final step for the calculation of the final saliency map, which is consequently used in the whole application, is to get the identified text regions weighted. 
+	To sum up, to identify a string as a word, it is not sufficient to pass the first check, it  also need  to have a corresponding special histogram to be labeled as word. 
+	Figure~\ref{fig:strings} shows the output of the text detection algorithm. 
+	The light blue color labels the possible word regions, the darker color denotes the actual words found by the algorithm.\par 
+	\begin{figure}
+		\centering
+		\begin{subfigure}[b]{0.45\columnwidth}
+			\centering
+			\includegraphics[width=\textwidth]{444}
+			\subcaption{Input image}
+			\label{fig:strings:org}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\columnwidth}
+			\centering
+			\includegraphics[width=\textwidth]{strings}
+			\subcaption{Output}
+		\end{subfigure}
+		\caption{Result of the text detection algorithm applied on the given source}
+		\label{fig:strings} % \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
+	\end{figure}
+	The last step for the calculation of the final saliency map, which is consequently used in the whole application, is to get the identified text regions weighted. 
 	All area which passed the word checking test is automatically evaluated as highly important, and gets the highest saliency value.
 	In addition, to make sure that even the space between the words remains undamaged, which is important because of greater readability, the area neighboring the text data is also weighted.
+	Figure\ref{fig:saliency} is the final saliency map of Figure~\ref{fig:strings:org}.
+	\begin{figure}[h]
+		\centering		
+		\includegraphics[width=0.5\textwidth]{saliency}
+		\caption{The final saliency map}
+		\label{fig:saliency}
+	\end{figure}
 	
 	\section{Seam Carving}
 	To resize the image without damaging the important regions, seam carving Forras is used.
@@ -426,6 +529,7 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	First, the algorithm is faster than the implemented seam carving method, and second, it applies an interpolating algorithm between the borders of the eliminated area, so in this case it ultimately saves more information than seam carving.   
 	
 	\chapter{Implementation}
+	\label{implementation}
 	The illustrative thumbnail creator application is developed in the programming language C++.
 	Except the source image file browsing window, no operating system specific calls are performed.
 	To make the application platform independent in the future, only this part needs customization.
@@ -584,6 +688,7 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	Therefore, screenshots with bigger and clearly defined UI areas have shorter run time, whereas inputs like images of gallery applications and of computer games take longer. 
 	
 	\chapter{Future Work}
+	\label{futureWork}
 	This application, according to the chapter above, is effective at creating illustrative thumbnails, but there are certain implementations to extend its scope. 
 	There are two main improvement areas to investigate: performance and software methodology.
 	Although the current application provides reasonable results, as described in the preceding chapters, there are several approaches, to make the present method even more robust and easier to use.
@@ -643,7 +748,7 @@ So the use of such advanced methods like Poisson equation is pointless, since th
 	As a combined results of the customized seam carving algorithm and its extensions with other helpful methods such as UI part elimination, text recognition and common resampling, the created thumbnails are more illustrative than their usual relatives, since their information content is better recognizable and the text regions are easier to read. 
 	
 	% Remove following line for the final thesis.
-	%\input{intro.tex} % A short introduction to LaTeX.
+	\input{intro.tex} % A short introduction to LaTeX.
 	
 	\backmatter
 	

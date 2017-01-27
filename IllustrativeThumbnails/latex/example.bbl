@@ -1,9 +1,93 @@
-\begin{thebibliography}{Tur36}
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{ADA{\etalchar{+}}04}
+
+\bibitem[ADA{\etalchar{+}}04]{agarwala2004interactive}
+Aseem Agarwala, Mira Dontcheva, Maneesh Agrawala, Steven Drucker, Alex Colburn,
+  Brian Curless, David Salesin, and Michael Cohen.
+\newblock Interactive digital photomontage.
+\newblock In {\em ACM Transactions on Graphics (TOG)}, volume~23, pages
+  294--302. ACM, 2004.
+
+\bibitem[CXF{\etalchar{+}}03]{chen2003visual}
+Li-Qun Chen, Xing Xie, Xin Fan, Wei-Ying Ma, Hong-Jiang Zhang, and He-Qin Zhou.
+\newblock A visual attention model for adapting images on small displays.
+\newblock {\em Multimedia systems}, 9(4):353--364, 2003.
+
+\bibitem[CYM11]{chang2011associating}
+Tsung-Hsiang Chang, Tom Yeh, and Rob Miller.
+\newblock Associating the visual representation of user interfaces with their
+  internal structures and metadata.
+\newblock In {\em Proceedings of the 24th annual ACM symposium on User
+  interface software and technology}, pages 245--256. ACM, 2011.
+
+\bibitem[DF10]{dixon2010prefab}
+Morgan Dixon and James Fogarty.
+\newblock Prefab: implementing advanced behaviors using pixel-based reverse
+  engineering of interface structure.
+\newblock In {\em Proceedings of the SIGCHI Conference on Human Factors in
+  Computing Systems}, pages 1525--1534. ACM, 2010.
+
+\bibitem[DLF11]{dixon2011content}
+Morgan Dixon, Daniel Leventhal, and James Fogarty.
+\newblock Content and hierarchy in pixel-based methods for reverse engineering
+  interface structure.
+\newblock In {\em Proceedings of the SIGCHI Conference on Human Factors in
+  Computing Systems}, pages 969--978. ACM, 2011.
+
+\bibitem[ESK08]{egorova2008collage}
+Marta Egorova, Ilia Safonov, and Nikolay Korobkov.
+\newblock Collage for cover of photobook.
+\newblock {\em Proc. GRAPHICON-2008}, pages 160--163, 2008.
+
+\bibitem[GSCO06]{gal2006feature}
+Ran Gal, Olga Sorkine, and Daniel Cohen-Or.
+\newblock Feature-aware texturing.
+\newblock {\em Rendering Techniques}, 2006(17th):2, 2006.
+
+\bibitem[H{\etalchar{+}}16]{hussain2016efficient}
+Khaled Hussain et~al.
+\newblock Efficient poisson image editing.
+\newblock {\em ELCVIA Electronic Letters on Computer Vision and Image
+  Analysis}, 14(2):45--57, 2016.
+
+\bibitem[LSCP10]{lee2010mobile}
+Man~Hee Lee, Nitin Singhal, Sungdae Cho, and In~Kyu Park.
+\newblock Mobile photo collage.
+\newblock In {\em Computer Vision and Pattern Recognition Workshops (CVPRW),
+  2010 IEEE Computer Society Conference on}, pages 24--30. IEEE, 2010.
+
+\bibitem[MN15]{mirkamali2015object}
+Seyed~Saeid Mirkamali and P~Nagabhushan.
+\newblock Object removal by depth-wise image inpainting.
+\newblock {\em Signal, Image and Video Processing}, 9(8):1785--1794, 2015.
+
+\bibitem[NLLG12]{niu2012image}
+Yuzhen Niu, Feng Liu, Xueqing Li, and Michael Gleicher.
+\newblock Image resizing via non-homogeneous warping.
+\newblock {\em Multimedia Tools and Applications}, 56(3):485--508, 2012.
+
+\bibitem[PGB03]{perez2003poisson}
+Patrick P{\'e}rez, Michel Gangnet, and Andrew Blake.
+\newblock Poisson image editing.
+\newblock In {\em ACM Transactions on Graphics (TOG)}, volume~22, pages
+  313--318. ACM, 2003.
+
+\bibitem[RBHB06]{rother2006autocollage}
+Carsten Rother, Lucas Bordeaux, Youssef Hamadi, and Andrew Blake.
+\newblock Autocollage.
+\newblock In {\em ACM transactions on graphics (TOG)}, volume~25, pages
+  847--852. ACM, 2006.
 
 \bibitem[Tur36]{Turing1936}
 Alan~Mathison Turing.
 \newblock On computable numbers, with an application to the
   entscheidungsproblem.
 \newblock {\em J. of Math}, 58:345--363, 1936.
+
+\bibitem[YCM09]{yeh2009sikuli}
+Tom Yeh, Tsung-Hsiang Chang, and Robert~C Miller.
+\newblock Sikuli: using gui screenshots for search and automation.
+\newblock In {\em Proceedings of the 22nd annual ACM symposium on User
+  interface software and technology}, pages 183--192. ACM, 2009.
 
 \end{thebibliography}

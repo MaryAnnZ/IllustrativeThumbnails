@@ -14,9 +14,20 @@
 \select@language {naustrian}
 \select@language {english}
 \addvspace {10pt}
+\contentsline {figure}{\numberline {1.1}{\ignorespaces The result using the two different approaches\relax }}{1}{figure.caption.10}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces The whole ROI packing process ~\cite {lee2010mobile} (a) K-means clustering (b) ROI's center at the beginning of the algoritm (c) Layout of the ROIs at the beginning of the algorithm (d) Shifting of the ROIs (e) Expanding the ROIs (f) Output after some iterations\relax }}{6}{figure.caption.11}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Possible solutions of the algorithm of Chen et al. ~\cite {chen2003visual}\relax }}{7}{figure.caption.12}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces The resulting image and grid from a certain input image and its feature mask of the Feature-aware Texturnig algorithm ~\cite {gal2006feature} \relax }}{8}{figure.caption.13}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Flow chart of the algorithm\relax }}{11}{figure.caption.14}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Unicolor line at the edge of the UI area\relax }}{13}{figure.caption.15}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces The border of the content\relax }}{13}{figure.caption.16}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Result of the text detection algorithm applied on the given source\relax }}{15}{figure.caption.17}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces The final saliency map\relax }}{16}{figure.caption.18}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
-\addvspace {10pt}
+\contentsline {figure}{\numberline {8.1}{\ignorespaces The header logo at different sizes.\relax }}{36}{figure.caption.22}

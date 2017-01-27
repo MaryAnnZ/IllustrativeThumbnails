@@ -20,33 +20,49 @@
 \contentsline {section}{\numberline {2.1}Processing as UI}{3}{section.2.1}
 \contentsline {section}{\numberline {2.2}Processing as a regular picture}{5}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Collage creating methods}{5}{subsection.2.2.1}
-\contentsline {subsection}{\numberline {2.2.2}Resampling methods}{6}{subsection.2.2.2}
-\contentsline {subsection}{\numberline {2.2.3}Feature combining methods}{7}{subsection.2.2.3}
-\contentsline {chapter}{\chapternumberline {3}Methodology}{9}{chapter.3}
-\contentsline {section}{\numberline {3.1}Eliminating UI elements}{9}{section.3.1}
-\contentsline {section}{\numberline {3.2}Saliency calculation}{11}{section.3.2}
-\contentsline {section}{\numberline {3.3}Seam Carving}{12}{section.3.3}
-\contentsline {chapter}{\chapternumberline {4}Implementation}{15}{chapter.4}
-\contentsline {section}{\numberline {4.1}Working Pipeline}{15}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Image loading}{15}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}UI elimination}{16}{subsection.4.1.2}
-\contentsline {subsection}{\numberline {4.1.3}Saliancy map calculation}{16}{subsection.4.1.3}
-\contentsline {subsection}{\numberline {4.1.4}Text detection}{16}{subsection.4.1.4}
-\contentsline {subsection}{\numberline {4.1.5}Seam carving}{17}{subsection.4.1.5}
-\contentsline {chapter}{\chapternumberline {5}Results and Evaluation}{19}{chapter.5}
-\contentsline {section}{\numberline {5.1}Elimination of UI elements}{19}{section.5.1}
-\contentsline {section}{\numberline {5.2}Text detection}{20}{section.5.2}
-\contentsline {section}{\numberline {5.3}Resampling threshold}{20}{section.5.3}
-\contentsline {section}{\numberline {5.4}Comparison to Adobe Photoshop}{20}{section.5.4}
-\contentsline {section}{\numberline {5.5}Performance evaluation}{21}{section.5.5}
-\contentsline {chapter}{\chapternumberline {6}Future Work}{23}{chapter.6}
-\contentsline {section}{\numberline {6.1}Performance improvement}{23}{section.6.1}
-\contentsline {section}{\numberline {6.2}Methodology improvement}{23}{section.6.2}
-\contentsline {chapter}{\chapternumberline {7}Conclusion}{27}{chapter.7}
-\contentsline {chapter}{List of Figures}{29}{section*.10}
-\contentsline {chapter}{List of Tables}{31}{section*.11}
-\contentsline {chapter}{List of Algorithms}{33}{chapter*.12}
-\contentsline {chapter}{Index}{35}{section*.13}
-\contentsline {chapter}{Glossary}{37}{section*.14}
-\contentsline {chapter}{Acronyms}{39}{section*.16}
-\contentsline {chapter}{Bibliography}{41}{section*.19}
+\contentsline {subsection}{\numberline {2.2.2}Resampling methods}{7}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Feature combining methods}{8}{subsection.2.2.3}
+\contentsline {chapter}{\chapternumberline {3}Methodology}{11}{chapter.3}
+\contentsline {section}{\numberline {3.1}Eliminating UI elements}{12}{section.3.1}
+\contentsline {section}{\numberline {3.2}Saliency calculation}{13}{section.3.2}
+\contentsline {section}{\numberline {3.3}Seam Carving}{16}{section.3.3}
+\contentsline {chapter}{\chapternumberline {4}Implementation}{19}{chapter.4}
+\contentsline {section}{\numberline {4.1}Working Pipeline}{19}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Image loading}{19}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}UI elimination}{20}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Saliancy map calculation}{20}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Text detection}{20}{subsection.4.1.4}
+\contentsline {subsection}{\numberline {4.1.5}Seam carving}{21}{subsection.4.1.5}
+\contentsline {chapter}{\chapternumberline {5}Results and Evaluation}{23}{chapter.5}
+\contentsline {section}{\numberline {5.1}Elimination of UI elements}{23}{section.5.1}
+\contentsline {section}{\numberline {5.2}Text detection}{24}{section.5.2}
+\contentsline {section}{\numberline {5.3}Resampling threshold}{24}{section.5.3}
+\contentsline {section}{\numberline {5.4}Comparison to Adobe Photoshop}{24}{section.5.4}
+\contentsline {section}{\numberline {5.5}Performance evaluation}{25}{section.5.5}
+\contentsline {chapter}{\chapternumberline {6}Future Work}{27}{chapter.6}
+\contentsline {section}{\numberline {6.1}Performance improvement}{27}{section.6.1}
+\contentsline {section}{\numberline {6.2}Methodology improvement}{27}{section.6.2}
+\contentsline {chapter}{\chapternumberline {7}Conclusion}{31}{chapter.7}
+\contentsline {chapter}{\chapternumberline {8}Introduction to \LaTeX }{33}{chapter.8}
+\contentsline {section}{\numberline {8.1}Installation}{33}{section.8.1}
+\contentsline {section}{\numberline {8.2}Editors}{33}{section.8.2}
+\contentsline {section}{\numberline {8.3}Compilation}{34}{section.8.3}
+\contentsline {section}{\numberline {8.4}Basic Functionality}{35}{section.8.4}
+\contentsline {subsection}{\numberline {8.4.1}Floats}{35}{subsection.8.4.1}
+\contentsline {subsection}{\numberline {8.4.2}Tables}{35}{subsection.8.4.2}
+\contentsline {subsection}{\numberline {8.4.3}Images}{36}{subsection.8.4.3}
+\contentsline {subsection}{\numberline {8.4.4}Mathematical Expressions}{36}{subsection.8.4.4}
+\contentsline {subsection}{\numberline {8.4.5}Pseudo Code}{36}{subsection.8.4.5}
+\contentsline {section}{\numberline {8.5}Bibliography}{36}{section.8.5}
+\contentsline {section}{\numberline {8.6}Table of Contents}{37}{section.8.6}
+\contentsline {section}{\numberline {8.7}Acronyms / Glossary / Index}{37}{section.8.7}
+\contentsline {section}{\numberline {8.8}Tips}{37}{section.8.8}
+\contentsline {section}{\numberline {8.9}Resources}{38}{section.8.9}
+\contentsline {subsection}{\numberline {8.9.1}Useful Links}{38}{subsection.8.9.1}
+\contentsline {subsection}{\numberline {8.9.2}Comprehensive TeX Archive Network}{39}{subsection.8.9.2}
+\contentsline {chapter}{List of Figures}{41}{section*.25}
+\contentsline {chapter}{List of Tables}{43}{section*.26}
+\contentsline {chapter}{List of Algorithms}{45}{chapter*.27}
+\contentsline {chapter}{Glossary}{47}{section*.28}
+\contentsline {chapter}{Acronyms}{49}{section*.30}
+\contentsline {chapter}{Bibliography}{51}{section*.33}
