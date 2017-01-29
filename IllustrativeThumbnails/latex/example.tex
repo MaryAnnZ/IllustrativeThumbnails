@@ -32,7 +32,7 @@
 
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
 \newcommand{\authorname}{Rebeka Koszticsak} % The author name without titles.
-\newcommand{\thesistitle}{Illustrative Thumbnails} % The title of the thesis. The English version should be used, if it exists.
+\newcommand{\thesistitle}{Generate Illustrative Window Thumbnails through Seam Carving} % The title of the thesis. The English version should be used, if it exists.
 
 % Set PDF document properties
 \hypersetup{
@@ -76,7 +76,7 @@
 \setaddress{Address}
 \setregnumber{1325492}
 \setdate{01}{01}{2001} % Set date with 3 arguments: {day}{month}{year}.
-\settitle{\thesistitle}{Illustrative Thumbnails} % Sets English and German version of the title (both can be English or German).
+\settitle{\thesistitle}{Generate Illustrative Window Thumbnails through Seam Carving} % Sets English and German version of the title (both can be English or German).
 %\setsubtitle{Optional Subtitle of the Thesis}{Optionaler Untertitel der Arbeit} % Sets English and German version of the subtitle (both can be English or German).
 
 % Select the thesis type: bachelor / master / doctor / phd-school.
@@ -168,7 +168,7 @@
 	Due to the fact that standard thumbnail applications simply take the screenshot of each application and present them in a smaller size, the relevant parts of the window are no longer recognizable. 
 	For example, the user interface widgets, especially in case of the multiple windows of the same application, take up valuable place that could otherwise be used to present more important content elements, such as actual file names or other unique characteristics of the window.
 	Furthermore with the use of tablets, smart phones and smart watches the display, thus the thumbnail size needs to shrink even more, but the original calculation algorithm does not take this into account.
-	Figure~\ref{fig:introo} shows a possible output of the current (Figure~\ref{fig:introo:org}) and the new (Figure~\ref{fig:introo:res}) thumbnail creating algorithms.\par 
+	Figure~\ref{fig:introo} shows possible outputs of the current (Figure~\ref{fig:introo:org}) and the new (Figure~\ref{fig:introo:res}) thumbnail creating algorithms.\par 
 	\begin{figure}[h]
 		\centering
 		\begin{subfigure}[b]{0.45\columnwidth}
@@ -285,7 +285,7 @@
 	\begin{figure}[h]
 		\centering		
 		\includegraphics[width=0.5\textwidth]{ROIpacking}
-		\caption{The whole ROI packing process ~\cite{lee2010mobile} (a) K-means clustering (b) ROI's center at the beginning of the algoritm (c) Layout of the ROIs at the beginning of the algorithm (d) Shifting of the ROIs (e) Expanding the ROIs (f) Output after some iterations}
+		\caption{The whole ROI packing process ~\cite{lee2010mobile} (a) K-means clustering (b) ROI's center at the beginning of the algorithm (c) Layout of the ROIs at the beginning of the algorithm (d) Shifting of the ROIs (e) Expanding the ROIs (f) Output after some iterations}
 		\label{fig:ROIpacking}
 	\end{figure}
 	Having the best ROIs for the collage the last task is to merge them into one output picture.
@@ -304,7 +304,7 @@
 	Screenshot collages have however different requirements for image and text regions.
 	In addition, cutting a screen apart and arranging its parts willingly has a potentially confusing result for the user, requiring them to spend even more time with the screen recognition.
 	
-	\subsection{Resampling methods}
+	\subsection{Re-sampling methods}
 	To attain a constant relative position among regions, applying a resampling method is more effective than the above described collage creating approaches.
 	Resampling means that some equally distributed parts of the image will be eliminated, thus, unlike by the collage algorithms, all remaining areas will have the same relation to each other.
 	Therefore, the image itself remains recognizable because it has a highly similar appearance, in spite of having the most important areas less readable.\par 
@@ -321,12 +321,12 @@
 		\label{fig:useOfAOs}
 	\end{figure}
 	The approach above, after careful calculations, chooses the only area that contains the highest possible amount of AOs.
-	To accomplish this, some possibly important AOs have to be ignored and cut off, like shown on Figure~\ref{fig:useOfAOs}.
+	To accomplish this, some possibly important AOs have to be ignored and cut off, as shown on Figure~\ref{fig:useOfAOs}.
 	With Feature-aware Texturing described in ~\cite{gal2006feature} this does not have to be the case.
 	The algorithm expects an input image and a feature mask.
 	A grid is generated, which lies on the input image.
-	This grid can be modified in an optional shape, but the gridpoints on the feature mask are not allowed to change their proportion to each other.
-	In that way the picture elements between the AOs fill the new shape, but the AOs get barely distorted, illustrated on Figure~\ref{fig:fat}.\par 
+	This grid can be modified into an optional shape, but the gridpoints on the feature mask are not allowed to change their proportion to each other.
+	This way the picture elements between the AOs fill the new shape while the AOs get barely distorted, as illustrated on Figure~\ref{fig:fat}.\par 
 	 \begin{figure}[h]
 		\includegraphics[width=.3\textwidth]{featureAwareTexturing1}\hfill
 		\includegraphics[width=.3\textwidth]{featureAwareTexturing2}\hfill
@@ -398,7 +398,7 @@
 	The above described process with an established order of margin cropping is fit for this purpose. \par 
 	To identify the best cropping line, indicating where the UI meets the content area, a double validation method is performed.
 	The first step evolves searching for a line in the predefined border area, located however near to the center of the source, having the same color and no interruption along the horizontal sides of the screen.
-	This method is based on the consideration that toolbars often have a unicolor background, as the examples illustrates on Figure~\ref{fig:lines}.
+	This method is based on the consideration that toolbars often have a unicolor background, as the examples illustrate on Figure~\ref{fig:lines}.
 	Therefore, the task is to find a line, where widgets are no longer located, but it still belongs to the UI area, so it contains a background color.\par
 	\begin{figure}[h]
 		\centering		
@@ -659,7 +659,7 @@
 	Afterwards, for the next row the least salient predecessor of every pixel is searched, and the saliency value at the coordinates of the current pixel is increased with the predecessor saliency value.
 	If the new saliency value is smaller than the one already stored at the coordinates of the current pixel, then the entry is updated and thus a better path is saved.
 	By looking for the predecessor pixel the algorithm works with 5-neighborhood. 
-	The saliency values of the five nearest pixels are weighted according to their distance from the current pixel with $\sqrt{5}$, $\sqrt{2}$ and one.
+	The saliency values of the five nearest pixels are weighted  by their distance form the current pixel with the values $\sqrt{5}$, $\sqrt{2}$ and one.
 	The pixel that is finally the least salient is chosen as predecessor.
 	When the algorithm finishes, in the end row of the path map the saliency values of the possible ways for starting at the first row are stored.
 	The final task is to find the smallest saliency value, and to follow the predecessor entities starting at the least salient pixel until the first row is reached again.
@@ -863,7 +863,7 @@
 	Consequently, no pixel will appear more important - or unimportant - than it really is.
 	Guo et al.~\cite{guo2015nif} obtains this with the calculation of a so-called neighborhood inhomogeneity factor, which denotes the amount of inhomogeneous neighbors of every pixel. 
 	This approach helps to find the important areas inside an object, where a simple line detection algorithm fails i.e. indicate no salient regions.
-	The saliency map, where accordig to the algorithm also the insight of the object is filled, is showed on Figure~\ref{fig:nif}.
+	The saliency map where, according to the algorithm, also the inside of the object is filled, is showed on Figure~\ref{fig:nif}.
 	\begin{figure}[H]
 		\centering		
 		\includegraphics[width=0.5\textwidth]{NIF}
@@ -1103,7 +1103,7 @@
 		\label{AppB}
 		This section lists all reference images created by Photoshop.
 		In case of the first column the input was the source image, in the second column the cropped image.
-		The order of the sources is the same like in the section above.
+		The order of the sources is the same as in the section above.
 		
 			\begin{figure}[H]
 			\centering
