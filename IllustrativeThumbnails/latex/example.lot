@@ -21,7 +21,7 @@
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {table}{\numberline {8.1}{\ignorespaces T\kern -.1667em\lower .5ex\hbox {E}\kern -.125emX\spacefactor \@m {}/\LaTeX \ distributions for different operating systems. Recomended choice in \textbf {bold}.\relax }}{33}{table.caption.19}
-\contentsline {table}{\numberline {8.2}{\ignorespaces Compilation steps for this document. The following abbreviations were used: table of contents (toc), list of figures (lof), list of tables (lot), list of algorithms (loa).\relax }}{34}{table.caption.20}
-\contentsline {table}{\numberline {8.3}{\ignorespaces Adapted example from the \LaTeX guide at \url {https://en.wikibooks.org/wiki/LaTeX/Tables}. This example uses rules specific to the \texttt {booktabs} package and employs the multi-row functionality of the \texttt {multirow} package.\relax }}{35}{table.caption.21}
-\contentsline {table}{\numberline {8.4}{\ignorespaces Anonymization of \gls {pdf} documents.\relax }}{38}{table.caption.24}
+\contentsline {table}{\numberline {8.1}{\ignorespaces T\kern -.1667em\lower .5ex\hbox {E}\kern -.125emX\spacefactor \@m {}/\LaTeX \ distributions for different operating systems. Recomended choice in \textbf {bold}.\relax }}{37}{table.caption.32}
+\contentsline {table}{\numberline {8.2}{\ignorespaces Compilation steps for this document. The following abbreviations were used: table of contents (toc), list of figures (lof), list of tables (lot), list of algorithms (loa).\relax }}{38}{table.caption.33}
+\contentsline {table}{\numberline {8.3}{\ignorespaces Adapted example from the \LaTeX guide at \url {https://en.wikibooks.org/wiki/LaTeX/Tables}. This example uses rules specific to the \texttt {booktabs} package and employs the multi-row functionality of the \texttt {multirow} package.\relax }}{39}{table.caption.34}
+\contentsline {table}{\numberline {8.4}{\ignorespaces Anonymization of \gls {pdf} documents.\relax }}{42}{table.caption.37}

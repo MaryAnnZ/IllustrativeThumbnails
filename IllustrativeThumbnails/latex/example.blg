@@ -1,7 +1,21 @@
 This is BibTeX, Version 0.99dThe top-level auxiliary file: example.aux
 The style file: alpha.bst
 Database file #1: intro.bib
+Repeated entry---line 183 of file intro.bib
+ :   @inproceedings{dong2009optimized
+ :                                   ,
+I'm skipping whatever remains of this entry
+You're missing a field part---line 216 of file intro.bib
+ :     title = 
+ :             ,
+I'm skipping whatever remains of this entry
+Warning--entry type for "photoshop" isn't style-file defined
+--line 231 of file intro.bib
 Warning--can't use both volume and number fields in agarwala2004interactive
+Warning--can't use both volume and number fields in avidan2007seam
+Warning--empty title in opencv_library
+Warning--empty year in opencv_library
+Warning--can't use both volume and number fields in dong2009optimized
 Warning--can't use both volume and number fields in perez2003poisson
 Warning--can't use both volume and number fields in rother2006autocollage
-(There were 3 warnings)
+(There were 2 error messages)

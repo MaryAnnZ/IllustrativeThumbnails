@@ -27,7 +27,19 @@
 \contentsline {figure}{\numberline {3.5}{\ignorespaces The final saliency map\relax }}{16}{figure.caption.18}
 \addvspace {10pt}
 \addvspace {10pt}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces The cropping points according to the border area 10\% and 40\%\relax }}{24}{figure.caption.20}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces The cropping points according to the correlation 1 and 2.5\relax }}{24}{figure.caption.21}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces The cropping points according to the thicknes of the slices 12\% and 5\%\relax }}{25}{figure.caption.22}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces The related areas according to the brightness threshold value 50 and 200 \relax }}{25}{figure.caption.23}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces The actual words according to the minimal width 100 and minimal height 20 \relax }}{25}{figure.caption.24}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces The actual words according to the maximal allowed difference 80\% and 20\% from the average \relax }}{26}{figure.caption.25}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces The output of the current and the modified algorithms \relax }}{26}{figure.caption.26}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces The results according to the re-sampling threshold 0.1 and 0.4\relax }}{27}{figure.caption.27}
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Source images used for testing\relax }}{27}{figure.caption.28}
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Results of the first scenario\relax }}{27}{figure.caption.29}
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Results of the second scenario\relax }}{28}{figure.caption.30}
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Result of the thumbnail algorithm\relax }}{28}{figure.caption.31}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {8.1}{\ignorespaces The header logo at different sizes.\relax }}{36}{figure.caption.22}
+\contentsline {figure}{\numberline {8.1}{\ignorespaces The header logo at different sizes.\relax }}{40}{figure.caption.35}

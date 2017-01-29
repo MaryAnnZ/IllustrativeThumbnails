@@ -1,5 +1,5 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
-\begin{thebibliography}{ADA{\etalchar{+}}04}
+\begin{thebibliography}{GDT{\etalchar{+}}15}
 
 \bibitem[ADA{\etalchar{+}}04]{agarwala2004interactive}
 Aseem Agarwala, Mira Dontcheva, Maneesh Agrawala, Steven Drucker, Alex Colburn,
@@ -7,6 +7,23 @@ Aseem Agarwala, Mira Dontcheva, Maneesh Agrawala, Steven Drucker, Alex Colburn,
 \newblock Interactive digital photomontage.
 \newblock In {\em ACM Transactions on Graphics (TOG)}, volume~23, pages
   294--302. ACM, 2004.
+
+\bibitem[AS07]{avidan2007seam}
+Shai Avidan and Ariel Shamir.
+\newblock Seam carving for content-aware image resizing.
+\newblock In {\em ACM Transactions on graphics (TOG)}, volume~26, page~10. ACM,
+  2007.
+
+\bibitem[Bra]{opencv_library}
+G.~Bradski.
+\newblock {\em Dr. Dobb's Journal of Software Tools}.
+
+\bibitem[Coo13]{Cook:2012:CPD:2430671}
+Shane Cook.
+\newblock {\em CUDA Programming: A Developer's Guide to Parallel Computing with
+  GPUs}.
+\newblock Morgan Kaufmann Publishers Inc., San Francisco, CA, USA, 1st edition,
+  2013.
 
 \bibitem[CXF{\etalchar{+}}03]{chen2003visual}
 Li-Qun Chen, Xing Xie, Xin Fan, Wei-Ying Ma, Hong-Jiang Zhang, and He-Qin Zhou.
@@ -19,6 +36,12 @@ Tsung-Hsiang Chang, Tom Yeh, and Rob Miller.
   internal structures and metadata.
 \newblock In {\em Proceedings of the 24th annual ACM symposium on User
   interface software and technology}, pages 245--256. ACM, 2011.
+
+\bibitem[DAV10]{domingues2010stream}
+Daniel Domingues, Alexandre Alahi, and Pierre Vandergheynst.
+\newblock Stream carving: an adaptive seam carving algorithm.
+\newblock In {\em Image Processing (ICIP), 2010 17th IEEE International
+  Conference on}, pages 901--904. IEEE, 2010.
 
 \bibitem[DF10]{dixon2010prefab}
 Morgan Dixon and James Fogarty.
@@ -34,10 +57,21 @@ Morgan Dixon, Daniel Leventhal, and James Fogarty.
 \newblock In {\em Proceedings of the SIGCHI Conference on Human Factors in
   Computing Systems}, pages 969--978. ACM, 2011.
 
+\bibitem[DZPZ09]{dong2009optimized}
+Weiming Dong, Ning Zhou, Jean-Claude Paul, and Xiaopeng Zhang.
+\newblock Optimized image resizing using seam carving and scaling.
+\newblock In {\em ACM Transactions on Graphics (TOG)}, volume~28, page 125.
+  ACM, 2009.
+
 \bibitem[ESK08]{egorova2008collage}
 Marta Egorova, Ilia Safonov, and Nikolay Korobkov.
 \newblock Collage for cover of photobook.
 \newblock {\em Proc. GRAPHICON-2008}, pages 160--163, 2008.
+
+\bibitem[GDT{\etalchar{+}}15]{guo2015nif}
+Dongyan Guo, Jundi Ding, Jinhui Tang, Min Xu, and Chunxia Zhao.
+\newblock Nif-based seam carving for image resizing.
+\newblock {\em Multimedia Systems}, 21(6):603--613, 2015.
 
 \bibitem[GSCO06]{gal2006feature}
 Ran Gal, Olga Sorkine, and Daniel Cohen-Or.
@@ -49,6 +83,23 @@ Khaled Hussain et~al.
 \newblock Efficient poisson image editing.
 \newblock {\em ELCVIA Electronic Letters on Computer Vision and Image
   Analysis}, 14(2):45--57, 2016.
+
+\bibitem[HC08]{hwang2008content}
+Daw-Sen Hwang and Shao-Yi Chien.
+\newblock Content-aware image resizing using perceptual seam carving with human
+  attention model.
+\newblock In {\em Multimedia and Expo, 2008 IEEE International Conference on},
+  pages 1029--1032. IEEE, 2008.
+
+\bibitem[Inc]{photoshop}
+Adobe~Systems Incorporated.
+\newblock Adobe photoshop cs5.
+
+\bibitem[LG06]{liu2006region}
+Feng Liu and Michael Gleicher.
+\newblock Region enhanced scale-invariant saliency detection.
+\newblock In {\em Multimedia and Expo, 2006 IEEE International Conference on},
+  pages 1477--1480. IEEE, 2006.
 
 \bibitem[LSCP10]{lee2010mobile}
 Man~Hee Lee, Nitin Singhal, Sungdae Cho, and In~Kyu Park.
@@ -66,6 +117,10 @@ Yuzhen Niu, Feng Liu, Xueqing Li, and Michael Gleicher.
 \newblock Image resizing via non-homogeneous warping.
 \newblock {\em Multimedia Tools and Applications}, 56(3):485--508, 2012.
 
+\bibitem[Ope17]{compareHist}
+OpenCV.
+\newblock {\em Histograms}, accessed January 28, 2017.
+
 \bibitem[PGB03]{perez2003poisson}
 Patrick P{\'e}rez, Michel Gangnet, and Andrew Blake.
 \newblock Poisson image editing.
@@ -78,11 +133,14 @@ Carsten Rother, Lucas Bordeaux, Youssef Hamadi, and Andrew Blake.
 \newblock In {\em ACM transactions on graphics (TOG)}, volume~25, pages
   847--852. ACM, 2006.
 
-\bibitem[Tur36]{Turing1936}
-Alan~Mathison Turing.
-\newblock On computable numbers, with an application to the
-  entscheidungsproblem.
-\newblock {\em J. of Math}, 58:345--363, 1936.
+\bibitem[SYJS05]{sun2005image}
+Jian Sun, Lu~Yuan, Jiaya Jia, and Heung-Yeung Shum.
+\newblock Image completion with structure propagation.
+\newblock {\em ACM Transactions on Graphics (ToG)}, 24(3):861--868, 2005.
+
+\bibitem[Win17]{openfilename}
+Windows.
+\newblock {\em OPENFILENAME structure}, 2008 (accessed January 28, 2017).
 
 \bibitem[YCM09]{yeh2009sikuli}
 Tom Yeh, Tsung-Hsiang Chang, and Robert~C Miller.
