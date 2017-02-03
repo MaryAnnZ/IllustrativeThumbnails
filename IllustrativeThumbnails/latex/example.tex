@@ -169,7 +169,7 @@
 	\begin{figure}[H]
 		\centering		
 		\includegraphics[width=\textwidth]{thumbnails}
-		\caption{Visualization of the currently used thumbnail system on windows 10 in case of four running applications}
+		\caption{Visualization of the currently used thumbnail system on windows 10 in case of four running applications.}
 		\label{fig:thumbnails}
 	\end{figure} 
 	For example, the user interface widgets, especially in case of the multiple windows of the same application, take up valuable space that could otherwise be used to present more important content elements, such as actual file names or other unique characteristics of the window.
@@ -224,10 +224,10 @@
 	
 	\chapter{Related Work}
 	There are several image processing algorithms that can be helpful at creating illustrative thumbnails.
-	The main difference between thus algorithms is whether they consider the input as an actual application window or just as a regular image.
+	The main difference between these algorithms is whether they consider the input as an actual application window or just as a regular image.
 	Therefore, this section is divided into two parts.
 	The first one discusses algorithms with UI processing segments.
-	Algorithms, invented for resampling natural images, are examined in the second section. 
+	Algorithms, invented for re-sampling natural images, are examined in the second section. 
 	Moreover, there are two classes of information presentation methods are to be distinguished, namely, simple resizing and collages, the latter combining the most important parts of the image. 
 	In the following, these methods are compared.
 	
@@ -236,15 +236,22 @@
 	Exceptions for this are only cases when graphics, images, videos or application are presented, such as video games, gallery program or video players.
 	Such applications tend to hide all UI elements and operate in 'fullscreen' mode, or use a redefined UI e.g. game menu bars.\par
 	Labeling the image parts as content and non-content, the metadata about the UI elements can be helpful.
-	Chang et al. ~\cite{chang2011associating} uses already existing accessibility APIs, tested on Mac OS X and on Microsoft Windows, to segment UI and non-UI data. 
+	Chang et al. ~\cite{chang2011associating} use already existing accessibility APIs, tested on Mac OS X and on Microsoft Windows, to segment UI and non-UI data. 
 	Matching the metadata with the screen content provides a fast and robust result about the location of any kind of UI content.
 	There are however several disadvantages, that need to be taken into account when using such APIs.
 	The range and the granularity of the support is often not wide enough.
 	The use of an accessibility API is unable to ensure that every UI elements are recognized, because some metadata are not reachable or they will be ignored by the application.\par
-	Consequently, Prefab ~\cite{dixon2010prefab} uses an adapted of such prototypes. 
+	Consequently, Prefab ~\cite{dixon2010prefab} uses prototypes. 
 	In the database, models and  prototypes of common UI elements are saved.
 	The (components of) UI elements are then matched with the prototypes from the database, allowing a consequent access to the predefined metadata.
 	Since the Prefab system is able to split complex widgets to their constructing elements, the database does not need to be unnecessary big, though it is still able to cover the most common UI elements.
+	Figure~\ref{fig:prototype} a possible entity of the Prefab database.
+	\begin{figure}[H]
+		\centering		
+		\includegraphics[width=0.5\textwidth]{prototype}
+		\caption{Prototype of Windows Vista Steel Button in the Prefab database ~\cite{dixon2010prefab}}
+		\label{fig:prototype}
+	\end{figure} 
 	In the case of special or rare UI widgets, like in a video game application or elements of a not widely used software, the system fails to recognize them, since these rare widgets are not included in the given database.\par
 	Sikuli ~\cite{yeh2009sikuli} offers a solution not only for the incompleteness of such database, but for issues around granularity, too.
 	It uses its own templates just like the Prefab system, but only in case of small icons and widgets.
@@ -258,35 +265,49 @@
 	With the help of this tree the order of the UI elements gets clear, and so the misleading information can be eliminated.\par
 	After the labeling of the UI elements correctly, they can be manipulated as needed.
 	They can cut off as whole or processed according to the information content.
+	A UI widget can be highly detailed, where by resizing the originally smaller elements are no more recognizable or they interfere and take the space from each other. 
 	Mirkamali et al. ~\cite{mirkamali2015object} invented an algorithm that eliminates the picture objects and fill their place with the texture of the object behind them using the z-buffer information.
 	The tree mentioned above works as a z-buffer in this case.
-	With this cut off algorithm, unnecessary widgets can easily be eliminated and more important elements of the UI can thus get more visible.\par
-	According to the definition of "illustrative", the UI elements of a screen in any case are to be excluded, consequently the segmentation of the UI elements is not required.
+	With this cut off algorithm, unnecessary widgets can easily be eliminated and more important elements, since they have more space, of the UI can thus get more visible.\par
+	According to the definition of "expressive", the UI elements of a screen in any case are to be excluded, consequently the segmentation of the UI elements is not required.
 	Although the Prefab and Sikuli systems are proved to be helpful at distinguishing between UI and content parts of the image, these approaches have their disadvantage at their reliance on database usage and at their slow template matching performance. 
 	Furthermore they are actually designed for another purpose, namely to segment and classify UI elements, so before their employment significant reworking is needed.
 	Since it is not essential to know, which exact widgets appear on the screen, and processing their actual content may cause performance issues, the use of the above methods would overcomplicate the application without providing noteworthy advantages.
 	
-	\section{Processing as a regular picture}
-	There are several information retrieving methods for processing images with any kind of content.
+	\section{Processing as a Regular Picture}
+	There are several information saving methods for processing images with any kind of content.
 	Furthermore, these methods can also handle a series of important tasks such as interesting point recognition, Region of Interest (ROI) selection, image or feature composition, i.e. tasks that are in order to make any kind of images more illustrative.
 	Based on the type of input data, there are two groups of the above algorithms that will be discussed in the following sections.
 	The first category works with more than one picture at the same time.
 	Its strength is to choose single features that best represents the whole input data. 
 	In exchange it is likely that no input image will be recognizable on the result.
 	To the contrary, there are the methods in the second group that take only one picture for input and process it as one unit.
-	The resulting image is similar to the input data, however thus it is likely that not only the unimportant but also the areas with high information ratio are damaged.
-	Finally, in the subsection below some approaches are presented that assist with the work of both of the above mentioned groups.
+	The resulting image is similar to the input data, however thus it is likely that not only the unimportant but also the areas with high information ratio are damaged and also distortions may occur.
 	
-	\subsection{Collage creating methods} 
+	%Finally, in the subsection below some approaches are presented that assist with the work of both of the above mentioned groups.
+	
+	\subsection{Collage Creating Methods} 
 	A collage is an assembled image, containing parts of a bunch of input images and being representative for the whole input data.
 	There are two cases by creating  more illustrative thumbnails where such methods can be helpful.
 	On the one hand the actual information of a screenshot image is presented only in few regions of the picture.
 	Many parts, for example UI elements, space between the content etc., can be ignored. 
-	The other way around the content can be retrieved in form of ROIs, and afterwards they can be combined arbitrary.
-	On the other hand thumbnails for desktop switching can be easily generated using collage creator algorithms, where the input is screenshots of the open applications of the desktop instead of some ROIs of one screen.\par
+	The other way around the content can be retrieved in form of ROIs, and afterwards they can be combined arbitrarily.
+	On the other hand thumbnails for desktop switching can be easily generated using collage creator algorithms, where the input is screenshots of the open applications of the desktop instead of some ROIs of one screen.
+	The following algorithms are implemented for natural images however, so in case of their use for thumbnail creation the methods need modifications accordingly.\par
 	For a representative collage the most important task is to choose the best images, which information content covers the whole input data.
-	Rother et al. ~\cite{rother2006autocollage} takes the parameters representativeness, importance costs, transition cost and object sensitivity into account.
+	Rother et al. ~\cite{rother2006autocollage} takes the parameters representativeness $E_{rep}$, importance costs  $E_{imp}$, transition cost  $E_{trans}$ and object sensitivity  $E_{obj}$ into account.
 	\[ E(L)=E_{rep}(L)+w_{imp}E_{imp}(L)+w_{trans}E_{trans}(L)+w_{obj}E_{obj}(L) \]
+	\[L = \{L(p), p \in \wp\}\]
+	\[L(p) = (n, s)\]
+	where:
+	\begin{center}
+		\begin{conditions}
+			\wp & domain \\
+			n & input image \\
+			s & pixel-wise 2D shift of n \\
+			w & adjusted weight by testing 
+		\end{conditions}
+	\end{center}
 	Representativeness means being interesting in this case.
 	A picture tends to have high representativeness value, if there are many special textures on it, and if it is not similar to the rest of the data (so that no image is chosen twice).
 	Importance cost evaluates and collects the ROIs of the input.
@@ -294,11 +315,11 @@
 	At last, the parameter object sensitivity holds the results of object recognition, and it helps in the arrangement, that every object has a reasonable placement.\par
 	Egorova et al. ~\cite{egorova2008collage} concentrates however only at the first two parameters above.
 	It clusters the images according to their source and the time, and measures the quality.
-	Thank for the clustering, by the choice of the final images it is clear,  which images are the same or have similar content.
+	Thank to the clustering, by the choice of the final images it is clear,  which images are the same or have similar content.
 	This feature, accordingly modified, can be useful by sorting ROIs of a screenshot, i.e.: text content, image content etc. or of the running applications of the desktop, i.e.: textprocessing, gallery application etc.
 	The parameter quality summarizes the value of the results of the following calculations: blurriness, compression, contrast and color balance.
 	Since in this case only screenshots, thus computer generated pictures, can be the input, these measurements invented for camera data would provide less meaningful results than the algorithm above.\par 
-	\begin{figure}[h]
+	\begin{figure}[H]
 		\centering		
 		\includegraphics[width=0.5\textwidth]{ROIpacking}
 		\caption{The whole ROI packing process ~\cite{lee2010mobile} (a) K-means clustering (b) ROI's center at the beginning of the algorithm (c) Layout of the ROIs at the beginning of the algorithm (d) Shifting of the ROIs (e) Expanding the ROIs (f) Output after some iterations}
@@ -315,10 +336,11 @@
 	Figure~\ref{fig:ROIpacking} shows the different steps of the ROI packing algorithm.\par 
 	Collage methods are excellent at representing a large image dataset in a small place.
 	They work with numerous input data, take the most important parts of them and create a new image, that is not similar to any previous one.
-	That is why they are more useful for making a thumbnail for a desktop while not being much so in case of applications.
-	Even though with taking the most important ROIs of one screen it would be possible to create a  more illustrative image than any other, since the important content could stay large and so well readable, classic collage assembly methods were developed for natural images.
-	Screenshot collages have however different requirements for image and text regions.
-	In addition, cutting a screen apart and arranging its parts willingly has a potentially confusing result for the user, requiring them to spend even more time with the screen recognition.
+	That is why they are more useful for making a thumbnail for a desktop while they do not necessarily provide as much advantages in case of applications.
+	With taking the most important ROIs of one screen it would be possible to create a  more expressive image than any other, since the important content could stay large and so well readable, but classic collage assembly methods were developed for natural images. 
+	These approaches need adjustment according to the different requirements for image and text regions.
+	In one hand the collage method could minimize distortion of important regions since they stay rigid.
+	In the other hand however, cutting a screen apart and arranging its parts willingly has a potentially confusing result for the user, requiring them to spend even more time with the screen recognition.
 	
 	\subsection{Re-sampling methods}
 	To attain a constant relative position among regions, applying a resampling method is more effective than the above described collage creating approaches.
@@ -338,7 +360,7 @@
 	\end{figure}
 	The approach above, after careful calculations, chooses the only area that contains the highest possible amount of AOs.
 	To accomplish this, some possibly important AOs have to be ignored and cut off, as shown on Figure~\ref{fig:useOfAOs}.
-	With Feature-aware Texturing described in ~\cite{gal2006feature} this does not have to be the case.
+	With feature-aware Texturing described in ~\cite{gal2006feature} this does not have to be the case.
 	The algorithm expects an input image and a feature mask.
 	A grid is generated, which lies on the input image.
 	This grid can be modified into an optional shape, but the gridpoints on the feature mask are not allowed to change their proportion to each other.
@@ -351,30 +373,82 @@
 		\label{fig:fat}
 	\end{figure}
 	A detailed importance is essential at creating thumbnails, since a screen usually contains a greater amount of sensitive information.
-	For example, a text can get easily destroyed, since they do not include such a clear focus point as regular pictures, where the density of ROIs is high. 
-	But the algorithms described above has aspects like face recognition and grid determination that over-complicate the calculations, causing performance issues without reaching better quality.
+	Text data is not allowed to be ignored, so they need to be part of one or more ROIs.
+	But the algorithms described above has aspects like face recognition and grid determination over-complicate the calculations.
 	A face on a computer screen is not as frequent as on usual photos, and in addition it is not as sensitive as for example a text data.
-	In the case of down sampling a human face can stay recognizable, whereas texts quickly become illegible. 
+	In the case of uniform down sampling a human face can stay recognizable, whereas texts quickly become illegible. 
 	With a grid the input image can get reshaped to any other form with no additional damage to the important areas.
 	But it is meant to form the input in completely other shape, not for resize it according to aspect ratio.
 	Some aspects however, like definition of AOs, could expand the actual used approaches, this possibility will be discussed in the \hyperref[futureWork]{future work} section.
 	
-	\subsection{Feature combining methods}
-	All the above mentioned approaches work with some kind of feature combining algorithms.
-	After choosing the relevant areas that need to stay recognizable also on the resulting image, they are merged into one output picture according to their methods.
-	It is usual in this process  that some artifacts show up near the joining area.\par 
-	A possible solution for this problem is the Poisson equation for image processing, introduced by Perez et al. ~\cite{perez2003poisson}.
-	A modified Poisson equation using a guidance field needs to be solved for every color in the color space where the guidance field is calculated from the gradients of the input image.
-	This algorithm is actually invented for seamless cloning, but it is helpful when some not-neighboring parts of the same image need to be placed near each other.
-	To make the Poisson calculation more efficient an algorithm suggested by Hussain et al. ~\cite{hussain2016efficient} offers help.
-	It proposes to solve the equation with an image pyramid that is built from the source and the destination image, or, as in this case, from the two image regions to be combined.
-	To reach the most optimal result, Agarwala et al. ~\cite{agarwala2004interactive} works with gradient-domain fusion developed from the Poisson equation.
-	It collects the color gradients of the source images into a composite vector field.
-	Afterwards,  a color composition is calculated, where the gradient fits as well in the vector field as possible. \par 
-	Combining and accumulating the color data promises very smooth results with a natural appearance at the joining areas. 
-	These algorithms however are invented for combining pictures from the real world, and not for computer generated images.
-	In case of thumbnails, it is less important to make the transitions less edgy, since the source does not seem to be natural neater. 
-	So the use of such advanced methods like Poisson equation is pointless, since the offer, providing natural edges and smooth transition, matches not even the input screenshot. 
+	\subsubsection{Seam Carving}
+	Seam Carving is a method, where unimportant pixel-paths are eliminated in order to down-sample the input image.
+	Every pixel is first examined, how much information it contains, how important it is.
+	After that horizontal and vertical seams, pixel-path where the following pixels are neighbors on the source image, can be calculated, and these with low importance value are cut off.
+	With this approach the size of the input decreases without the loss a big amount of information. 
+	Figure~\ref{fig:diff} shows the resized version of the same input using Seam Carving~\ref{fig:seamCarv} and simple down-samling~\ref{fig:downSampl}.\par 
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}[b]{0.45\columnwidth}
+			\centering
+			\includegraphics[width=\textwidth]{AppB/game2}
+			\subcaption{Seam Carved image}
+			\label{fig:seamCarv}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\columnwidth}
+			\centering
+			\includegraphics[width=\textwidth]{AppA/game2}
+			\subcaption{Down-Sampled image}
+			\label{fig:downSampl}
+		\end{subfigure}
+		\caption{The result using seam carving and common down sampling.}
+		\label{fig:diff} % \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
+	\end{figure}
+	The importance map calculation depends on the individual implementation, but they are normally based on the saliency model introduced by Itti et al.~\cite{itti1998model}.
+	Itti's saliency calculation takes the function of the low-level human visual system into account, so it pays attention for color, intensity and orientation of the pixels in the first row.
+	In the calculation every pixel and its neighborhood is investigated, what relationship they have to each other.
+	In this way the attention catching elements of an image, like color and intensity changes and lines or edges, can easily be found. 
+	The architecture of this saliency model is illustrated on Figure~\ref{fig:salMod}.\par 
+	\begin{figure}[H]
+		\centering		
+		\includegraphics[width=0.5\textwidth]{saliencyModel}
+		\caption{The architecture of the saliency model ~\cite{itti1998model}}
+		\label{fig:salMod}
+	\end{figure}
+	According to the importance map Seam Carving is performed as by Avidan et al.\cite{avidan2007seam}, where the least important seams are simply eliminated.
+	A seam runs from the top to the bottom or from the left to the right side and every pixel is part of the 8-neighborhood of the previous seam member.
+	The final importance cost of every seam is calculated by summing up the importance value of the containing pixels.
+	When this value is low, it means that the seam does not cross regions with high information content, so in case of elimination the data loss remains minimal.
+	Figure~\ref{fig:seamsDol} shows the least important seams on a possible input image.
+	Repeating this calculation, the image size can be reduces drastically without damaging the important regions as much as common down-sampling would do.\par 
+	\begin{figure}[H]
+		\centering		
+		\includegraphics[width=0.5\textwidth]{seams}
+		\caption{The least important seams of the image ~\cite{avidan2007seam}}
+		\label{fig:seamsDol}
+	\end{figure} 
+	Since Seam Carving pays attention for the importance of one and other image regions by the creation of more expressive thumbnails is preferable over down-sampling.
+	Seam Carving tries to save the high-information-content of the source, and eliminates only the non-relevant parts of the image.
+	But how efficient it works it strongly depends on the importance map.
+	In case of thumbnails, the calculation of the saliency is not sufficient, since it evaluates for example text data not as important as it finally should be.
+	So in case of the use of Seam Carving for thumbnail creation the importance map calculation needs to get adjusted to the special requirements of a screenshot. 
+	
+%	\subsection{Feature combining methods}
+%	All the above mentioned approaches work with some kind of feature combining algorithms.
+%	After choosing the relevant areas that need to stay recognizable also on the resulting image, they are merged into one output picture according to their methods.
+%	It is usual in this process  that some artifacts show up near the joining area.\par 
+%	A possible solution for this problem is the Poisson equation for image processing, introduced by Perez et al. ~\cite{perez2003poisson}.
+%	A modified Poisson equation using a guidance field needs to be solved for every color in the color space where the guidance field is calculated from the gradients of the input image.
+%	This algorithm is actually invented for seamless cloning, but it is helpful when some not-neighboring parts of the same image need to be placed near each other.
+%	To make the Poisson calculation more efficient an algorithm suggested by Hussain et al. ~\cite{hussain2016efficient} offers help.
+%	It proposes to solve the equation with an image pyramid that is built from the source and the destination image, or, as in this case, from the two image regions to be combined.
+%	To reach the most optimal result, Agarwala et al. ~\cite{agarwala2004interactive} works with gradient-domain fusion developed from the Poisson equation.
+%	It collects the color gradients of the source images into a composite vector field.
+%	Afterwards,  a color composition is calculated, where the gradient fits as well in the vector field as possible. \par 
+%	Combining and accumulating the color data promises very smooth results with a natural appearance at the joining areas. 
+%	These algorithms however are invented for combining pictures from the real world, and not for computer generated images.
+%	In case of thumbnails, it is less important to make the transitions less edgy, since the source does not seem to be natural neater. 
+%	So the use of such advanced methods like Poisson equation is pointless, since the offer, providing natural edges and smooth transition, matches not even the input screenshot. 
 	
 	
 	

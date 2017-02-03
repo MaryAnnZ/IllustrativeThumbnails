@@ -1,13 +1,6 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
 \begin{thebibliography}{GDT{\etalchar{+}}15}
 
-\bibitem[ADA{\etalchar{+}}04]{agarwala2004interactive}
-Aseem Agarwala, Mira Dontcheva, Maneesh Agrawala, Steven Drucker, Alex Colburn,
-  Brian Curless, David Salesin, and Michael Cohen.
-\newblock Interactive digital photomontage.
-\newblock In {\em ACM Transactions on Graphics (TOG)}, volume~23, pages
-  294--302. ACM, 2004.
-
 \bibitem[AS07]{avidan2007seam}
 Shai Avidan and Ariel Shamir.
 \newblock Seam carving for content-aware image resizing.
@@ -78,18 +71,18 @@ Ran Gal, Olga Sorkine, and Daniel Cohen-Or.
 \newblock Feature-aware texturing.
 \newblock {\em Rendering Techniques}, 2006(17th):2, 2006.
 
-\bibitem[H{\etalchar{+}}16]{hussain2016efficient}
-Khaled Hussain et~al.
-\newblock Efficient poisson image editing.
-\newblock {\em ELCVIA Electronic Letters on Computer Vision and Image
-  Analysis}, 14(2):45--57, 2016.
-
 \bibitem[HC08]{hwang2008content}
 Daw-Sen Hwang and Shao-Yi Chien.
 \newblock Content-aware image resizing using perceptual seam carving with human
   attention model.
 \newblock In {\em Multimedia and Expo, 2008 IEEE International Conference on},
   pages 1029--1032. IEEE, 2008.
+
+\bibitem[IKN98]{itti1998model}
+Laurent Itti, Christof Koch, and Ernst Niebur.
+\newblock A model of saliency-based visual attention for rapid scene analysis.
+\newblock {\em IEEE Transactions on pattern analysis and machine intelligence},
+  20(11):1254--1259, 1998.
 
 \bibitem[Inc]{photoshop}
 Adobe~Systems Incorporated.
@@ -120,12 +113,6 @@ Yuzhen Niu, Feng Liu, Xueqing Li, and Michael Gleicher.
 \bibitem[Ope17]{compareHist}
 OpenCV.
 \newblock {\em Histograms}, accessed January 28, 2017.
-
-\bibitem[PGB03]{perez2003poisson}
-Patrick P{\'e}rez, Michel Gangnet, and Andrew Blake.
-\newblock Poisson image editing.
-\newblock In {\em ACM Transactions on Graphics (TOG)}, volume~22, pages
-  313--318. ACM, 2003.
 
 \bibitem[RBHB06]{rother2006autocollage}
 Carsten Rother, Lucas Bordeaux, Youssef Hamadi, and Andrew Blake.
