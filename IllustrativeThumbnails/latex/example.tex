@@ -32,7 +32,7 @@
 
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
 \newcommand{\authorname}{Rebeka Koszticsak} % The author name without titles.
-\newcommand{\thesistitle}{Generate Illustrative Window Thumbnails through Seam Carving} % The title of the thesis. The English version should be used, if it exists.
+\newcommand{\thesistitle}{Generating Expressive Window Thumbnails through Seam Carving} % The title of the thesis. The English version should be used, if it exists.
 
 % Set PDF document properties
 \hypersetup{
@@ -76,7 +76,7 @@
 \setaddress{Address}
 \setregnumber{1325492}
 \setdate{01}{01}{2001} % Set date with 3 arguments: {day}{month}{year}.
-\settitle{\thesistitle}{Generate Illustrative Window Thumbnails through Seam Carving} % Sets English and German version of the title (both can be English or German).
+\settitle{\thesistitle}{Generating Expressive Window Thumbnails through Seam Carving} % Sets English and German version of the title (both can be English or German).
 %\setsubtitle{Optional Subtitle of the Thesis}{Optionaler Untertitel der Arbeit} % Sets English and German version of the subtitle (both can be English or German).
 
 % Select the thesis type: bachelor / master / doctor / phd-school.
@@ -128,8 +128,8 @@
 		Außerdem sind Screenshots von der selben Applikation sehr ähnlich, zum Beispiel die Seite und Toolbar in MS Office Word, der Text auf der Seite ist aber nicht lesbar. 
 		Es gibt bereits mehrere Möglichkeiten, wodurch die beim Bearbeiten entstehenden Artifakte weniger auffällig und die wichtigen Regionen hervorgehoben werden können.
 		In dieser Bachelorarbeit wird eine Applikation entwickelt, welche diese Methoden auf Screenshots anwendet und Thumbnails erstellt.
-		Die unwichtigen Teile  werden weggeschnitten, dannach wird das Bild mit Seam Carving bearbeitet, und wenn keine unrelevanten Informationen mehr übrig bleiben, wird herkömmliches down-sampling benutzt.
-		Die Thumbnails zeigen also nur salient Informationen an, wodurch sie illustrativer sind und ihren Zweck besser erfüllen können.
+		Screenshots von Applikationsfenster werden durch eine Kombination aus Cropping, Abschneiden von irrelevanten Elementen an der Seite, Seam Carving, Verkleinern durch Herausschneiden unwichtiger Pixel-Pfade, und herkömmlichem Down-Sampling zu Thumbnails verkleinert. 
+		Die Ergebnisse zeigen also nur relevante Informationen an, wodurch sie expressiver sind und ihren Zweck besser erfüllen können.
 		
 	\end{kurzfassung}
 	
@@ -141,14 +141,13 @@
 		same application is opened multiple times. Depending on the resolution of the display, the
 		screenshot size decreases as the number of opened windows increases. Furthermore,
 		within the same application (like MS Office World) the screenshots are similar in appearance
-		(eg.: white paper and tool bar), but the important text is not readable.
+		(eg.~: white paper and tool bar), but the important text is not readable.
 		There are several approaches that filter the important areas of the images to make editting
 		less obvious or enhance the main region. In this bachelor thesis an application
-		is implemented that uses these methods on the captured
-		images. The less important
-		areas of the screenshots are cut off, then seam carving is applied and only if no more irrelevant information remains, a conventional downsampling algorithm is applied.
-		So the thumbnails show only salient information,
-		which makes them more illustrative and easier to fulfill their purpose.
+		is implemented that uses these methods on the screenshots.
+		Screenshots of windows are reduced by cropping the irrelevant elements of the margin area, by seam carving, thus elimination of non-importan pixel paths, and by common down-sampling.
+		So the thumbnails show only relevant information,
+		which makes them more expressive and easier to fulfill their purpose.
 	\end{abstract}
 	
 	% Select the language of the thesis, e.g., english or naustrian.
@@ -161,12 +160,19 @@
 	\mainmatter
 	
 	\chapter{Introduction}
-	With the increased use of mobile devices and reliance on multi-tasking thumbnails are becoming increasingly important.
+	With the increasing use of mobile devices and reliance on multi-tasking thumbnails are becoming more important.
 	Thumbnails appear when switching between tasks, representing the concurrent windows i.e. the running applications.
-	To keep a continuous and effective workflow, it is essential to make the process of switching as fast and smooth as possible by allowing the user to quickly identify and choose between the given tabs. 
-	However, the current thumbnail system is not fit for this purpose. 
-	Due to the fact that standard thumbnail applications simply take the screenshot of each application and present them in a smaller size, the relevant parts of the window are no longer recognizable. 
-	For example, the user interface widgets, especially in case of the multiple windows of the same application, take up valuable place that could otherwise be used to present more important content elements, such as actual file names or other unique characteristics of the window.
+	To keep a continuous and effective workflow, it is essential to make the process of switching as fast and smooth as possible by allowing the user to quickly identify and choose between the given tabs and windows. 
+	However, classic thumbnails are sometimes not sufficient for this purpose. 
+	Due to the fact that standard thumbnail applications simply take the screenshot of each application and present them in a smaller size, the relevant parts of the window may no longer be recognizable.
+	Figure~\ref{fig:thumbnails} shows the windows-switching tool of Windows 10.
+	\begin{figure}[H]
+		\centering		
+		\includegraphics[width=\textwidth]{thumbnails}
+		\caption{Visualization of the currently used thumbnail system on windows 10 in case of four running applications}
+		\label{fig:thumbnails}
+	\end{figure} 
+	For example, the user interface widgets, especially in case of the multiple windows of the same application, take up valuable space that could otherwise be used to present more important content elements, such as actual file names or other unique characteristics of the window.
 	Furthermore with the use of tablets, smart phones and smart watches the display, thus the thumbnail size needs to shrink even more, but the original calculation algorithm does not take this into account.
 	Figure~\ref{fig:introo} shows possible outputs of the current (Figure~\ref{fig:introo:org}) and the new (Figure~\ref{fig:introo:res}) thumbnail creating algorithms.\par 
 	\begin{figure}[h]
@@ -174,36 +180,46 @@
 		\begin{subfigure}[b]{0.45\columnwidth}
 			\centering
 			\includegraphics[width=\textwidth]{orgBlizzard}
-			\subcaption{Currently used thumbnail}
+			\subcaption{Classic thumbnail}
 			\label{fig:introo:org}
 		\end{subfigure}
 		\begin{subfigure}[b]{0.45\columnwidth}
 			\centering
 			\includegraphics[width=\textwidth]{resultBlizzard}
-			\subcaption{Thumbnail created by the new algorithm}
+			\subcaption{Expressive thumbnail}
 			\label{fig:introo:res}
 		\end{subfigure}
-		\caption{The result using the two different approaches}
+		\caption{The result using the two different approaches.}
 		\label{fig:introo} % \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}
-	This project introduces a new approach using seam carving to make thumbnails more illustrative even on small displays.
-	Seam carving is a special re-sampling method, where not necessarily straight lines are determined, and the least important of them are then eliminated.
+	%This project introduces a new approach using seam carving to make thumbnails more expressive even on small displays.
+	Seam carving is a special re-sampling method, where seams along the least important image regions are eliminated to down-sample the image.
 	The definition of importance depends on the implementation, but it in any case evaluates color changes and identifies the edges that shape the outline of the element on the source image.
-	Following a similar logic, the algorithm presented in this thesis uses a customized seam carving method.
-	Furthermore, it takes into account that the given input is essentially a screenshot thus will probably contain some UI elements on the picture.
-	Additionally, considering that letters are more common on computer screens than on usual images, the text content is also investigated to calculate its salient regions.
+	It is implemented for natural images, however, and not for screenshots, the usual saliency calculation is not adequate enough.
+	Following a similar logic, the algorithm presented in this thesis uses the seam carving method, but it takes into account that the given input is essentially a screenshot.
+	So it will probably contain some UI elements on the picture.
+	Additionally, considering that letters are more common on computer screens than on usual images, the text content is also investigated to determine them as important regions.\par
+	In summary, the thumbnail creating algorithm of this thesis performs cropping first to eliminate the UI elements of the margin area, then seam carving using a customized importance map and finally common down-sampling.
+	While modified importance map is built from the usual saliency values of the screenshot and from the results of the text detection.
 	
-	\section{Definition of the word illustrative} 
-	To provide satisfactory results a detailed and clear definition of the word illustrative is needed.
-	Not only it influences the calculation of the pixel and region saliency value, but also acts at the selection of result outputs, and is useful for future software development.
+	%\section{Definition of the word illustrative} 
+	To provide satisfactory results a detailed and clear definition of the word expressive is needed.
+	Not only it influences the calculation of the pixel and region importance value, but also acts at the selection of result outputs, and is useful for future software development.
 	Also, for a fitting definition it needs to be taken into account that in this case the seam carving algorithm is used for screenshots and not for usual photographs.\par 
-	The expression 'illustrative thumbnail' also comprehends that it is able to represent more information on a same sized picture than the other not illustrative thumbnail.
+	The expression 'expressive thumbnail' also comprehends that it is able to represent more information on a same sized picture than the other not expressive thumbnail.
 	Unlike usual visual features observed on real world images, such as color changes and location of edges, as mentioned above, computer screens have additional special properties that require further consideration.
-	For example, most screenshots include UI widgets, that are classified as not illustrative.
+	For example, most screenshots include UI widgets, that are classified as not expressive in case of expressive thumbnail creation.
 	Namely, it is rarely the case that the relevant part of an application is its UI and not its the actual content processing features, additionally, the identification of the a window in question is also possible by reading its title.
 	Furthermore text data has on the computer screen more important role then usual pictures.
-	To transmit as much information as possible, text data is not allowed to get damaged, i.e. even after size reduction it needs to stay readable.\par 
-	Summing up, in this project a thumbnail is called 'illustrative' if its informative content preserves.
+	To transmit as much information as possible, text data is not allowed to get damaged, i.e. even after size reduction it needs to stay readable.
+	Figure~\ref{fig:textDamage} shows a possible output of the seam carving algorithm using different importance maps.\par 
+	\begin{figure}[H]
+		\centering		
+		\includegraphics[width=\textwidth]{textDemage}
+		\caption{The text damage using caused by seam carving using saliency map and modified importance map of this application. }
+		\label{fig:textDamage}
+	\end{figure} 
+	Summing up, in this project a thumbnail is called 'expressive' if it preserves the information content.
 	To measure this property, contrast values, color changes, location of edges, text data and the presence of UI elements are evaluated and considered.            
 	
 	\chapter{Related Work}
