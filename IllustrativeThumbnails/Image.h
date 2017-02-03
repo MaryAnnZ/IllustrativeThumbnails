@@ -24,13 +24,16 @@ public:
 
 	//central window
 	cv::Mat getCroppedImage();
+	cv::Mat getMarginHist();
+	cv::Mat getContentHist();
+	cv::Mat getCroppingHist();
 
 	cv::Mat showSeamCarved();
 	cv::Mat showSeams();
 
 	cv::Mat getReference();
 	
-	
+	bool histSet = false;
 private:
 	double size;
 	
@@ -83,6 +86,10 @@ private:
 	double upperBorderCorr;
 	double leftBorderCorr;
 	double rightBorderCorr;
+	cv::Mat marginHist;
+	cv::Mat contentHist;
+	cv::Mat croppingHist;
+
 
 	std::vector<Word> possibleWords;
 	std::vector<Word> words;

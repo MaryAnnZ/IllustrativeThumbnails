@@ -27,7 +27,7 @@
 
 
 \newenvironment{conditions}
-{\par\vspace{\abovedisplayskip}\noindent\begin{tabular}{>{$}l<{$} @{${}={}$} l}}
+{\par\vspace{\abovedisplayskip}\noindent\begin{tabular}{>{$}l<{$} @{${}:{}$} l}}
 	{\end{tabular}\par\vspace{\belowdisplayskip}}
 
 % Define convenience functions to use the author name and the thesis title in the PDF document properties.
@@ -342,7 +342,8 @@
 	In one hand the collage method could minimize distortion of important regions since they stay rigid.
 	In the other hand however, cutting a screen apart and arranging its parts willingly has a potentially confusing result for the user, requiring them to spend even more time with the screen recognition.
 	
-	\subsection{Re-sampling methods}
+	\subsection{Re-sampling Methods}
+	\label{relatedWork:resampling}
 	To attain a constant relative position among regions, applying a resampling method is more effective than the above described collage creating approaches.
 	Resampling means that some equally distributed parts of the image will be eliminated, thus, unlike by the collage algorithms, all remaining areas will have the same relation to each other.
 	Therefore, the image itself remains recognizable because it has a highly similar appearance, in spite of having the most important areas less readable.\par 
@@ -382,6 +383,7 @@
 	Some aspects however, like definition of AOs, could expand the actual used approaches, this possibility will be discussed in the \hyperref[futureWork]{future work} section.
 	
 	\subsubsection{Seam Carving}
+	\label{seamCarving}
 	Seam Carving is a method, where unimportant pixel-paths are eliminated in order to down-sample the input image.
 	Every pixel is first examined, how much information it contains, how important it is.
 	After that horizontal and vertical seams, pixel-path where the following pixels are neighbors on the source image, can be calculated, and these with low importance value are cut off.
@@ -456,86 +458,114 @@
 	\begin{figure}
 		\centering		
 		\includegraphics[width=\textwidth]{flowChart}
-		\caption{Flow chart of the algorithm}
+		\caption{Flow chart of the algorithm.}
 		\label{fig:flowChart}
 	\end{figure}
-	The illustrative thumbnail creating algorithm has three main steps, as shown on Figure ~\ref{fig:flowChart}.
-	At the beginning the UI elements are cut off.
-	In the case of thumbnails there are other ways to get information about what application are actually opened, for example by giving a title for it, containing the running application's name.
-	In addition, it is rather usual that the same software is running multiple times, possibly for other purposes, e.g. using the text editor for both writing one and reading another document.
+	The illustrative thumbnail creating algorithm has three main steps, as shown in Figure ~\ref{fig:flowChart}.
+	At the beginning the UI elements are cropped.
+	%In the case of thumbnails there are other ways to get information about what application are actually opened, for example by giving a title for it, containing the running application's name.
+	It is rather usual that the same software is running multiple times, possibly for other purposes, e.g. using the text editor for both writing one and reading another document.
+	The appearance of the applications is thus very similar, and they may be no longer discriminable when scaled down.  
 	Consequently, the actual content and not the surface of these applications makes a difference.
-	Although reading the title of the thumbnails is slower than the software recognition through visual data, this aspect needs to take count for the better visualization of the actual content area.%TODO{trade off} 
-	The second step is the calculation of the importance map weighted on the location of text data.
-	Unlike at regular real-life pictures the occurrence of text on computer screens is higher and more important.
-	For this reason the calculation of the final importance map have two steps.
-	First the importance value of every picture is generated according to an image based energy function described in the next sections.
+	Although reading the title of the thumbnails may be slower than the software recognition through low-level visual data, this aspect needs to take count for the better visualization of the actual content area.%TODO{trade off} 
+	The second step is the calculation of the importance map weighted by the location of text data.
+	Unlike at regular real-life pictures the occurrence of text on computer screens is very common, and possibly the main discriminating content.
+	For this reason the calculation of the final importance map has two steps.
+	First the importance value of every pixel is generated according to an image based energy function described in the next sections.
 	Second the importance value is increased at the places where text is found.
-	This way not only the silhouette but also the whole body of the letters seems to be salient.
+	This way not only the silhouette but also the whole body of the letters and the space between them seem to be salient.
 	Lastly, seam carving and simple re-sampling is performed  until the correct output size is reached.
 	In this section these three main sections are discussed, and an overview of the algorithm is presented.	
 	
 	\section{Eliminating UI elements}
 	For the elimination of UI elements, first their identification must be accomplished. 
-	For the search of UI widget a heuristic is developed, which implies that these elements are located near the border of the screen and not in central areas.
+	For the search of UI widget three heuristic are developed.
+	The first one implies that these UI elements are located near the border of the screen and not in central areas.
+	Secondly it is assumed that the UI has similar background or theme color, and it differs from the rest of the window.
+	Finally the UI area is bounded by a straight line, while the horizontal one is longer then the vertical.
 	Thus, the middle of the screen is taken as reference data for the investigation and is not checked for the unimportant UI elements.
-	The UI elimination algorithm works right on the source window in a predefined, parametrized border area, i.e. no further premodification is required for this process.\par
-	Cropping the borders, first the horizontal, then the vertical margins are investigated, allowing where their order is relevant.
-	The algorithm is based on the observation that upper and lower bars expand through the whole width of the display.
+	The UI elimination algorithm works right on the source window in the border area, which size is predefined and parametrized, i.e. no further premodification is required for this process.\par
+	While cropping the borders, first the horizontal, then the vertical margins are investigated, where the order is relevant.
+	The cropping algorithm, described in the following, is based on the assumption that upper and lower bars expand through the whole width of the display.
 	The sidebars, if they exist, run however between the upper and the lower bars, and cover the remaining areas of the margin.
 	Furthermore, occasionally the sidebar have a slightly different style than the other UI widgets mentioned above.
-	The UI matching method investigates slices of the screen running along the margins and examines whether they belong to the UI or to the middle area of the window.
-	To get better results, it is important to investigate a coherent data, and not to mix parts of different UI bars to the same slice.
+	The UI matching method investigates slices of the screen running along the margins and examining their color histograms determines whether they belong to the UI or to the middle area of the window.
+	Because of the use of color histograms and the assumption that the UI has similar background color, which is different from the content, it is important to investigate a coherent data, so the slices should cover only UI or only content area, and not a mix of them.
 	The above described process with an established order of margin cropping is fit for this purpose. \par 
-	To identify the best cropping line, indicating where the UI meets the content area, a double validation method is performed.
-	The first step evolves searching for a line in the predefined border area, located however near to the center of the source, having the same color and no interruption along the horizontal sides of the screen.
-	This method is based on the consideration that toolbars often have a unicolor background, as the examples illustrate on Figure~\ref{fig:lines}.
-	Therefore, the task is to find a line, where widgets are no longer located, but it still belongs to the UI area, so it contains a background color.\par
+	%Ennel a resznel kb 5 komment volt. ugyhogy lehez ezert kicsit szajbargos. de kb mindegyik mondatban volt vmiamit nem ertett...
+	To identify the best cropping line, indicating the edge where the UI meets the content area, a double validation method is performed.
+	The first step evolves searching for a row of pixels in the border area, which size is configurable and predefined as mentioned above, located however near to the center of the source, having the same color and no interruption along the horizontal sides of the screen.
+	It means, the length of the row is equal to the width of the source, it has exactly one pixel from every column which are actually taking place in one line on the input image.
+	But this pixel row is not necessarily an actual line or edge of the image, it is only a horizontal path, where every member has the same color.
+	This method is based on the consideration that toolbars often have a unicolor background or the UI is bounded by a straight line, where such a pixel row can easily be found, as the examples illustrate on Figure~\ref{fig:lines}.
+	Therefore, the task is to find a horizontal pixel path, where widgets are no longer located, but it still belongs to the UI area, so it contains a background color or the line at the edge of the UI and content area.\par
 	\begin{figure}[h]
 		\centering		
 		\includegraphics[width=\textwidth]{UIlines}
-		\caption{Unicolor line at the edge of the UI area}
+		\caption{Unicolor line at the edge of the UI area.}
 		\label{fig:lines}
 	\end{figure}
 	In case of predefined UI areas the method above works well, on the other hand, there are several specific occasions where it is not able to provide any results.
-	Outstandingly, game applications usually use their own graphical UI, but even at more traditional applications it is plausible that the UI area is so overloaded or designed that no background line can be found.
+	Outstandingly, game applications usually use their own graphical UI, but even at more traditional applications it is plausible that the UI area is so overloaded or designed that no background line can be found or the UI is simply not bounded by the edge mentioned before.
 	For this reason it is important to perform an additional checking loop, too.
-	This step is based on the correlation value of the border and center's color histogram.
-	The margin is split into thin slices.
+	This step is based on the correlation value of the border and center's color histogram calculated with the following equation~\cite{compareHist}:
+	\[ d(H_{1},H_{2})=\left(\frac{\sum\limits_{J}(H_{1}(J)-H_{1})(H_{2}(I)-H_{2})}{\sqrt{\sum\limits_{J}(H_{1}(J)-H_{1})^2\sum\limits_{J}(H_{2}(J)-H_{2}})^2}\right) \]
+	where:
+	\[H_{k}=\left(\frac{1}{N}\right)\sum\limits_{J}H_{k}(J)\]
+	\begin{center}
+		\begin{conditions}
+			N & Amount of the bins 
+		\end{conditions}
+	\end{center}
+	The result of this equation is between 1 and 0, if it is high it means that the two histograms are very similar, if it is low, however, it implies that they have no similarities.
+	The margin is split into thin slices, where the actual size is parametrized and can be set as needed as a percentage portion of the actual height of the source.
 	Initially the first slice near the border is examined.
 	The histogram of this slice is then compared to the histogram of the center.
-	If their correlation is high, it implies that the two areas are not significantly different, therefore nothing should be cut off, and so the algorithm returns.
+	If their correlation is high, where this threshold value can be defined, it implies that the two areas are not significantly different, therefore nothing should be cut off, and so the algorithm returns.
 	Alternatively, if low correlation is found, the examined strips are not part of the same unit, indicating that the slice is supposedly from within the UI area.
-	In this case, the two histograms, the one with the first slice and the other from the center region, are kept for/as reference values.
+	In this case, the two histograms, the one with the first slice and the other from the center region, are kept for reference values.
 	In the next step, the remaining slices are compared with the two reference histograms, starting at the border and heading towards the middle area.
 	At the beginning the correlation with the border histogram is high and with the center is low, which shows that the slice is still in the UI area i.e. it matches the theme of the border widgets.
+	\begin{figure}[H]
+		\includegraphics[width=.3\textwidth]{marginHist}\hfill
+		\includegraphics[width=.3\textwidth]{croppedHist}\hfill
+		\includegraphics[width=.3\textwidth]{contentHist}
+		\caption{The histogram of the margin area, of the slices, where the source~\ref{fig:cropped} is cropped and of the content region.}
+		\label{fig:hist}
+	\end{figure}
 	This tendency reverses however as the slices approach the center regions.
 	At the slice whose correlation with the center histogram is higher than the one with the border histogram, the algorithm stops, cuts all of the previously examined slices, and then terminates.
-	Figure~\ref{fig:cropped} shows the borders between the content and UI regions found by the UI cropping heuristic.\par 
-	\begin{figure}[h]
+	Figure~\ref{fig:hist} displays the histograms of the margin, of the cropping and of the content area of Figure~\ref{fig:cropped}.
+	Figure~\ref{fig:cropped} shows the borders between the content and UI regions found by the UI cropping heuristics.\par 
+	\begin{figure}[H]
 		\centering		
-		\includegraphics[width=0.5\textwidth]{cropped}
-		\caption{The border of the content}
+		\includegraphics[width=\textwidth]{croppedGame2}
+		\caption{The border of the content.}
 		\label{fig:cropped}
 	\end{figure}
-	%This method is executed four times.
-	%In the first two cases the upper and the lower borders are %investigated.
-	%The third and the fourth loop is adjusted to the sidebars.
-	%In the first step not a horizontal but a vertical line is %searched, looking for a straight route, where the %background color of the sidebar takes the whole space %between the, already cropped, upper and lower borders of %the image.
-	%Finally in the second checking loop the slices are defined %vertically and not horizontally this time. 
+
+	This method is executed four times.
+	In the first two cases the upper and the lower borders are investigated.
+	The third and the fourth loop is adjusted to the sidebars.
+	In the first step not a horizontal but a vertical line is searched, looking for a straight route, where the background color of the sidebar takes the whole space between the, already cropped, upper and lower borders of the image.
+	Finally in the second checking loop the slices are defined vertically and not horizontally this time. 
 	
-	\section{Saliency calculation}
-	In order to ignore that parts of the source image that are actually unimportant, saliency calculation is applied.
-	The saliency value of a pixel measures how important the pixel is, how noticeable it is and how much attention it affects for the human eye.
-	A saliency map is a grayscale image where the high value of an area means that the region is more interesting than other pixels with lower values.
-	There are, however, many definitions and approaches about which pixels should be evaluated as salient or not salient.
+	\section{Importance Map Calculation}
+	In order to ignore that parts of the source image that are actually unimportant, importance calculation is applied.
+	The importance map calculation has two main steps: saliency calculation and text detection.
+	In the following these two components of the algorithm is described.
+	\subsection{Saliency Calculation}
+	The saliency value of a pixel describes how much it stands out from its surrounding, how noticeable it is and how much attention it affects for the human eye.
+	A saliency map in this project is a matrix where the high value of an area means that the region is more salient than other pixels with lower values.
+	There are, however, many definitions and approaches about which pixels should be evaluated as salient or not salient, some of them is already mentioned in the \hyperref[relatedWork:resampling]{Related Work section}.
 	In this case the saliency is calculated as presented by Niu et al.~\cite{niu2012image}. 
 	There are two reasons, why this algorithm is chosen.
-	First, it evaluates the low level visual informations.
-	It means that only those pixels are valued as important that activate the low level human visual system, for example due to their sharp edges and color change characteristics.
-	Secondly, it is scale invariant, so it is more robust than other similar but only singe scale approaches.\par 
-	The algorithm converts the source into a uniform colorspace (Lu*v) first.
+	First, it evaluates the low level visual information just like the traditional method introduces by Itti et al.~\cite{itti1998model}.
+	It means that only those pixels are valued as important that activate the low level human visual system, for example due to their intensity and color change characteristics.
+	In addition however, it is scale invariant, so it is more robust than other similar approaches mentioned before.\par 
+	The algorithm converts the source into a perceptually linear, device-independent colorspace (Lu*v) first.
 	After that, to make the approach scale invariant, a Gaussian contrast pyramid is built.
-	It calculates the contrast value from the weighted sum of difference between the pixel and its neighborhood, using the L2 norm:	
+	The algorithm of Niu et al.~\cite{niu2012image} calculates the contrast value from the weighted sum of difference between the pixel and its neighborhood, using the L2 norm:	
 	\[ C_{i,j,l}=\sum\limits_{q\in\Theta}w_{i,j,l}d(p_{i,j,l},p_{q}) \]
 	\[ w_{i,j,l}=1-\left(\frac{r_{i,j,l}}{r_{l,max}}\right) \]
 	where:
@@ -549,7 +579,7 @@
 			d & difference \\
 			p & color of the pixel \\
 			r & distance from the image center \\
-			r_{l, max} & maximum possible distance on the image
+			r_{l, max} & maximum possible distance on the image.
 		\end{conditions}
 	\end{center}
 	This approach needs to get slightly modified, in way that the calculation ignores the weighting value.
@@ -558,22 +588,25 @@
 	A screenshot often does not have a defined focus point where the most important information is shown.
 	By using the weighting value, the focus would be on the inner window, despite the fact that there is no actual significant correlation between the importance of the data and its position on the screen.
 	At the end, the importance value of each pixel is calculated by summing up all levels of the pyramid into one final saliency map.\par
+	
+	\subsection{Text Detection}
 	In the case of computer screens, texts are fairly common, and their information content is usually also very high.
 	Therefore, it would be rather impractical not to reflect the importance of such text regions on the saliency map. 
 	For that reason a further evaluation of the saliency map is needed, to check whether text areas were evaluated as important data.\par 
-	The text recognition algorithm is based on the one introduced in ~\cite{chang2011associating}.
-	For the first step the whole input image is horizontally blurred, so that the letters and the neighboring words form a string together.
+	The text detection algorithm is based on the one introduced in ~\cite{chang2011associating}.
+	For the first step the whole input image is horizontally blurred, so that the letters and the neighboring words form a string together using connected component analysis.
 	After that, all of these coherent strings are investigated and consorted depending on whether they are representations of actual words or if they derive from another visual feature of the source.
 	The method that identifies the words examines two aspects.
 	The first is if the strings are high enough but not too high to indicate real letters.
 	Second, whether their width is not too small but also not too big to form at least one word but not an endless sentence.
-	Both of these size examining values are parametrized, with their default value based on the size of one letter, as explained in the \hyperref[Implementation]{next chapter}. 
+	Both of these size examining values are parametrized, the thresholds can be set as needed, with their default value based on the size of one letter, in default case 5pt, as explained in the \hyperref[Implementation]{next chapter}. 
 	The second loop evaluates the histograms of the area, where the strings were found.
 	Normally the letters, if belonging to the same text data, have the same color, while the background, for optimal readability, does not change its color underneath the text, either.
-	Therefore, the histograms of these areas are bimodal, namely one for the letters and one for the color of the background.
+	Therefore, the histograms of these areas are bimodal, that means they have one peak for the letters and one for the background color. 
+	The two largest bins of the histogram are detected, and if they contain a predefined percent of the pixels, it is set for 65\% as default, then is the area labeled as actual word.
 	To sum up, to identify a string as a word, it is not sufficient to pass the first check, it  also need  to have a corresponding special histogram to be labeled as word. 
 	Figure~\ref{fig:strings} shows the output of the text detection algorithm. 
-	The light blue color labels the possible word regions, the darker color denotes the actual words found by the algorithm.\par 
+	The light blue color labels the possible word regions, thus the result of the connected component analysis, the darker color denotes the actual words found by the algorithm.\par 
 	\begin{figure}
 		\centering
 		\begin{subfigure}[b]{0.45\columnwidth}
@@ -587,57 +620,72 @@
 			\includegraphics[width=\textwidth]{strings}
 			\subcaption{Output}
 		\end{subfigure}
-		\caption{Result of the text detection algorithm applied on the given source}
+		\caption{Result of the text detection algorithm applied on the given source.}
 		\label{fig:strings} % \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}
-	The last step for the calculation of the final saliency map, which is consequently used in the whole application, is to get the identified text regions weighted. 
-	All area which passed the word checking test is automatically evaluated as highly important, and gets the highest saliency value.
+	The last step for the calculation of the final importance map, which is consequently used in the whole application, is to get the identified text regions weighted in the saliency map. 
+	All area which passed the word checking test is automatically evaluated as highly important, and gets the highest saliency value in the importance map.
 	In addition, to make sure that even the space between the words remains undamaged, which is important because of greater readability, the area neighboring the text data is also weighted.
-	Figure\ref{fig:saliency} is the final saliency map of Figure~\ref{fig:strings:org}.
+	Figure\ref{fig:saliency} is the final importance map of Figure~\ref{fig:strings:org}.
 	\begin{figure}[h]
 		\centering		
-		\includegraphics[width=0.5\textwidth]{saliency}
-		\caption{The final saliency map}
+		\includegraphics[width=\textwidth]{saliency}
+		\caption{The final saliency map.}
 		\label{fig:saliency}
 	\end{figure}
 	
 	\section{Seam Carving}
-	To resize the image without damaging the important regions, seam carving ~\cite{avidan2007seam} is used.
-	Seam carving calculates paths according to the saliency map, and eliminates those with minimal importance value.
+	To resize the image without damaging the important regions, seam carving is used, mentioned in the \hyperref[seamCarving]{Related Work} section.
+	Seam carving calculates paths according to the importance map, and eliminates those with minimal importance value.
 	This step is repeated until the desired size is reached or the importance value of the chosen path exceeds a predefined threshold.
-	Because seam carving does not necessary eliminates only the straight lines, the algorithm noticeably effects the layout of the unimportant regions.
+	Because seam carving does not necessary eliminate only the straight lines, the algorithm noticeably affects the layout of the unimportant regions.
 	Furthermore, if the whole image has very high salient values, the resulting seams do not have a remarkably smaller salient value than any straight line would have had when chosen randomly for re-sampling.
-	To save the image from unnecessary artifacts and increase the application performance, a threshold value is defined as Dong~\cite{dong2009optimized} proposed.
-	To reach the final output size common re-sampling is applied.\par 
-	To find the most appropriate path, every possible solution need to be examined using the backpacking method.
-	A path map is thus generated, where all past possibilities are stored, and that every new try can use as a look up.
+	To save the image from unnecessary artifacts and increase the application performance, a threshold, when to switch to re-sampling, is defined as Dong~\cite{dong2009optimized} proposed.
+	To reach the final output size common down-sampling is applied.\par 
+	To find the most appropriate path, every possible solution need to be examined using the backtracking method.
+	A path map is thus generated, where all past possibilities belonging to the previous start pixels are stored, and that every new try, when examining the next start pixel, can use as a look up.
 	This way performance can be saved and the algorithm becomes faster.\par 
 	To find the next pixel of the path, five-neighborhood of the next possible member is examined.
 	The algorithm runs from the top to the bottom, where the path to the next member is chosen from the five nearest pixels of the previous line.
 	To calculate the costs of a possible switch between the columns the importance value of the neighboring pixels are weighted accordingly.
-	In each case the chosen pixel is the one whose importance value with the weighting parameter is the smallest.
+	In each case the chosen pixel is the one whose importance value with the weighting parameter is the smallest.\par
+	Figure~\ref{fig:pathValues} is a visualization of the path map while running the algorithm.
+	The yellow pixels are already set, the first row is automatically filled with the importance values from the importance map, the whites are however not known.
+	The algorithm takes always the next unknown pixel running from left to right, from the top to the bottom and searches for an appropriate predecessor.
+	The next point is displayed in blue square.
+	The possible predecessor of this point are shown in the red square.
+	The importance of these pixels, saved in the path map, the yellow entities, are compared, and the one with the smallest value is chosen.
+	At the pixel in the blue square the coordinates of the chosen predecessor are stored and its importance value is set summing the value in the predecessor pixel and the value in the importance map at the blue pixel together. 
+	\begin{figure}[H]
+		\centering		
+		\includegraphics[width=0.5\textwidth]{pathValues}
+		\caption{Visualization of the path map in the middle of the calculation.}
+		\label{fig:pathValues}
+	\end{figure}
 	Algorithm~\ref{alg:seamCarving} shows the flow of the seam carving process.
-	Two paths per loop are calculated, one horizontally and one vertically, however, in the end only the pixels of the least salient path become eliminated.\par 
+	Two paths per loop are calculated, one horizontally and one vertically, however, in the end only the pixels of the least salient path become eliminated.
+	Additionally, since the output needs to hold the aspect ratio, at the end the same amount of horizontal and vertical seams is eliminated\par 
 	\begin{algorithm}
-		\KwIn{the cropped source image \textit{image}, the importance map \textit{saliencyMap}, two dimensional vector of the size of \textit{image} storing the saliency value and the previous path \textit{pathValues}  }
+		\KwIn{the cropped source image \textit{image}, the importance map of the cropped image \textit{saliencyMap}, two dimensional vector of the size of \textit{image} storing the saliency value and the previous path \textit{pathValues}  }
 		\KwOut{seam carved \textit{image}}
-		\For{\textit{y} < width of \textit{image}}
+		\While{\textit{y} < width of \textit{image}}
 		{
-			\For{\textit{x} < height of \textit{image}}
+			\While{\textit{x} < height of \textit{image}}
 			{
-				\textit{previousPixel} = detect the less salient pixel of the five-neighborhood in the previous line in \textit{pathValues},
-				the saliency value of \textit{pathValues} at (\textit{x},\textit{y}) = \textit{previousPixel} + \textit{saliencyMap} at (\textit{x},\textit{y}),
-				the path value of \textit{pathValues} at (\textit{x},\textit{y}) = position of  \textit{previousPixel},
-				increase \textit{x}
+				\textit{previousPixel} = detect the less salient pixel of the five-neighborhood in the previous line in \textit{pathValues} \\
+				the saliency value of \textit{pathValues} at (\textit{x},\textit{y}) = \textit{previousPixel} + \textit{saliencyMap} at (\textit{x},\textit{y}) \\
+				the path value of \textit{pathValues} at (\textit{x},\textit{y}) = position of  \textit{previousPixel}\\
 			}
-				increase \textit{y}	
 		}
-		\textit{lessSalientPixel} = detect the smallest saliency value in the last row of \textit{pathValues}
+		\textit{leastSalientPixel};
+		\While{i < width of  \textit{pathValues} }
+			{
+			  Set \textit{leastSalientPixel} if the i-th value in the last row of  \textit{pathValues} is smaller than the value of \textit{leastSalientPixel}
+			}
 		\For{j = height of \textit{image}, j $\geq$ 0}
 		{
-			remove the pixel from \textit{image} with the coordinates of \textit{lessSalientPixel},
-			\textit{lessSalientPixel} = the pixel in \textit{pathValues} with the coordinates of the path value of \textit{lessSalientPixel},
-			decrease \textit{j} 
+			remove the pixel from \textit{image} with the coordinates of \textit{leastSalientPixel}\\
+			\textit{lessSalientPixel} = the pixel in \textit{pathValues} with the coordinates of the path value of \textit{lessSalientPixel}
 		}
 		\Return(\textit{image})
 		\caption{The seam carving algorithm}
@@ -645,10 +693,11 @@
 	\end{algorithm}
 
 	Because the horizontal and vertical paths are eliminated independently, the picture being processed usually does not hold the aspect ratio.
-	For this reason it is plausible that the weight and height parameters do not reach the output size or the threshold value at the same time.
-	In this case the seam carving algorithm continues only for the remaining parameter until it reaches one of the conditions above. 
+	For this reason it is plausible that the width and height parameters do not reach the output size or the threshold value at the same time.
+	In this case the seam carving algorithm continues only for the remaining parameter, thus it is looking for only for horizontal or vertical seams, since the width or the height already hit the preconditions, until it reaches one of the conditions above. 
     The value of the threshold parameter is essential,	since it determines when the algorithm is to switch between seam carving and re-sampling. 
 	It is calculated from the maximum salient path found after the first loop of the seam carving algorithm.
+	This threshold value is further customizable, the different outputs in case of varying its value is discussed in the \hyperref[res:resampling]{Results and Evaluation} section.
 	Since with every loop one unsalient pixel is eliminated from the horizontal or from the vertical path, the relative saliency of the seams constantly increases.
 	Therefore, in most cases, even the least salient seam will get more salient than the most salient seam of the original image. 
 	The common re-sampling method eliminates straight lines chosen from the source image until the desired size is reached.
@@ -689,14 +738,7 @@
 	After cutting, the histogram of the remaining margin area is examined and compared to the central region, the margin is split along the nearest border into thin slices.
 	The function \texttt{calcHist} calculates histograms of the marginal and of the central window.
 	The function \texttt{compareHist} measures the correlation of two histograms with the equation~\cite{compareHist}:
-	\[ d(H_{1},H_{2})=\left(\frac{\sum\limits_{J}(H_{1}(J)-H_{1})(H_{2}(I)-H_{2})}{\sqrt{\sum\limits_{J}(H_{1}(J)-H_{1})^2\sum\limits_{J}(H_{2}(J)-H_{2}})^2}\right) \]
-	where:
-	\[H_{k}=\left(\frac{1}{N}\right)\sum\limits_{J}H_{k}(J)\]
-	\begin{center}
-		\begin{conditions}
-			N & Amount of the bins 
-		\end{conditions}
-	\end{center}
+
 	If according to it they do not correlate, the comparison is performed on other slices that are consequently labeled as margin or central windows.
 	If a slice is found that correlates with the margin histogram, the image is cropped by the slice again. 
 	The parameters of correlation and the width of the slices are also configurable.
@@ -853,6 +895,7 @@
 		\caption{The output of the current and the modified algorithms }
 	\end{figure} 
 	\section{Re-sampling threshold}
+	\label{res:resampling}
 	The re-sampling threshold determines when the application switches from seam carving to usual re-sampling. 
 	If the value is small (0.1) only a few seam carving loops are performed, and the application behaves similar to a common down sampling algorithm.
 	The performance is positively affected by fewer seam carving loops, but it also loses its advantage against simple re-sampling methods, with the important areas being no longer easily recognizable.
