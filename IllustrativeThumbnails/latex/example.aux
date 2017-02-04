@@ -176,6 +176,7 @@
 \newlabel{fig:cropped}{{\M@TitleReference {3.4}{The border of the content.\relax }}{19}{The border of the content.\relax }{figure.caption.23}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.2}Importance Map Calculation}{19}{section.3.2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Saliency Calculation}{19}{subsection.3.2.1}}
+\newlabel{saliencyCalculation}{{\M@TitleReference {3.2.1}{Saliency Calculation}}{19}{Saliency Calculation}{subsection.3.2.1}{}}
 \citation{niu2012image}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Text Detection}{20}{subsection.3.2.2}}
 \citation{chang2011associating}
@@ -195,83 +196,102 @@
 \citation{openfilename}
 \@writefile{lof}{\addvspace {10pt}}
 \@writefile{lot}{\addvspace {10pt}}
-\@writefile{toc}{\contentsline {chapter}{\chapternumberline {4}Implementation}{25}{chapter.4}}
+\@writefile{toc}{\contentsline {chapter}{\chapternumberline {4}Implementation and Working Pipeline}{25}{chapter.4}}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{implementation}{{\M@TitleReference {4}{Implementation}}{25}{Implementation}{chapter.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Working Pipeline}{25}{section.4.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Image loading}{25}{subsection.4.1.1}}
-\citation{compareHist}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}UI elimination}{26}{subsection.4.1.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}Saliancy map calculation}{26}{subsection.4.1.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.4}Text detection}{26}{subsection.4.1.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.5}Seam carving}{27}{subsection.4.1.5}}
+\newlabel{implementation}{{\M@TitleReference {4}{Implementation and Working Pipeline}}{25}{Implementation and Working Pipeline}{chapter.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Image Loading}{25}{section.4.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}UI Elimination}{26}{subsection.4.1.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Saliancy Map Clculation}{26}{section.4.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Text Detection}{26}{section.4.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Seam Carving}{27}{section.4.4}}
 \citation{photoshop}
 \@writefile{lof}{\addvspace {10pt}}
 \@writefile{lot}{\addvspace {10pt}}
 \@writefile{toc}{\contentsline {chapter}{\chapternumberline {5}Results and Evaluation}{29}{chapter.5}}
 \@writefile{loa}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {5.1}Elimination of UI elements}{29}{section.5.1}}
-\newlabel{fig:res:neon}{{\M@TitleReference {\caption@xref {fig:res:neon}{ on input line 818}}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.28}{}}
+\newlabel{fig:res:neon}{{\M@TitleReference {\caption@xref {fig:res:neon}{ on input line 829}}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.28}{}}
 \newlabel{sub@fig:res:neon}{{\M@TitleReference {}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.28}{}}
-\newlabel{fig:res:pdf}{{\M@TitleReference {\caption@xref {fig:res:pdf}{ on input line 823}}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.28}{}}
+\newlabel{fig:res:pdf}{{\M@TitleReference {\caption@xref {fig:res:pdf}{ on input line 834}}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.28}{}}
 \newlabel{sub@fig:res:pdf}{{\M@TitleReference {}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.28}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces The cropping points according to the border area 10\% and 40\%\relax }}{30}{figure.caption.28}}
-\newlabel{fig:res:corr1}{{\M@TitleReference {\caption@xref {fig:res:corr1}{ on input line 835}}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces The cropping points according to the border area 10\% (yellow) and 40\% (green).\relax }}{30}{figure.caption.28}}
+\newlabel{fig:res:corr1}{{\M@TitleReference {\caption@xref {fig:res:corr1}{ on input line 846}}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.29}{}}
 \newlabel{sub@fig:res:corr1}{{\M@TitleReference {}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.29}{}}
-\newlabel{fig:res:corr2}{{\M@TitleReference {\caption@xref {fig:res:corr2}{ on input line 840}}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.29}{}}
+\newlabel{fig:res:corr2}{{\M@TitleReference {\caption@xref {fig:res:corr2}{ on input line 851}}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.29}{}}
 \newlabel{sub@fig:res:corr2}{{\M@TitleReference {}{Elimination of UI elements}}{30}{Elimination of UI elements}{figure.caption.29}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces The cropping points according to the correlation 1 and 2.5\relax }}{30}{figure.caption.29}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces The cropping points according to the thicknes of the slices 12\% and 5\%\relax }}{31}{figure.caption.30}}
-\newlabel{fig:res:steps}{{\M@TitleReference {5.3}{The cropping points according to the thicknes of the slices 12\% and 5\%\relax }}{31}{The cropping points according to the thicknes of the slices 12\% and 5\%\relax }{figure.caption.30}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces The cropping points according to the correlation 1 (yellow) and 2.5 (green).\relax }}{30}{figure.caption.29}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces The cropping points according to the thickness of the slices 12\% (yellow) and 5\% (green)\relax }}{31}{figure.caption.30}}
+\newlabel{fig:res:steps}{{\M@TitleReference {5.3}{The cropping points according to the thickness of the slices 12\% (yellow) and 5\% (green)\relax }}{31}{The cropping points according to the thickness of the slices 12\% (yellow) and 5\% (green)\relax }{figure.caption.30}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.2}Text detection}{31}{section.5.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces The related areas according to the brightness threshold value 50 and 200 \relax }}{31}{figure.caption.31}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces The actual words according to the minimal width 100 and minimal height 20 \relax }}{31}{figure.caption.32}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.6}{\ignorespaces The actual words according to the maximal allowed difference 80\% and 20\% from the average \relax }}{32}{figure.caption.33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.7}{\ignorespaces The output of the current and the modified algorithms \relax }}{32}{figure.caption.34}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Re-sampling threshold}{32}{section.5.3}}
-\newlabel{res:resampling}{{\M@TitleReference {5.3}{Re-sampling threshold}}{32}{Re-sampling threshold}{section.5.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces The related areas according to the brightness threshold value 50 and 200. \relax }}{31}{figure.caption.31}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.5}{\ignorespaces The actual words according to the minimal width 100 and minimal height 20. \relax }}{32}{figure.caption.32}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.6}{\ignorespaces The actual words according to the maximal allowed difference 80\% and 20\% from the average. \relax }}{32}{figure.caption.33}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.7}{\ignorespaces Different text weighting: high weights (middle) and low weights (right). \relax }}{32}{figure.caption.34}}
 \citation{photoshop}
-\newlabel{fig:res:th1}{{\M@TitleReference {\caption@xref {fig:res:th1}{ on input line 909}}{Re-sampling threshold}}{33}{Re-sampling threshold}{figure.caption.35}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Re-sampling threshold}{33}{section.5.3}}
+\newlabel{res:resampling}{{\M@TitleReference {5.3}{Re-sampling threshold}}{33}{Re-sampling threshold}{section.5.3}{}}
+\newlabel{fig:res:th1}{{\M@TitleReference {\caption@xref {fig:res:th1}{ on input line 922}}{Re-sampling threshold}}{33}{Re-sampling threshold}{figure.caption.35}{}}
 \newlabel{sub@fig:res:th1}{{\M@TitleReference {}{Re-sampling threshold}}{33}{Re-sampling threshold}{figure.caption.35}{}}
-\newlabel{fig:res:th2}{{\M@TitleReference {\caption@xref {fig:res:th2}{ on input line 914}}{Re-sampling threshold}}{33}{Re-sampling threshold}{figure.caption.35}{}}
+\newlabel{fig:res:th2}{{\M@TitleReference {\caption@xref {fig:res:th2}{ on input line 927}}{Re-sampling threshold}}{33}{Re-sampling threshold}{figure.caption.35}{}}
 \newlabel{sub@fig:res:th2}{{\M@TitleReference {}{Re-sampling threshold}}{33}{Re-sampling threshold}{figure.caption.35}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.8}{\ignorespaces The results according to the re-sampling threshold 0.1 and 0.4\relax }}{33}{figure.caption.35}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.8}{\ignorespaces The results according to the re-sampling threshold 0.1 and 0.4.\relax }}{33}{figure.caption.35}}
+\newlabel{fig:res}{{\M@TitleReference {5.8}{The results according to the re-sampling threshold 0.1 and 0.4.\relax }}{33}{The results according to the re-sampling threshold 0.1 and 0.4.\relax }{figure.caption.35}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.4}Comparison to Adobe Photoshop}{33}{section.5.4}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5.9}{\ignorespaces Source images used for testing\relax }}{33}{figure.caption.36}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.10}{\ignorespaces Results of the first scenario\relax }}{33}{figure.caption.37}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5.11}{\ignorespaces Results of the second scenario\relax }}{34}{figure.caption.38}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.10}{\ignorespaces Photoshop results of the first scenario.\relax }}{34}{figure.caption.37}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.11}{\ignorespaces Photoshop results of the second scenario.\relax }}{34}{figure.caption.38}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5.12}{\ignorespaces Result of the thumbnail algorithm\relax }}{34}{figure.caption.39}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.5}Performance evaluation}{34}{section.5.5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.13}{\ignorespaces Snippet about the same region of the first test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm \relax }}{35}{figure.caption.40}}
+\newlabel{fig:comp444}{{\M@TitleReference {5.13}{Snippet about the same region of the first test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm \relax }}{35}{Snippet about the same region of the first test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm \relax }{figure.caption.40}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.14}{\ignorespaces Snippet about the same region of the second test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm.\relax }}{35}{figure.caption.41}}
+\newlabel{fig:compDesktop}{{\M@TitleReference {5.14}{Snippet about the same region of the second test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm.\relax }}{35}{Snippet about the same region of the second test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm.\relax }{figure.caption.41}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.15}{\ignorespaces Snippet about the same region of the third test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm.\relax }}{36}{figure.caption.42}}
+\newlabel{fig:comppdf}{{\M@TitleReference {5.15}{Snippet about the same region of the third test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm.\relax }}{36}{Snippet about the same region of the third test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm.\relax }{figure.caption.42}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Natural Images}{36}{section.5.5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.16}{\ignorespaces The UI cropping heuristic eliminates two persons on the right side.\relax }}{36}{figure.caption.43}}
+\newlabel{fig:nat:face}{{\M@TitleReference {5.16}{The UI cropping heuristic eliminates two persons on the right side.\relax }}{36}{The UI cropping heuristic eliminates two persons on the right side.\relax }{figure.caption.43}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.17}{\ignorespaces There is a horizontal line in the middle, where probably several seems were eliminated.\relax }}{37}{figure.caption.44}}
+\newlabel{fig:nat:food}{{\M@TitleReference {5.17}{There is a horizontal line in the middle, where probably several seems were eliminated.\relax }}{37}{There is a horizontal line in the middle, where probably several seems were eliminated.\relax }{figure.caption.44}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.6}Performance Evaluation}{37}{section.5.6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.18}{\ignorespaces There are several artifact to see on the body of the fireworks.\relax }}{38}{figure.caption.45}}
+\newlabel{fig:nat:fire}{{\M@TitleReference {5.18}{There are several artifact to see on the body of the fireworks.\relax }}{38}{There are several artifact to see on the body of the fireworks.\relax }{figure.caption.45}{}}
 \citation{Cook:2012:CPD:2430671}
+\citation{duarte2012accelerating}
 \citation{hwang2008content}
 \@writefile{lof}{\addvspace {10pt}}
 \@writefile{lot}{\addvspace {10pt}}
-\@writefile{toc}{\contentsline {chapter}{\chapternumberline {6}Future Work}{37}{chapter.6}}
+\@writefile{toc}{\contentsline {chapter}{\chapternumberline {6}Future Work}{39}{chapter.6}}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{futureWork}{{\M@TitleReference {6}{Future Work}}{37}{Future Work}{chapter.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Performance improvement}{37}{section.6.1}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Methodology improvement}{37}{section.6.2}}
+\newlabel{futureWork}{{\M@TitleReference {6}{Future Work}}{39}{Future Work}{chapter.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Performance improvement}{39}{section.6.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Methodology improvement}{39}{section.6.2}}
 \citation{domingues2010stream}
 \citation{guo2015nif}
 \citation{guo2015nif}
 \citation{guo2015nif}
+\newlabel{fig:res:th1}{{\M@TitleReference {\caption@xref {fig:res:th1}{ on input line 1090}}{Methodology improvement}}{40}{Methodology improvement}{figure.caption.46}{}}
+\newlabel{sub@fig:res:th1}{{\M@TitleReference {}{Methodology improvement}}{40}{Methodology improvement}{figure.caption.46}{}}
+\newlabel{fig:res:th2}{{\M@TitleReference {\caption@xref {fig:res:th2}{ on input line 1095}}{Methodology improvement}}{40}{Methodology improvement}{figure.caption.46}{}}
+\newlabel{sub@fig:res:th2}{{\M@TitleReference {}{Methodology improvement}}{40}{Methodology improvement}{figure.caption.46}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces The current algorithm destroys the facial information.\relax }}{40}{figure.caption.46}}
+\newlabel{fig:face}{{\M@TitleReference {6.1}{The current algorithm destroys the facial information.\relax }}{40}{The current algorithm destroys the facial information.\relax }{figure.caption.46}{}}
 \citation{liu2006region}
 \citation{liu2006region}
 \citation{liu2006region}
 \citation{domingues2010stream}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces The source image and the saliency map of the NIF algorithm ~\cite  {guo2015nif} \relax }}{38}{figure.caption.40}}
-\newlabel{fig:nif}{{\M@TitleReference {6.1}{The source image and the saliency map of the NIF algorithm ~\cite  {guo2015nif} \relax }}{38}{The source image and the saliency map of the NIF algorithm ~\cite {guo2015nif} \relax }{figure.caption.40}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces The source image and the saliency map of the mean shift algorithm ~\cite  {liu2006region} \relax }}{38}{figure.caption.41}}
-\newlabel{fig:kmean}{{\M@TitleReference {6.2}{The source image and the saliency map of the mean shift algorithm ~\cite  {liu2006region} \relax }}{38}{The source image and the saliency map of the mean shift algorithm ~\cite {liu2006region} \relax }{figure.caption.41}{}}
 \citation{sun2005image}
 \citation{sun2005image}
 \citation{sun2005image}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces The source image and the saliency map of the NIF algorithm ~\cite  {guo2015nif} \relax }}{41}{figure.caption.47}}
+\newlabel{fig:nif}{{\M@TitleReference {6.2}{The source image and the saliency map of the NIF algorithm ~\cite  {guo2015nif} \relax }}{41}{The source image and the saliency map of the NIF algorithm ~\cite {guo2015nif} \relax }{figure.caption.47}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces The source image and the saliency map of the mean shift algorithm ~\cite  {liu2006region} \relax }}{41}{figure.caption.48}}
+\newlabel{fig:kmean}{{\M@TitleReference {6.3}{The source image and the saliency map of the mean shift algorithm ~\cite  {liu2006region} \relax }}{41}{The source image and the saliency map of the mean shift algorithm ~\cite {liu2006region} \relax }{figure.caption.48}{}}
 \citation{dong2009optimized}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces The structure propagation algorithm, where $\Omega $ denotes the unknown regions and $p_{i}$ the anchor points ~\cite  {sun2005image}\relax }}{39}{figure.caption.42}}
-\newlabel{fig:structProp}{{\M@TitleReference {6.3}{The structure propagation algorithm, where $\Omega $ denotes the unknown regions and $p_{i}$ the anchor points ~\cite  {sun2005image}\relax }}{39}{The structure propagation algorithm, where $\Omega $ denotes the unknown regions and $p_{i}$ the anchor points ~\cite {sun2005image}\relax }{figure.caption.42}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces The structure propagation algorithm, where $\Omega $ denotes the unknown regions and $p_{i}$ the anchor points ~\cite  {sun2005image}\relax }}{42}{figure.caption.49}}
+\newlabel{fig:structProp}{{\M@TitleReference {6.4}{The structure propagation algorithm, where $\Omega $ denotes the unknown regions and $p_{i}$ the anchor points ~\cite  {sun2005image}\relax }}{42}{The structure propagation algorithm, where $\Omega $ denotes the unknown regions and $p_{i}$ the anchor points ~\cite {sun2005image}\relax }{figure.caption.49}{}}
 \@writefile{lof}{\addvspace {10pt}}
 \@writefile{lot}{\addvspace {10pt}}
-\@writefile{toc}{\contentsline {chapter}{\chapternumberline {7}Conclusion}{41}{chapter.7}}
+\@writefile{toc}{\contentsline {chapter}{\chapternumberline {7}Conclusion}{43}{chapter.7}}
 \@writefile{loa}{\addvspace {10\p@ }}
 \bibstyle{alpha}
 \bibdata{intro}
@@ -283,9 +303,10 @@
 \bibcite{domingues2010stream}{DAV10}
 \bibcite{dixon2010prefab}{DF10}
 \bibcite{dixon2011content}{DLF11}
+\bibcite{duarte2012accelerating}{DS12}
+\@writefile{toc}{\contentsline {chapter}{Bibliography}{45}{section*.51}}
 \bibcite{dong2009optimized}{DZPZ09}
 \bibcite{egorova2008collage}{ESK08}
-\@writefile{toc}{\contentsline {chapter}{Bibliography}{43}{section*.44}}
 \bibcite{guo2015nif}{GDT{$^{+}$}15}
 \bibcite{gal2006feature}{GSCO06}
 \bibcite{hwang2008content}{HC08}
@@ -302,13 +323,13 @@
 \bibcite{yeh2009sikuli}{YCM09}
 \@writefile{lof}{\addvspace {10pt}}
 \@writefile{lot}{\addvspace {10pt}}
-\@writefile{toc}{\contentsline {chapter}{Appendix A}{47}{chapter*.45}}
+\@writefile{toc}{\contentsline {chapter}{Appendix A}{49}{chapter*.52}}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{AppA}{{\M@TitleReference {7}{Appendix A}}{47}{Appendix A}{chapter*.45}{}}
+\newlabel{AppA}{{\M@TitleReference {7}{Appendix A}}{49}{Appendix A}{chapter*.52}{}}
 \@writefile{lof}{\addvspace {10pt}}
 \@writefile{lot}{\addvspace {10pt}}
-\@writefile{toc}{\contentsline {chapter}{Appendix B}{51}{chapter*.60}}
+\@writefile{toc}{\contentsline {chapter}{Appendix B}{57}{chapter*.74}}
 \@writefile{loa}{\addvspace {10\p@ }}
-\newlabel{AppB}{{\M@TitleReference {7}{Appendix B}}{51}{Appendix B}{chapter*.60}{}}
-\memsetcounter{lastsheet}{70}
-\memsetcounter{lastpage}{54}
+\newlabel{AppB}{{\M@TitleReference {7}{Appendix B}}{57}{Appendix B}{chapter*.74}{}}
+\memsetcounter{lastsheet}{76}
+\memsetcounter{lastpage}{60}

@@ -163,6 +163,7 @@ cv::Mat Image::showSeamCarved()
 		//TODO
 		goalWidth = (int) (getSourceImage().cols * size);
 		goalHeight = (int)(getSourceImage().rows * size);
+		std::cout << "Goal szie: " << goalWidth << "X" << goalHeight << std::endl;
 		//first loop
 		
 		std::vector<std::vector<Entity>> pathValues = calculateSeams(true);
@@ -173,6 +174,7 @@ cv::Mat Image::showSeamCarved()
 		double originalHorizontal = 0;
 
 		while (verticalSeamsImage.cols != goalWidth || verticalSeamsImage.rows != goalHeight) {
+			std::cout << "Current szie: " << verticalSeamsImage.cols << "X" << verticalSeamsImage.rows << std::endl;
 			if (verticalSeamsImage.cols != goalWidth && verticalSeamsImage.rows != goalHeight) {
 				//vertical
 				std::vector<std::vector<Entity>> pathValuesVer = calculateSeams(true);
@@ -873,36 +875,36 @@ void Image::cropHorizontalBorders()
 					if (contentCorrel > marginCorrel) {
 						croppedImage = croppedImage.rowRange(i + step, croppedImage.rows);
 						
-						//draw histograms
-						marginHist = cv::Mat(400, 512, CV_8UC3, cv::Scalar(0, 0, 0));
-						contentHist = cv::Mat(400, 512, CV_8UC3, cv::Scalar(0, 0, 0));
-						croppingHist = cv::Mat(400, 512, CV_8UC3, cv::Scalar(0, 0, 0));
+						////draw histograms
+						//marginHist = cv::Mat(400, 512, CV_8UC3, cv::Scalar(0, 0, 0));
+						//contentHist = cv::Mat(400, 512, CV_8UC3, cv::Scalar(0, 0, 0));
+						//croppingHist = cv::Mat(400, 512, CV_8UC3, cv::Scalar(0, 0, 0));
 
-						cv::normalize(bHistMargin, bHistMargin, 0, marginHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
-						cv::normalize(rHistMargin, rHistMargin, 0, marginHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
-						cv::normalize(gHistMargin, gHistMargin, 0, marginHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
-						cv::normalize(bHistContent, bHistContent, 0, contentHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
-						cv::normalize(rHistContent, rHistContent, 0, contentHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
-						cv::normalize(gHistContent, gHistContent, 0, contentHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
-						cv::normalize(bHistCompare, bHistCompare, 0, croppingHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
-						cv::normalize(rHistCompare, rHistCompare, 0, croppingHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
-						cv::normalize(gHistCompare, gHistCompare, 0, croppingHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
+						//cv::normalize(bHistMargin, bHistMargin, 0, marginHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
+						//cv::normalize(rHistMargin, rHistMargin, 0, marginHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
+						//cv::normalize(gHistMargin, gHistMargin, 0, marginHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
+						//cv::normalize(bHistContent, bHistContent, 0, contentHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
+						//cv::normalize(rHistContent, rHistContent, 0, contentHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
+						//cv::normalize(gHistContent, gHistContent, 0, contentHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
+						//cv::normalize(bHistCompare, bHistCompare, 0, croppingHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
+						//cv::normalize(rHistCompare, rHistCompare, 0, croppingHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
+						//cv::normalize(gHistCompare, gHistCompare, 0, croppingHist.rows, cv::NORM_MINMAX, -1, cv::Mat());
 
-						int w = cvRound((double) 512 / binAmount);
-						for (int i = 0; i < binAmount; i++) {
-							cv::line(marginHist, cv::Point(w*(i - 1), 400 - cvRound(bHistMargin.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(bHistMargin.at<float>(i))), cv::Scalar(0, 0, 255), 2, 8, 0);
-							cv::line(marginHist, cv::Point(w*(i - 1), 400 - cvRound(gHistMargin.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(gHistMargin.at<float>(i))), cv::Scalar(0, 255, 0), 2, 8, 0);
-							cv::line(marginHist, cv::Point(w*(i - 1), 400 - cvRound(rHistMargin.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(rHistMargin.at<float>(i))), cv::Scalar(255, 0, 0), 2, 8, 0);
+						//int w = cvRound((double) 512 / binAmount);
+						//for (int i = 0; i < binAmount; i++) {
+						//	cv::line(marginHist, cv::Point(w*(i - 1), 400 - cvRound(bHistMargin.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(bHistMargin.at<float>(i))), cv::Scalar(0, 0, 255), 2, 8, 0);
+						//	cv::line(marginHist, cv::Point(w*(i - 1), 400 - cvRound(gHistMargin.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(gHistMargin.at<float>(i))), cv::Scalar(0, 255, 0), 2, 8, 0);
+						//	cv::line(marginHist, cv::Point(w*(i - 1), 400 - cvRound(rHistMargin.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(rHistMargin.at<float>(i))), cv::Scalar(255, 0, 0), 2, 8, 0);
 
-							cv::line(contentHist, cv::Point(w*(i - 1), 400 - cvRound(bHistContent.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(bHistContent.at<float>(i))), cv::Scalar(0, 0, 255), 2, 8, 0);
-							cv::line(contentHist, cv::Point(w*(i - 1), 400 - cvRound(gHistContent.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(gHistContent.at<float>(i))), cv::Scalar(0, 255, 0), 2, 8, 0);
-							cv::line(contentHist, cv::Point(w*(i - 1), 400 - cvRound(rHistContent.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(rHistContent.at<float>(i))), cv::Scalar(255, 0, 0), 2, 8, 0);
+						//	cv::line(contentHist, cv::Point(w*(i - 1), 400 - cvRound(bHistContent.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(bHistContent.at<float>(i))), cv::Scalar(0, 0, 255), 2, 8, 0);
+						//	cv::line(contentHist, cv::Point(w*(i - 1), 400 - cvRound(gHistContent.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(gHistContent.at<float>(i))), cv::Scalar(0, 255, 0), 2, 8, 0);
+						//	cv::line(contentHist, cv::Point(w*(i - 1), 400 - cvRound(rHistContent.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(rHistContent.at<float>(i))), cv::Scalar(255, 0, 0), 2, 8, 0);
 
-							cv::line(croppingHist, cv::Point(w*(i - 1), 400 - cvRound(bHistCompare.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(bHistCompare.at<float>(i))), cv::Scalar(0, 0, 255), 2, 8, 0);
-							cv::line(croppingHist, cv::Point(w*(i - 1), 400 - cvRound(gHistCompare.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(gHistCompare.at<float>(i))), cv::Scalar(0, 255, 0), 2, 8, 0);
-							cv::line(croppingHist, cv::Point(w*(i - 1), 400 - cvRound(rHistCompare.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(rHistCompare.at<float>(i))), cv::Scalar(255, 0, 0), 2, 8, 0);
-							histSet = true;
-						}
+						//	cv::line(croppingHist, cv::Point(w*(i - 1), 400 - cvRound(bHistCompare.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(bHistCompare.at<float>(i))), cv::Scalar(0, 0, 255), 2, 8, 0);
+						//	cv::line(croppingHist, cv::Point(w*(i - 1), 400 - cvRound(gHistCompare.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(gHistCompare.at<float>(i))), cv::Scalar(0, 255, 0), 2, 8, 0);
+						//	cv::line(croppingHist, cv::Point(w*(i - 1), 400 - cvRound(rHistCompare.at<float>(i - 1))), cv::Point(w*i, 400 - cvRound(rHistCompare.at<float>(i))), cv::Scalar(255, 0, 0), 2, 8, 0);
+						//	histSet = true;
+						//}
 						break;
 					}
 				}

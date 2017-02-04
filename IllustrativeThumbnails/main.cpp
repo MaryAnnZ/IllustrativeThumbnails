@@ -28,26 +28,26 @@ void main()
 		Image* img = new Image(configData);
 
 		if (!img->getSourceImage().empty()) {
-			cvNamedWindow("saliency");
-			cv::imshow("saliency", img->getOriginalSaliencyMap());
-			cvNamedWindow("blurred");
-			cv::imshow("blurred", img->getBluredImage());
-			cvNamedWindow("string");
-			cv::imshow("string", img->getStringImage());
+			//cvNamedWindow("saliency");
+			//cv::imshow("saliency", img->getOriginalSaliencyMap());
+			//cvNamedWindow("blurred");
+			//cv::imshow("blurred", img->getBluredImage());
+			//cvNamedWindow("string");
+			//cv::imshow("string", img->getStringImage());
 			cvNamedWindow("result");
 			cv::imshow("result", img->showSeamCarved());
-			cvNamedWindow("importanceMap");
-			cv::imshow("importanceMap", img->getSaliencyMap());
-			cvNamedWindow("seams");
-			cv::imshow("seams", img->showSeams());
-			if (img->histSet) {
-				cvNamedWindow("marginHist");
-				cv::imshow("marginHis", img->getMarginHist());
-				cvNamedWindow("contentHist");
-				cv::imshow("contentHist", img->getContentHist());
-				cvNamedWindow("croppedHist");
-				cv::imshow("croppedHist", img->getCroppingHist());
-			}
+			//cvNamedWindow("importanceMap");
+			//cv::imshow("importanceMap", img->getSaliencyMap());
+			//cvNamedWindow("seams");
+			//cv::imshow("seams", img->showSeams());
+			//if (img->histSet) {
+			//	cvNamedWindow("marginHist");
+			//	cv::imshow("marginHis", img->getMarginHist());
+			//	cvNamedWindow("contentHist");
+			//	cv::imshow("contentHist", img->getContentHist());
+			//	cvNamedWindow("croppedHist");
+			//	cv::imshow("croppedHist", img->getCroppingHist());
+			//}
 		}
 
 
