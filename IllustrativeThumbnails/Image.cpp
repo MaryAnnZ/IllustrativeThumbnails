@@ -96,6 +96,12 @@ Image::Image(std::map<std::string, double> configData)
 	else {
 		wantSizeOutput = true;
 	}
+	if (configData["wantCroppedImage"] == 0) {
+		wantCroppedImage = false;
+	}
+	else {
+		wantCroppedImage = true;
+	}
 }
 
 

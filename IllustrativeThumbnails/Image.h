@@ -37,6 +37,7 @@ public:
 	bool wantOrgImportanceMap;
 	bool wantBlurredImage;
 	bool wantTextImage;
+	bool wantCroppedImage;
 	bool wantFinalResult;
 	bool wantImportanceMap;
 	bool wantDebugSeams;

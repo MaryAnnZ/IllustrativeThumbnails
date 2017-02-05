@@ -29,6 +29,7 @@ Die Parameter:
 wantOrgImportanceMap
 wantBlurredImage
 wantTextImage
+wantCroppedImage
 wantFinalResult
 wantImportanceMap
 wantDebugSeams
@@ -74,6 +75,7 @@ doLines=0
 wantOrgImportanceMap=0
 wantBlurredImage=0
 wantTextImage=0
+wantCroppedImage=0
 wantFinalResult=1
 wantImportanceMap=0
 wantDebugSeams=0

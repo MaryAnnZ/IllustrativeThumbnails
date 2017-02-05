@@ -7,22 +7,22 @@
 \select@language {english}
 \select@language {naustrian}
 \select@language {naustrian}
-\contentsline {chapter}{Kurzfassung}{xi}{chapter*.6}
+\contentsline {chapter}{Kurzfassung}{xi}{chapter*.4}
 \select@language {naustrian}
 \select@language {english}
-\contentsline {chapter}{Abstract}{xiii}{chapter*.7}
+\contentsline {chapter}{Abstract}{xiii}{chapter*.5}
 \select@language {naustrian}
 \select@language {english}
-\contentsline {chapter}{Contents}{xv}{section*.8}
+\contentsline {chapter}{Contents}{xv}{section*.6}
 \contentsline {chapter}{\chapternumberline {1}Introduction}{1}{chapter.1}
 \contentsline {chapter}{\chapternumberline {2}Related Work}{5}{chapter.2}
 \contentsline {section}{\numberline {2.1}Processing as UI}{5}{section.2.1}
 \contentsline {section}{\numberline {2.2}Processing as a Regular Picture}{7}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Collage Creating Methods}{7}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}Re-Sampling Methods}{9}{subsection.2.2.2}
-\contentsline {subsubsection}{Seam Carving}{11}{section*.16}
+\contentsline {subsubsection}{Seam Carving}{11}{section*.14}
 \contentsline {chapter}{\chapternumberline {3}Methodology}{15}{chapter.3}
-\contentsline {section}{\numberline {3.1}Eliminating UI elements}{16}{section.3.1}
+\contentsline {section}{\numberline {3.1}Eliminating UI Elements}{16}{section.3.1}
 \contentsline {section}{\numberline {3.2}Importance Map Calculation}{19}{section.3.2}
 \contentsline {subsection}{\numberline {3.2.1}Saliency Calculation}{19}{subsection.3.2.1}
 \contentsline {subsection}{\numberline {3.2.2}Text Detection}{20}{subsection.3.2.2}
@@ -34,16 +34,16 @@
 \contentsline {section}{\numberline {4.3}Text Detection}{26}{section.4.3}
 \contentsline {section}{\numberline {4.4}Seam Carving}{27}{section.4.4}
 \contentsline {chapter}{\chapternumberline {5}Results and Evaluation}{29}{chapter.5}
-\contentsline {section}{\numberline {5.1}Elimination of UI elements}{29}{section.5.1}
-\contentsline {section}{\numberline {5.2}Text detection}{31}{section.5.2}
-\contentsline {section}{\numberline {5.3}Re-sampling threshold}{33}{section.5.3}
+\contentsline {section}{\numberline {5.1}Elimination of UI Elements}{29}{section.5.1}
+\contentsline {section}{\numberline {5.2}Text Detection}{31}{section.5.2}
+\contentsline {section}{\numberline {5.3}Re-sampling Threshold}{33}{section.5.3}
 \contentsline {section}{\numberline {5.4}Comparison to Adobe Photoshop}{33}{section.5.4}
 \contentsline {section}{\numberline {5.5}Natural Images}{36}{section.5.5}
 \contentsline {section}{\numberline {5.6}Performance Evaluation}{37}{section.5.6}
 \contentsline {chapter}{\chapternumberline {6}Future Work}{39}{chapter.6}
-\contentsline {section}{\numberline {6.1}Performance improvement}{39}{section.6.1}
-\contentsline {section}{\numberline {6.2}Methodology improvement}{39}{section.6.2}
+\contentsline {section}{\numberline {6.1}Performance Improvement}{39}{section.6.1}
+\contentsline {section}{\numberline {6.2}Methodology Improvement}{39}{section.6.2}
 \contentsline {chapter}{\chapternumberline {7}Conclusion}{43}{chapter.7}
-\contentsline {chapter}{Bibliography}{45}{section*.51}
-\contentsline {chapter}{Appendix A}{49}{chapter*.52}
-\contentsline {chapter}{Appendix B}{57}{chapter*.74}
+\contentsline {chapter}{Bibliography}{45}{section*.50}
+\contentsline {chapter}{Appendix A}{49}{chapter*.51}
+\contentsline {chapter}{Appendix B}{57}{chapter*.73}

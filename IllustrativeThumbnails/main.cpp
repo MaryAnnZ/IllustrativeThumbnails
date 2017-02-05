@@ -40,6 +40,10 @@ void main()
 				cvNamedWindow("string");
 				cv::imshow("string", img->getStringImage());
 			}
+			if (img->wantCroppedImage) {
+				cvNamedWindow("cropped");
+				cv::imshow("cropped", img->getCroppedImage());
+			}
 			if (img->wantFinalResult) {
 				cvNamedWindow("result");
 				cv::imshow("result", img->showSeamCarved());
