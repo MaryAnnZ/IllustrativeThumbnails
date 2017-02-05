@@ -32,8 +32,16 @@ public:
 	cv::Mat showSeams();
 
 	cv::Mat getReference();
-	
-	bool histSet = false;
+
+	//outputs
+	bool wantOrgImportanceMap;
+	bool wantBlurredImage;
+	bool wantTextImage;
+	bool wantFinalResult;
+	bool wantImportanceMap;
+	bool wantDebugSeams;
+	bool wantHists;
+	bool wantSizeOutput;
 private:
 	double size;
 	

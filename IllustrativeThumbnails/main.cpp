@@ -28,26 +28,43 @@ void main()
 		Image* img = new Image(configData);
 
 		if (!img->getSourceImage().empty()) {
-			//cvNamedWindow("saliency");
-			//cv::imshow("saliency", img->getOriginalSaliencyMap());
-			//cvNamedWindow("blurred");
-			//cv::imshow("blurred", img->getBluredImage());
-			//cvNamedWindow("string");
-			//cv::imshow("string", img->getStringImage());
-			cvNamedWindow("result");
-			cv::imshow("result", img->showSeamCarved());
-			//cvNamedWindow("importanceMap");
-			//cv::imshow("importanceMap", img->getSaliencyMap());
-			//cvNamedWindow("seams");
-			//cv::imshow("seams", img->showSeams());
-			//if (img->histSet) {
-			//	cvNamedWindow("marginHist");
-			//	cv::imshow("marginHis", img->getMarginHist());
-			//	cvNamedWindow("contentHist");
-			//	cv::imshow("contentHist", img->getContentHist());
-			//	cvNamedWindow("croppedHist");
-			//	cv::imshow("croppedHist", img->getCroppingHist());
-			//}
+			if (img->wantOrgImportanceMap) {
+				cvNamedWindow("saliency");
+				cv::imshow("saliency", img->getOriginalSaliencyMap());
+			}
+			if (img->wantBlurredImage) {
+				cvNamedWindow("blurred");
+				cv::imshow("blurred", img->getBluredImage());
+			}
+			if (img->wantTextImage) {
+				cvNamedWindow("string");
+				cv::imshow("string", img->getStringImage());
+			}
+			if (img->wantFinalResult) {
+				cvNamedWindow("result");
+				cv::imshow("result", img->showSeamCarved());
+			}
+			if (img->wantImportanceMap) {
+				cvNamedWindow("importanceMap");
+				cv::imshow("importanceMap", img->getSaliencyMap());
+			}
+			if (img->wantDebugSeams) {
+				cvNamedWindow("seams");
+				cv::imshow("seams", img->showSeams());
+			}
+			if (img->wantHists) {
+				cv::Mat margin = img->getMarginHist();
+				cv::Mat content = img->getContentHist();
+				cv::Mat cropped = img->getCroppingHist();
+				if (!margin.empty()) {
+					cvNamedWindow("marginHist");
+					cv::imshow("marginHist", margin);
+					cvNamedWindow("contentHist");
+					cv::imshow("contentHist", content);
+					cvNamedWindow("croppedHist");
+					cv::imshow("croppedHist", cropped);
+				}
+			}
 		}
 
 

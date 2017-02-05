@@ -20,7 +20,21 @@ maxAvgHeight
 5.3:
 resamplingTh
 
-Die restlichen Variablen sind für Debuging benutzt bzw. konfigurieren OpenCV funktionen wie Filterkernel und Histograms.
+Die Parameter:
+wantOrgImportanceMap
+wantBlurredImage
+wantTextImage
+wantFinalResult
+wantImportanceMap
+wantDebugSeams
+wantHists
+wantSizeOutput
+sind Boolische Variablen und regeln, welche Output gegeben werden sollte.
+wantOrgImportanceMap schreibt die originelle Importancemap aus, wantImportanceMap die nach seam carving.
+wantDebugSeams schreibt die besten Seams nach dem ersten Durchlauf aus, wobei die rote tatsächlich eliminiert wird.
+wantHists zeigt die Histogramme von UI-Elimination an. Es kann aber vorkommen, dass kein Output generiert wird, weil die vorige Heuristiken es vermeiden (es wurde schon genug weggeschnitten oder die beide Histogramme sind nicht unterschiedlich genug).
+
+Die restlichen Variablen sind für Debuging benutzt bzw. konfigurieren OpenCV Funktionen wie Filterkernel und Histograms.
 Die größe von Output ist einstellbar mit der 'size' Variable.
 
 Die default config.txt schaut wie folg aus:
@@ -52,3 +66,11 @@ debugSeamAmount=1000
 size=0.5
 resamplingTh=0.5
 doLines=0
+wantOrgImportanceMap=0
+wantBlurredImage=0
+wantTextImage=0
+wantFinalResult=1
+wantImportanceMap=0
+wantDebugSeams=0
+wantHists=0
+wantSizeOutput=0
