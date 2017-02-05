@@ -1,4 +1,7 @@
 Die Path-Variable OPENCV_DIR muss gesetzt werden, zB.: C:\opencv2.13\opencv\build\x64\vc12.
+In den Projekt Properties, bei C/C++: General soll "$(OPENCV_DIR)\..\..\include" bei "Additional Include Directories" und "Additional #using Driectories" gesetzt werden.
+Bei Linker: General soll "$(OPENCV_DIR)\lib" bei "Additional Library Directories" gesetzt werden.
+Bei Linker: Input sollen "opencv_core2413.lib;opencv_highgui2413.lib;opencv_imgproc2413.lib;opencv_features2d2413.lib" bei "Additional Dependencies" gesetzt werden. 
 Nachdem ist die Applikation ausführbar.
 In config.txt sind alle benutze Variablen parametrisiert.
 Die Variablen die den Algorithmus konfigurieren wurden in der Arbeit erwähnt.
