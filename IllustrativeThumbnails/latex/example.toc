@@ -19,7 +19,7 @@
 \contentsline {section}{\numberline {2.1}Processing as UI}{5}{section.2.1}
 \contentsline {section}{\numberline {2.2}Processing as a Regular Picture}{7}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Collage Creating Methods}{7}{subsection.2.2.1}
-\contentsline {subsection}{\numberline {2.2.2}Re-sampling Methods}{9}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.2}Re-Sampling Methods}{9}{subsection.2.2.2}
 \contentsline {subsubsection}{Seam Carving}{11}{section*.16}
 \contentsline {chapter}{\chapternumberline {3}Methodology}{15}{chapter.3}
 \contentsline {section}{\numberline {3.1}Eliminating UI elements}{16}{section.3.1}
