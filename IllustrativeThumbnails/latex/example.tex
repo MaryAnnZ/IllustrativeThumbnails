@@ -73,7 +73,7 @@
 \setsecondadvisor{Pretitle}{Forename Surname}{Posttitle}{male} % Comment to remove.
 
 % Required data.
-\setaddress{Address}
+\setaddress{ }
 \setregnumber{1325492}
 \setdate{06}{02}{2017} % Set date with 3 arguments: {day}{month}{year}.
 \settitle{\thesistitle}{Generating Expressive Window Thumbnails through Seam Carving} % Sets English and German version of the title (both can be English or German).
@@ -207,7 +207,7 @@
 	To provide satisfactory results a detailed and clear definition of the word expressive is needed.
 	Not only it influences the calculation of the pixel and region importance value, but also acts at the selection of result outputs, and is useful for future software development.
 	Moreover, for a fitting definition it needs to be taken into account that in this case the seam carving algorithm is used for screenshots and not for usual photographs.\par 
-	The expression 'expressive thumbnail' also comprehends that it is able to represent more information on a same sized picture than another not expressive thumbnail.
+	The expression "expressive thumbnail" also comprehends that it is able to represent more information on a same sized picture than another not expressive thumbnail.
 	Unlike usual visual features observed on real world images, such as color changes and location of edges, as mentioned above, computer screens have additional special properties that require further consideration.
 	For example, most screenshots include UI widgets, that are classified as not expressive.
 	Namely, it is rarely the case that the relevant parts of an application includes its UI and not its actual content processing features; additionally, the identification of the window in question is also possible by reading its title.
@@ -220,7 +220,7 @@
 		\caption{The text damage caused by seam carving using traditional saliency map and modified importance map of this application. }
 		\label{fig:textDamage}
 	\end{figure} 
-	Summing up, in this project a thumbnail is called 'expressive' if it well preserves the information content.
+	Summing up, in this project a thumbnail is called "expressive" if it well preserves the information content.
 	To measure this property, contrast values, color changes, location of edges, text data and the presence of UI elements are evaluated and considered. 
 	
 	
@@ -236,7 +236,7 @@
 	\section{Processing as UI}
 	When the input is a screenshot, there is a high chance that usual UI elements, like buttons and menu bars, are shown on the screen.
 	Exceptions for this are only cases when graphics, images, videos or application are presented, such as video games, gallery programs or video players.
-	Such applications tend to hide all UI elements and operate in 'fullscreen' mode, or use a redefined UI e.g. game menu bars.\par
+	Such applications tend to hide all UI elements and operate in "fullscreen" mode, or use a redefined UI e.g. game menu bars.\par
 	Labeling the image parts as content and non-content, the metadata about the UI elements can be helpful.
 	Chang et al. ~\cite{chang2011associating} use already existing accessibility APIs, tested on Mac OS X and on Microsoft Windows, to segment UI and non-UI data. 
 	Matching the metadata with the screen content provides a fast and robust result about the location of any kind of UI content.
@@ -359,7 +359,7 @@
 	\begin{figure}[h]
 		\centering		
 		\includegraphics[width=0.5\textwidth]{useOfAOs}
-		\caption{Possible solutions of the algorithm of Chen et al. ~\cite{chen2003visual}.}
+		\caption{Possible solutions of the algorithm by Chen et al. ~\cite{chen2003visual}.}
 		\label{fig:useOfAOs}
 	\end{figure}
 	The approach above, after careful calculations, chooses the only area that contains the highest possible amount of AOs.
@@ -373,7 +373,7 @@
 		\includegraphics[width=.3\textwidth]{featureAwareTexturing1}\hfill
 		\includegraphics[width=.3\textwidth]{featureAwareTexturing2}\hfill
 		\includegraphics[width=.3\textwidth]{featureAwareTexturing3}
-		\caption{The resulting image and grid from a certain input image and its feature mask of the Feature-aware Texturing algorithm ~\cite{gal2006feature}. }
+		\caption{The resulting image and its grid created  by the Feature-aware Texturing algorithm; on the left: the input and its feature mask ~\cite{gal2006feature}. }
 		\label{fig:fat}
 	\end{figure}
 	A detailed importance is essential at creating thumbnails, since a screen usually contains a greater amount of sensitive information.
@@ -406,7 +406,7 @@
 			\subcaption{Down-Sampled image}
 			\label{fig:downSampl}
 		\end{subfigure}
-		\caption{The result using seam carving and common down sampling.}
+		\caption{The results of seam carving and common down sampling.}
 		\label{fig:diff} % \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}
 	The importance map calculation depends on the individual implementation, but they are normally based on the saliency model introduced by Itti et al.~\cite{itti1998model}.
@@ -534,7 +534,7 @@
 		\includegraphics[width=.3\textwidth]{marginHist}\hfill
 		\includegraphics[width=.3\textwidth]{croppedHist}\hfill
 		\includegraphics[width=.3\textwidth]{contentHist}
-		\caption{The histogram of the margin area, of the slice, where the source~\ref{fig:cropped} is cropped and of the content region.}
+		\caption{Histogram of the margin area, of the slice where the source~\ref{fig:cropped} is cropped and of the content region.}
 		\label{fig:hist}
 	\end{figure}
 	This tendency reverses however as the slices approach the center regions.
@@ -549,7 +549,7 @@
 	\begin{figure}[H]
 		\centering		
 		\includegraphics[width=\textwidth]{croppedGame2}
-		\caption{The border of the content.}
+		\caption{The border of content.}
 		\label{fig:cropped}
 	\end{figure}
 	\section{Importance Map Calculation}
@@ -636,7 +636,7 @@
 	\begin{figure}[h]
 		\centering		
 		\includegraphics[width=\textwidth]{saliency}
-		\caption{The final saliency map.}
+		\caption{Final saliency map.}
 		\label{fig:saliency}
 	\end{figure}
 	
@@ -665,7 +665,7 @@
 	\begin{figure}[H]
 		\centering		
 		\includegraphics[width=0.5\textwidth]{pathValues}
-		\caption{Visualization of the path map in the middle of the calculation.}
+		\caption{Visualization of the path map during the calculation.}
 		\label{fig:pathValues}
 	\end{figure}
 	Algorithm~\ref{alg:seamCarving} shows the flow of the seam carving process.
@@ -836,7 +836,7 @@
 			\includegraphics[width=\textwidth]{pdfBorderRegion}
 			\label{fig:res:pdf}
 		\end{subfigure}
-		\caption{The cropping points according to the border area 10\% (yellow) and 40\% (green).}
+		\caption{Cropping points according to the border area 10\% (yellow) and 40\% (green).}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure} 
 	Starting from the histograms of the border area, the central area and the slices between them are sequentially compared, the value of their correlation is crucial for assigning them to one or another part of the image.
@@ -854,7 +854,7 @@
 			\includegraphics[width=\textwidth]{pptCorr}
 			\label{fig:res:corr2}
 		\end{subfigure}
-		\caption{The cropping points according to the correlation 1 (yellow) and 2.5 (green).}
+		\caption{The cropping points according to the correlation of 1 (yellow) and 2.5 (green).}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure} 
 	The thickness of the slices influences how throughout the algorithm is when searching through the border area.
@@ -862,7 +862,7 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.5\textwidth]{indexSteps}
-		\caption{The cropping points according to the thickness of the slices 12\% (yellow) and 5\% (green).}
+		\caption{Cropping points according to the thickness of the slices 12\% (yellow) and 5\% (green).}
 		\label{fig:res:steps}
 	\end{figure}
 	\section{Text Detection}
@@ -893,7 +893,7 @@
 		\includegraphics[width=.3\textwidth]{pdf2}\hfill
 		\includegraphics[width=.3\textwidth]{pdf2height80}\hfill
 		\includegraphics[width=.3\textwidth]{pdf2height20}
-		\caption{The actual words according to the maximal allowed difference 80\% and 20\% from the average.  }
+		\caption{The actual words according to the maximal allowed difference of 80\% and 20\% from the average.  }
 	\end{figure}  
 	With the inversion of the algorithm, setting the weight of the words for negative, the behavior of the application can be changed.
 	For experimental investigation the text areas were set to non-salient, i.e. only images and no words are saved. 
@@ -910,7 +910,7 @@
 		
 		\caption{Different text weighting: high weights (middle) and low weights (right).  }
 	\end{figure} 
-	\section{Re-sampling Threshold}
+	\section{Re-Sampling Threshold}
 	\label{res:resampling}
 	The re-sampling threshold determines when the application switches from seam carving to usual re-sampling. 
 	If the value is small (0.1, 10\% of the average importance of the most important seam on the original image) only a few seam carving loops are performed, and the application behaves similar to a common down-sampling algorithm.
@@ -930,7 +930,7 @@
 			\includegraphics[width=\textwidth]{resamplingTh/game4}
 			\label{fig:res:th2}
 		\end{subfigure}
-		\caption{The results according to the re-sampling threshold 0.1 and 0.4.}
+		\caption{Results at re-sampling threshold of 0.1 and 0.4.}
 		\label{fig:res}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}  
@@ -1019,7 +1019,7 @@
 	Other drawbacks of the thumbnail algorithm on natural images are the artifacts caused by seam carving.
 	There are two explanations to why the algorithm is not able to work on photographs from the real word as smooth as on screenshot images.
 	The first one is the importance map calculation, which, as mentioned above, is customized for computer screens and not for natural images.
-	Therefore,  in later steps the seam carving method does not have information about which objects are to be handled as 'special' i.e. similar to how text data was prioritized before.
+	Therefore,  in later steps the seam carving method does not have information about which objects are to be handled as "special" i.e. similar to how text data was prioritized before.
 	It is thus possible, that the seam carving algorithm ignores human faces like it does on Figure~\ref{fig:nat:faces}.	
 	\begin{figure}[H]
 		\centering
@@ -1031,7 +1031,7 @@
 			\centering
 			\includegraphics[width=\textwidth]{img/resFaces}
 		\end{subfigure}
-		\caption{Seam carving eliminates two faces and causes artifacts by the legs.}
+		\caption{Seam carving eliminates two faces and causes artifacts around the legs.}
 		\label{fig:nat:faces}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}  
@@ -1050,7 +1050,7 @@
 			\centering
 			\includegraphics[width=\textwidth]{img/resfood}
 		\end{subfigure}
-		\caption{There is a horizontal line in the middle, where probably several seems were eliminated.}
+		\caption{There is a horizontal line in the middle, where probably several seems were eliminated from.}
 		\label{fig:nat:food}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}  
@@ -1064,14 +1064,14 @@
 			\centering
 			\includegraphics[width=\textwidth]{img/resFirework}
 		\end{subfigure}
-		\caption{There are several artifacts on the body of the fireworks.}
+		\caption{There are several artifacts on the firework bodies.}
 		\label{fig:nat:fire}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}    
 	
 	
 	\section{Performance Evaluation}
-	The tests were performed on Windows 10 with CPU Intel i3-2310, 2.1GHZ and 2 Cores, using Grafic card AMD Radeon HD 7400M.
+	The tests were performed on Windows 10 with CPU Intel i3-2310, 2.1GHZ and 2 Cores, using Grafic card AMD Radeon HD 7400M, the size of the source is 1366x768 pixel.
 	During the tests some performance issues occurred, the application occasionally needed up to 3.5 minutes performance time, however remaining in a one-minute termination average.\par 
 	The performance bottleneck is caused by the seam calculation.
 	Every time when a seam is eliminated, the whole saliency map is recalculated.

@@ -32,10 +32,6 @@ void main()
 				cvNamedWindow("saliency");
 				cv::imshow("saliency", img->getOriginalSaliencyMap());
 			}
-			if (img->wantBlurredImage) {
-				cvNamedWindow("blurred");
-				cv::imshow("blurred", img->getBluredImage());
-			}
 			if (img->wantTextImage) {
 				cvNamedWindow("string");
 				cv::imshow("string", img->getStringImage());

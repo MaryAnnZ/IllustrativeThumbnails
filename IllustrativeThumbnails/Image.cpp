@@ -54,12 +54,6 @@ Image::Image(std::map<std::string, double> configData)
 	else {
 		wantOrgImportanceMap = true;
 	}
-	if (configData["wantBlurredImage"] == 0) {
-		wantBlurredImage = false;
-	}
-	else {
-		wantBlurredImage = true;
-	}
 	if (configData["wantTextImage"] == 0) {
 		wantTextImage = false;
 	}

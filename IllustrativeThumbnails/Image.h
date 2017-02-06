@@ -32,10 +32,8 @@ public:
 	cv::Mat showSeams();
 
 	cv::Mat getReference();
-
 	//outputs
 	bool wantOrgImportanceMap;
-	bool wantBlurredImage;
 	bool wantTextImage;
 	bool wantCroppedImage;
 	bool wantFinalResult;

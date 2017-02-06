@@ -36,7 +36,7 @@
 \contentsline {chapter}{\chapternumberline {5}Results and Evaluation}{29}{chapter.5}
 \contentsline {section}{\numberline {5.1}Elimination of UI Elements}{29}{section.5.1}
 \contentsline {section}{\numberline {5.2}Text Detection}{31}{section.5.2}
-\contentsline {section}{\numberline {5.3}Re-sampling Threshold}{33}{section.5.3}
+\contentsline {section}{\numberline {5.3}Re-Sampling Threshold}{33}{section.5.3}
 \contentsline {section}{\numberline {5.4}Comparison to Adobe Photoshop}{33}{section.5.4}
 \contentsline {section}{\numberline {5.5}Natural Images}{36}{section.5.5}
 \contentsline {section}{\numberline {5.6}Performance Evaluation}{37}{section.5.6}

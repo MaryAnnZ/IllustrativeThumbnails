@@ -1,9 +1,12 @@
-Die Path-Variable OPENCV_DIR muss gesetzt werden, zB.: C:\opencv2.13\opencv\build\x64\vc12.
+Die Path-Variable OPENCV_DIR, Version 2.4.13, muss gesetzt werden, zB.: C:\opencv2.13\opencv\build\x64\vc12.
 In den Projekt Properties, bei C/C++: General soll "$(OPENCV_DIR)\..\..\include" bei "Additional Include Directories" und "Additional #using Driectories" gesetzt werden.
 Bei Linker: General soll "$(OPENCV_DIR)\lib" bei "Additional Library Directories" gesetzt werden.
 Bei Linker: Input sollen "opencv_core2413.lib;opencv_highgui2413.lib;opencv_imgproc2413.lib;opencv_features2d2413.lib" bei "Additional Dependencies" gesetzt werden.
 Schließlich müssen die OpenCV .dll-s zu dem Build Ordner kopiert werden. 
 Nachdem ist die Applikation ausführbar.
+
+Meine Testdaten sind unter: IllustrativeThumbnails\IllustrativeThumbnails\images\final zu finden.
+Alle Testfälle sind unter: IllustrativeThumbnails\IllustrativeThumbnails\images\final\test gespeichert.
 
 In config.txt sind alle benutze Variablen parametrisiert.
 Die Variablen die den Algorithmus konfigurieren wurden in der Arbeit erwähnt.
@@ -27,7 +30,6 @@ resamplingTh
 
 Die Parameter:
 wantOrgImportanceMap
-wantBlurredImage
 wantTextImage
 wantCroppedImage
 wantFinalResult
@@ -35,7 +37,7 @@ wantImportanceMap
 wantDebugSeams
 wantHists
 wantSizeOutput
-sind Boolische Variablen und regeln, welche Output gegeben werden sollte.
+sind Boolische Variablen und regeln, welche Output generiert werden sollte.
 wantOrgImportanceMap schreibt die originelle Importancemap aus, wantImportanceMap die nach seam carving.
 wantDebugSeams schreibt die besten Seams nach dem ersten Durchlauf aus, wobei die rote tatsächlich eliminiert wird.
 wantHists zeigt die Histogramme von UI-Elimination an. Es kann aber vorkommen, dass kein Output generiert wird, weil die vorige Heuristiken es vermeiden (es wurde schon genug weggeschnitten oder die beide Histogramme sind nicht unterschiedlich genug).
@@ -73,7 +75,6 @@ size=0.5
 resamplingTh=0.5
 doLines=0
 wantOrgImportanceMap=0
-wantBlurredImage=0
 wantTextImage=0
 wantCroppedImage=0
 wantFinalResult=1
