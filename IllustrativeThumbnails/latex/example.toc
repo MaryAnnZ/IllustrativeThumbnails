@@ -16,8 +16,8 @@
 \contentsline {chapter}{Contents}{xv}{section*.6}
 \contentsline {chapter}{\chapternumberline {1}Introduction}{1}{chapter.1}
 \contentsline {chapter}{\chapternumberline {2}Related Work}{5}{chapter.2}
-\contentsline {section}{\numberline {2.1}Processing as UI}{5}{section.2.1}
-\contentsline {section}{\numberline {2.2}Processing as a Regular Picture}{7}{section.2.2}
+\contentsline {section}{\numberline {2.1}UI Segmentation Methods}{5}{section.2.1}
+\contentsline {section}{\numberline {2.2}Natural Image Size Compression Methods}{7}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Collage Creating Methods}{7}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}Re-Sampling Methods}{9}{subsection.2.2.2}
 \contentsline {subsubsection}{Seam Carving}{11}{section*.14}
@@ -30,7 +30,7 @@
 \contentsline {chapter}{\chapternumberline {4}Implementation and Working Pipeline}{25}{chapter.4}
 \contentsline {section}{\numberline {4.1}Image Loading}{25}{section.4.1}
 \contentsline {subsection}{\numberline {4.1.1}UI Elimination}{26}{subsection.4.1.1}
-\contentsline {section}{\numberline {4.2}Saliancy Map Clculation}{26}{section.4.2}
+\contentsline {section}{\numberline {4.2}Saliency Map Calculation}{26}{section.4.2}
 \contentsline {section}{\numberline {4.3}Text Detection}{26}{section.4.3}
 \contentsline {section}{\numberline {4.4}Seam Carving}{27}{section.4.4}
 \contentsline {chapter}{\chapternumberline {5}Results and Evaluation}{29}{chapter.5}

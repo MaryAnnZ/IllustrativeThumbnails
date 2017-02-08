@@ -130,7 +130,7 @@
 		Außerdem sind Screenshots derselben Applikation oft sehr ähnlich, zum Beispiel die Seite und Toolbar in MS Office Word; der Text auf der Seite ist aber nicht lesbar. 
 		Es gibt bereits mehrere Möglichkeiten, wodurch die beim Bearbeiten entstehenden Artefakte weniger auffällig gemacht und die wichtigen Regionen hervorgehoben werden können.
 		In dieser Bachelorarbeit wird eine Applikation entwickelt, welche diese Methoden auf Screenshots anwendet und Thumbnails erstellt.
-		Screenshots von Applikationsfenster werden durch eine Kombination aus Cropping, Abschneiden von irrelevanten Elementen an der Seite, Seam Carving, Verkleinern durch Herausschneiden unwichtiger Pixel-Pfade, und herkömmlichem Down-Sampling zu Thumbnails verkleinert. 
+		Screenshots von Applikationsfenster werden durch eine Kombination aus Cropping, Abschneiden von irrelevanten Elementen an der Seite, Seam Carving, Verkleinern durch Herausschneiden unwichtiger Pixel-Pfade, und herkömmlichem Down-Sampling, falls Seam Carving wichtige Pfade wegschneiden würde, zu Thumbnails verkleinert. 
 		Die Ergebnisse zeigen also nur relevante Informationen an, wodurch sie expressiver sind und ihren Zweck besser erfüllen können.
 		
 	\end{kurzfassung}
@@ -146,8 +146,8 @@
 		(e.g.~: white paper and tool bar), but the important text is not readable.
 		There are several approaches that filter the important areas of the images to enhance the main region. In this bachelor thesis an application
 		is implemented that uses the above methods on screenshots.
-		Screenshots of windows are reduced by cropping the irrelevant elements of the margin area using seam carving, i.e. by eliminating the non-important pixel paths; and by common down-sampling.
-		As a result the thumbnails show only relevant information,
+		Screenshots of windows are reduced by cropping the irrelevant elements of the margin area, by seam carving, i.e. by eliminating the non-important pixel paths; and by common down-sampling.
+		As a result the thumbnails, compared to classic thumbnails, show more relevant information,
 		which makes them more expressive and easier to fulfill their purpose.
 	\end{abstract}
 	
@@ -194,13 +194,13 @@
 		\label{fig:introo} % \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}
 	%This project introduces a new approach using seam carving to make thumbnails more expressive even on small displays.
-	Seam carving is a special re-sampling method, where seams along the least important image regions are eliminated to down-sample the image.
+	Seam carving~\cite{avidan2007seam} is a special re-sampling method, where seams along the least important image regions are eliminated to down-sample the image.
 	The definition of importance depends on the implementation, but it in any case evaluates color changes and identifies the edges that shape the outline of the elements on the source image.
 	It is implemented for natural images, however, and not for screenshots, where the usual saliency calculation is not adequate enough.
 	Following a similar logic, the algorithm presented in this thesis uses the seam carving method, but it takes into account that the given input is essentially a screenshot.
 	So it will probably contain some UI elements on the picture, too.
 	Additionally, considering that letters are more common on computer screens than on usual images, the text content is also investigated to determine them as important regions.\par
-	In summary, the thumbnail creating algorithm of this thesis performs cropping first to eliminate the UI elements of the margin area, then seam carving using a customized importance map and finally common down-sampling.
+	In summary, the thumbnail creating algorithm of this thesis performs cropping first to eliminate the UI elements of the margin area, then seam carving using a customized importance map and finally common down-sampling, if seam carving would cut off important seams.
 	During seam carving, a modified importance map is built from the usual saliency values of the screenshot and from the results of the text detection.
 	
 	%\section{Definition of the word illustrative} 
@@ -213,11 +213,12 @@
 	Namely, it is rarely the case that the relevant parts of an application includes its UI and not its actual content processing features; additionally, the identification of the window in question is also possible by reading its title.
 	Furthermore, the importance of text data on the computer screens is assumably much higher than on regular pictures or photographs. 
 	Therefore, in order to transmit as much information as possible, text data distortion is to be avoided, i.e. even after size reduction it needs to stay readable.
-	Figure~\ref{fig:textDamage} shows a possible output of the seam carving algorithm using different importance maps.\par 
+	Figure~\ref{fig:textDamage} shows a caption from a possible output of the seam carving algorithm using different importance maps.
+	The size of the text area is different, because the thumbnail algorithm tries to save this region, however, the usual seam carving algorithm pays no attention for the letters.\par 
 	\begin{figure}[H]
 		\centering		
 		\includegraphics[width=\textwidth]{textDemage}
-		\caption{The text damage caused by seam carving using traditional saliency map and modified importance map of this application. }
+		\caption{The text damage caused by seam carving using traditional saliency map (first image) and modified importance map of this application (second image) on the source (third image). }
 		\label{fig:textDamage}
 	\end{figure} 
 	Summing up, in this project a thumbnail is called "expressive" if it well preserves the information content.
@@ -225,7 +226,7 @@
 	
 	
 	\chapter{Related Work}
-	There are several image processing algorithms that can be helpful at creating illustrative thumbnails.
+	There are several image processing algorithms that can be helpful at creating expressive thumbnails.
 	The main difference between these algorithms is whether they consider the input as an actual application window or just as a regular image.
 	Therefore, this section is divided into two parts.
 	The first one discusses algorithms with UI processing segments.
@@ -233,7 +234,7 @@
 	Moreover, there are two classes of information presentation methods to be distinguished, namely, simple resizing and collages; the latter combining the most important parts of the image. 
 	In the following, these methods are compared.
 	
-	\section{Processing as UI}
+	\section{UI Segmentation Methods}
 	When the input is a screenshot, there is a high chance that usual UI elements, like buttons and menu bars, are shown on the screen.
 	Exceptions for this are only cases when graphics, images, videos or application are presented, such as video games, gallery programs or video players.
 	Such applications tend to hide all UI elements and operate in "fullscreen" mode, or use a redefined UI e.g. game menu bars.\par
@@ -276,9 +277,9 @@
 	Furthermore, they are actually designed for another purpose, namely to segment and classify UI elements, so before applying them significant reworking is needed.
 	Since it is not essential to know, exactly which widgets appear on the screen, and processing their actual content may cause performance issues, the use of the above methods would overcomplicate the application without providing noteworthy advantages.
 	
-	\section{Processing as a Regular Picture}
+	\section{Natural Image Size Compression Methods}
 	There are several information saving methods for processing images with any kind of content.
-	Furthermore, these methods can also handle a series of important tasks such as interesting point recognition, Region of Interest (ROI) selection, image or feature composition, i.e. tasks that are in place to make any kind of images more illustrative.
+	Furthermore, these methods can also handle a series of important tasks such as interesting point recognition, Region of Interest (ROI) selection, image or feature composition, i.e. tasks that are in place to make any kind of images more expressive.
 	Based on the type of input data, there are two groups of the above algorithms that will be discussed in the following sections.
 	The first category works with more than one picture at the same time.
 	Its strength is to choose single features that best represents the whole input data. 
@@ -370,10 +371,10 @@
 	This grid can be modified into an optional shape, but the gridpoints on the feature mask are not allowed to change their proportion to each other.
 	This way the picture elements between the AOs fill the new shape while the AOs get barely distorted, as illustrated on Figure~\ref{fig:fat}.\par 
 	\begin{figure}[h]
-		\includegraphics[width=.3\textwidth]{featureAwareTexturing1}\hfill
-		\includegraphics[width=.3\textwidth]{featureAwareTexturing2}\hfill
+		\includegraphics[width=.3\textwidth]{featureAwareTexturing1}\hfill		
+		\includegraphics[width=.3\textwidth]{featureAwareTexturing2}\hfill		
 		\includegraphics[width=.3\textwidth]{featureAwareTexturing3}
-		\caption{The resulting image and its grid created  by the Feature-aware Texturing algorithm; on the left: the input and its feature mask ~\cite{gal2006feature}. }
+		\caption{The resulting image (middle) and its grid (right) created  by the Feature-aware Texturing algorithm; on the left: the input and its feature mask ~\cite{gal2006feature}. }
 		\label{fig:fat}
 	\end{figure}
 	A detailed importance is essential at creating thumbnails, since a screen usually contains a greater amount of sensitive information.
@@ -409,6 +410,8 @@
 		\caption{The results of seam carving and common down sampling.}
 		\label{fig:diff} % \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}
+
+
 	The importance map calculation depends on the individual implementation, but they are normally based on the saliency model introduced by Itti et al.~\cite{itti1998model}.
 	Itti's saliency calculation takes the function of the low-level human visual system into account, so it channels attention to color, intensity and orientation of the pixels in the first row.
 	In the calculation every pixel and their neighborhood is investigated in terms of their relationship to each other.
@@ -465,7 +468,7 @@
 		\caption{Flow chart of the algorithm.}
 		\label{fig:flowChart}
 	\end{figure}
-	The illustrative thumbnail creating algorithm has three main steps, as shown in Figure ~\ref{fig:flowChart}.
+	The expressive thumbnail creating algorithm has three main steps, as shown in Figure ~\ref{fig:flowChart}.
 	At the beginning the UI elements are cropped.
 	%In the case of thumbnails there are other ways to get information about what application are actually opened, for example by giving a title for it, containing the running application's name.
 	It is rather usual that the same software is running multiple times, possibly for other purposes, e.g. using the text editor for both writing one and reading another document.
@@ -534,7 +537,7 @@
 		\includegraphics[width=.3\textwidth]{marginHist}\hfill
 		\includegraphics[width=.3\textwidth]{croppedHist}\hfill
 		\includegraphics[width=.3\textwidth]{contentHist}
-		\caption{Histogram of the margin area, of the slice where the source~\ref{fig:cropped} is cropped and of the content region.}
+		\caption{Histogram of the margin area (left), of the slice where the source~\ref{fig:cropped} is cropped (middle) and of the content region (right).}
 		\label{fig:hist}
 	\end{figure}
 	This tendency reverses however as the slices approach the center regions.
@@ -560,7 +563,7 @@
 	\label{saliencyCalculation}
 	The saliency value of a pixel describes how much it stands out from its surrounding, how noticeable it is and how prompting it is for the human eye.
 	A saliency map in this project is a matrix where the high value of an area means that the region is more salient than any other pixels with lower values.
-	There are, however, many definitions and approaches about which pixels should be evaluated as salient or not salient, some of them is already mentioned in the \hyperref[relatedWork:resampling]{Related Work section}.
+	There are, however, many definitions and approaches about which pixels should be evaluated as salient or not salient, some of them is already mentioned in the Related Work section~\ref{relatedWork:resampling}.
 	In this case the saliency is calculated as presented by Niu et al.~\cite{niu2012image}. 
 	There are two reasons, why this algorithm is chosen.
 	First, it evaluates the low-level visual information just like the traditional method introduces by Itti et al.~\cite{itti1998model}.
@@ -605,7 +608,7 @@
 	The method that identifies the words examines two aspects.
 	The first is if the strings are high enough but not too high to indicate real letters.
 	Second, whether their width is not too small but also not too big to form at least one word but not an endless sentence.
-	Both of these size examining values are parametrized, the thresholds can be set as needed, with their default value based on the size of one letter, in default case 5pt, as explained in the \hyperref[Implementation]{next chapter}. 
+	Both of these size examining values are parametrized, the thresholds can be set as needed, with their default value based on the size of one letter, in default case 5pt, as explained in the next chapter~\ref{Implementation}. 
 	The second loop evaluates the histograms of the area, where the strings were found.
 	Normally the letters, if belonging to the same text data, have the same color, while the background, for optimal readability, does not change its color underneath the text, either.
 	Therefore, the histograms of these areas are bimodal, meaning that they have one peak for the letters and one for the background color. 
@@ -641,7 +644,7 @@
 	\end{figure}
 	
 	\section{Seam Carving}
-	To resize the image without damaging the important regions, seam carving is used, mentioned in the \hyperref[seamCarving]{Related Work} section.
+	To resize the image without damaging the important regions, seam carving is used, mentioned in the Related Work~\ref{seamCarving} section.
 	Seam carving calculates paths according to the importance map, and eliminates those with minimal importance value.
 	This step is repeated until the desired size is reached or the importance value of the chosen path exceeds a predefined threshold.
 	Because seam carving does not necessary eliminate only the straight lines, the algorithm noticeably affects the layout of the unimportant regions.
@@ -703,11 +706,11 @@
 	In this case the seam carving algorithm continues only for the remaining parameter, thus it is only looking for either horizontal or vertical seams, since the width or the height already hit the preconditions, until it reaches one of the conditions above. 
 	The value of the threshold parameter is essential,	since it determines when the algorithm is to switch between seam carving and re-sampling. 
 	It is calculated from the maximum salient path found after the first loop of the seam carving algorithm.
-	This threshold value is further customizable, the different outputs in case of varying its value is discussed in the \hyperref[res:resampling]{Results and Evaluation} section.
+	This threshold value is further customizable, the different outputs in case of varying its value is discussed in the Results and Evaluation section~\ref{res:resampling}.
 	Since with every loop one unsalient pixel is eliminated from the horizontal or from the vertical path, the relative saliency of the seams constantly increases.
 	Therefore, in most cases, even the least salient seam will get more salient than the most salient seam of the original image. 
-	The common re-sampling method eliminates straight lines chosen from the source image until the desired size is reached.
-	Seam carving is applied to prevent paths with high salient value to be cut off.
+	The common re-sampling method eliminates straight lines chosen from the source image and interpolates between the pixel values until the desired size is reached.
+	Seam carving is applied to prevent parts with high salient value to be cut off.
 	On the other hand, if the seams have as high importance value as any other of the source image, regular re-sampling has additional advantages.
 	First, the algorithm is faster than the implemented seam carving method, and second, it applies an interpolating algorithm between the borders of the eliminated area, so in this case it ultimately saves more information than seam carving.   
 
@@ -748,12 +751,12 @@
 	The parameters of correlation and the width of the slices are also configurable.
 	According to testings, the best results are provided when the correlation is between 1.3 and 2 and the width of the slices is the 0.25\% of the window.
 	
-	\section{Saliancy Map Clculation}
+	\section{Saliency Map Calculation}
 	The saliency map is calculated from a Gaussian pyramid.
 	However, before building the pyramid the cropped source image has to get converted into a uniform colorspace.
 	For this purpose the OpenCV function \texttt{cvtColor} is called.
 	Then the levels of the pyramid are determined using the \texttt{pyrDown} method.
-	Afterwards, a contrast map is calculated with the L2 norm using the equation mentioned in the \hyperref[saliencyCalculation]{Methodology} section, from the four neighboring pixels for each level.
+	Afterwards, a contrast map is calculated with the L2 norm using the equation mentioned in the Methodology section~\ref{saliencyCalculation}, from the four neighboring pixels for each level.
 	In order to avoid any overflow, by merging the levels into one saliency map, the pixel values are divided by the amount of pyramid levels.
 	
 	\section{Text Detection}
@@ -809,7 +812,7 @@
 	\chapter{Results and Evaluation}
 	In order to find the configuration, which provides reasonable results in as many cases as possible, several tests were performed.
 	There is a test database including 14 pictures, showing seven different applications, captured on Windows 10.
-	The test images and the results when using the recommended \texttt{config} file and the experimental results on Linux are listed in \hyperref[AppA]{Appendix A}. 
+	The test images and the results when using the recommended \texttt{config} file and the experimental results on Linux are listed in Appendix A~\ref{AppA}. 
 	In the following, the test cases of the elimination of UI elements, text detection and various value of re-sampling thresholds are presented and evaluated in respect to which of them are best able to provide the desired results.
 	Then, the application is compared to Adobe Photoshop~\cite{photoshop}, with both applications' advantages and disadvantages described.
 	Following that, some further results are presented when the algorithm is applied on natural images but not on screenshots.
@@ -876,7 +879,7 @@
 		\includegraphics[width=.3\textwidth]{444}\hfill
 		\includegraphics[width=.3\textwidth]{444String50}\hfill
 		\includegraphics[width=.3\textwidth]{444String200}
-		\caption{The related areas according to the brightness threshold value 50 and 200. }
+		\caption{The related areas according to the brightness threshold value 50 (middle) and 200 (right). }
 	\end{figure} 
 	The properties of a possible word are also customizable in the \texttt{config} file.
 	The set of possible words needs to be sorted first, depending on how likely they are potential words when considering their size.
@@ -885,7 +888,7 @@
 		\includegraphics[width=.3\textwidth]{stackOverflow}\hfill
 		\includegraphics[width=.3\textwidth]{stackOverflowWidth100}\hfill
 		\includegraphics[width=.3\textwidth]{stackOverflowHeight20}
-		\caption{The actual words according to the minimal width 100 and minimal height 20. }
+		\caption{The actual words according to the minimal width 100 (middle) and minimal height 20 (right). }
 	\end{figure}  
 	From the set of the possible words the average word size is calculated, but thenafter the words' variance from this value is still further customizable.
 	For example, if the allowed difference is set to 80\% of the original size, the smaller words can easily get sorted out, while at 20\% they also manage to stay in the possible words set.\par 
@@ -915,28 +918,29 @@
 	The re-sampling threshold determines when the application switches from seam carving to usual re-sampling. 
 	If the value is small (0.1, 10\% of the average importance of the most important seam on the original image) only a few seam carving loops are performed, and the application behaves similar to a common down-sampling algorithm.
 	The performance is positively affected by fewer seam carving loops, but it also loses its advantage against simple re-sampling methods, with the important areas being no longer easily recognizable.
-	When the threshold is set, however, to a bigger value (0.4, 40\% of the average importance of the most important seam on the original image), the application switches at the very end of the process.
-	In this case the application works noticeably slower and additionally in causes more artifacts than usual re-sampling.
-	On Figure~\ref{fig:res} the red lines indicate the edges, where the side-effects of elimination are obvious.
+	When the threshold is set, however, to a bigger value (0.7, 70\% of the average importance of the most important seam on the original image), the application switches at the very end of the process.
+	In this case the application works noticeably slower and additionally in causes more artifacts than usual re-sampling, like Figure~\ref{fig:res} illustrates.
 	\begin{figure}[H]
 		\centering
-		\begin{subfigure}[b]{0.45\columnwidth}
+		\begin{subfigure}[Bt]{0.45\columnwidth}
 			\centering
 			\includegraphics[width=\textwidth]{resamplingTh/game1}
+			\caption{Artifacts in the background of the output image}
 			\label{fig:res:th1}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\columnwidth}
+		\begin{subfigure}[Bt]{0.45\columnwidth}
 			\centering
 			\includegraphics[width=\textwidth]{resamplingTh/game4}
+			\caption{Artifacts in the background, on the body and around the sword}
 			\label{fig:res:th2}
 		\end{subfigure}
-		\caption{Results at re-sampling threshold of 0.1 and 0.4.}
+		\caption{Results at re-sampling threshold of 0.1 (left) and 0.7 (right).}
 		\label{fig:res}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}  
 	\section{Comparison to Adobe Photoshop} 
 	To compare the algorithm to an already existing tool the content-aware resize feature of Adobe Photoshop CS 5~\cite{photoshop} was used.
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\includegraphics[width=.3\textwidth]{photoshop/org/444}\hfill
 		\includegraphics[width=.3\textwidth]{photoshop/org/desktop}\hfill
 		\includegraphics[width=.3\textwidth]{photoshop/org/pdfReader2}
@@ -945,7 +949,7 @@
 	There are two test scenarios; the first takes the same source to the expressive thumbnail creator algorithm.
 	The input image in the second case is, however, the cropped source image produced by this application after the elimination of the UI elements.
 	In the first test it is investigated how seam carving invented for usual photos works on screenshots.
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\includegraphics[width=.3\textwidth]{photoshop/444}\hfill
 		\includegraphics[width=.3\textwidth]{photoshop/desktop}\hfill
 		\includegraphics[width=.3\textwidth]{photoshop/pdf1}
@@ -954,7 +958,7 @@
 	Comparing  the images to outputs of the thumbnail algorithm, it is striking how much smaller and less readable the words appear.
 	Because this project applies not only seam carving but also heuristics to cut off the border region, to compare the actual seam carving algorithms, Photoshop  needs the same input as this application used when it began with the seam calculation.
 	The second test scenario is in place for this reason.
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\includegraphics[width=.3\textwidth]{photoshop/444cropped}\hfill
 		\includegraphics[width=.3\textwidth]{photoshop/desktopcropped}\hfill
 		\includegraphics[width=.3\textwidth]{photoshop/pdf1cropped}
@@ -973,24 +977,24 @@
 	Since the thumbnail creator algorithm has a ranking between the elements, favoring texts before images, the output is not dubious: even in case of image data loss, the text remains readable, like the snippet of Figure~\ref{fig:comp444} shows.
 	The output of Photoshop is rather disorganized, the text and image regions flow into each other, illustrated on Figure~\ref{fig:compDesktop}.
 	The images are better recognizable as already illustrated on Figure~\ref{fig:comp444}, but in exchange the words are noticeably more damaged, as it appear on the code snippets on Figure~\ref{fig:comppdf}. 
-	All results produced by Photoshop are listed in \hyperref[AppB]{Appendix B}. 
+	All results produced by Photoshop are listed in Appendix B~\ref{AppB}. 
 	
 	\begin{figure}[H]
 		\centering		
 		\includegraphics[width=\textwidth]{photoshop/compare444}
-		\caption{Snippet of the same region of the first test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm. }
+		\caption{Snippet of the same region of the first test image captured on the output of the Photoshop test scenarios (first scenario on the left, second scenario in the middle) and of the thumbnail creator algorithm (right). }
 		\label{fig:comp444}
 	\end{figure}
 	\begin{figure}[H]
 		\centering		
 		\includegraphics[width=\textwidth]{photoshop/compareDesktop}
-		\caption{Snippet of the same region of the second test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm.}
+		\caption{Snippet of the same region of the second test image captured on the output of the Photoshop test scenarios (first scenario on the left, second scenario in the middle) and of the thumbnail creator algorithm (right).}
 		\label{fig:compDesktop}
 	\end{figure}
 	\begin{figure}[H]
 		\centering		
 		\includegraphics[width=0.5\textwidth]{photoshop/comparePdf}
-		\caption{Snippet of the same region of the third test image captured on the output of the Photoshop test scenarios and of the thumbnail creator algorithm.}
+		\caption{Snippet of the same region of the third test image captured on the output of the Photoshop test scenarios (first scenario on the left, second scenario in the middle) and of the thumbnail creator algorithm (right).}
 		\label{fig:comppdf}
 	\end{figure}
 	
@@ -999,9 +1003,6 @@
 	The importance map calculation is customized for the requirements of a screenshot, not of a common photograph.
 	There are two aspects, where the thumbnail algorithm fails and is not able to provide results having the same quality as before.
 	The first one is the UI cropping heuristic, as shown in Figure~\ref{fig:nat:face}.
-	It is also common on natural images, that the margin area has a slightly different color theme than the central region.
-	At the margin normally the background is shown, whereas the focus objects of the picture are placed at the middle of the scene.
-	Therefore it is possible, that since the UI cropping algorithm examines only the color histograms of both areas, it will assume that at the margin UI widgets are found, and thus some border regions get eliminated.
 	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\columnwidth}
@@ -1016,6 +1017,9 @@
 		\label{fig:nat:face}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}  
+	It is also common on natural images, that the margin area has a slightly different color theme than the central region.
+	At the margin normally the background is shown, whereas the focus objects of the picture are placed at the middle of the scene.
+	Therefore it is possible, that since the UI cropping algorithm examines only the color histograms of both areas, it will assume that at the margin UI widgets are found, and thus some border regions get eliminated.
 	Other drawbacks of the thumbnail algorithm on natural images are the artifacts caused by seam carving.
 	There are two explanations to why the algorithm is not able to work on photographs from the real word as smooth as on screenshot images.
 	The first one is the importance map calculation, which, as mentioned above, is customized for computer screens and not for natural images.
@@ -1040,7 +1044,17 @@
 	Sharp edges and strong intensity changes on screenshots are usual, so even after seam carving the possible artifacts caused by pixel elimination are not outstanding. 
 	To the contrary, in order to obtain a natural-looking outcome in case of natural images, it would be essential to smoothen the resulting sharp edges of the pixel path elimination. 
 	Since this step is not implemented, the weaknesses of natural image processing are obvious on Figure~\ref{fig:nat:food} and on Figure~\ref{fig:nat:fire}.  
-	\begin{figure}[h]
+	
+	
+	\section{Performance Evaluation}
+	The tests were performed on Windows 10 with CPU Intel i3-2310, 2.1GHZ and 2 Cores, using Grafic card AMD Radeon HD 7400M, the size of the source is 1366x768 pixel.
+	During the tests some performance issues occurred, the application occasionally needed up to 3.5 minutes performance time, however remaining in a one-minute termination average.\par 
+	The performance bottleneck is caused by the seam calculation.
+	Every time when a seam is eliminated, the whole saliency map is recalculated.
+	Having a new saliency map the possible seam paths also need to get redetermined.
+	If the UI cropping algorithm is not able to cut a bigger area or the re-sampling threshold is reached later, several seam carving loops are performed. 
+	Therefore, screenshots with bigger and clearly defined UI areas have shorter run time, whereas inputs like images of gallery applications and of computer games take longer. 
+	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\columnwidth}
 			\centering
@@ -1054,7 +1068,7 @@
 		\label{fig:nat:food}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}  
-	\begin{figure}[h]
+	\begin{figure}[H]
 		\centering
 		\begin{subfigure}[b]{0.45\columnwidth}
 			\centering
@@ -1068,16 +1082,6 @@
 		\label{fig:nat:fire}
 		% \label has to be placed AFTER \caption (or \subcaption) to produce correct cross-references.
 	\end{figure}    
-	
-	
-	\section{Performance Evaluation}
-	The tests were performed on Windows 10 with CPU Intel i3-2310, 2.1GHZ and 2 Cores, using Grafic card AMD Radeon HD 7400M, the size of the source is 1366x768 pixel.
-	During the tests some performance issues occurred, the application occasionally needed up to 3.5 minutes performance time, however remaining in a one-minute termination average.\par 
-	The performance bottleneck is caused by the seam calculation.
-	Every time when a seam is eliminated, the whole saliency map is recalculated.
-	Having a new saliency map the possible seam paths also need to get redetermined.
-	If the UI cropping algorithm is not able to cut a bigger area or the re-sampling threshold is reached later, several seam carving loops are performed. 
-	Therefore, screenshots with bigger and clearly defined UI areas have shorter run time, whereas inputs like images of gallery applications and of computer games take longer. 
 	
 	\chapter{Future Work}
 	\label{futureWork}

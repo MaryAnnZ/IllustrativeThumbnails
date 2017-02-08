@@ -1,6 +1,11 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
 \begin{thebibliography}{GDT{\etalchar{+}}15}
 
+\bibitem[{Ado}]{photoshop}
+{Adobe Systems Incorporated}.
+\newblock Adobe photoshop cs5.
+\newblock http://www.photoshop.com/.
+
 \bibitem[AS07]{avidan2007seam}
 Shai Avidan and Ariel Shamir.
 \newblock Seam carving for content-aware image resizing.
@@ -93,10 +98,6 @@ Laurent Itti, Christof Koch, and Ernst Niebur.
 \newblock {\em IEEE Transactions on pattern analysis and machine intelligence},
   20(11):1254--1259, 1998.
 
-\bibitem[Inc]{photoshop}
-Adobe~Systems Incorporated.
-\newblock Adobe photoshop cs5.
-
 \bibitem[LG06]{liu2006region}
 Feng Liu and Michael Gleicher.
 \newblock Region enhanced scale-invariant saliency detection.
@@ -119,9 +120,11 @@ Yuzhen Niu, Feng Liu, Xueqing Li, and Michael Gleicher.
 \newblock Image resizing via non-homogeneous warping.
 \newblock {\em Multimedia Tools and Applications}, 56(3):485--508, 2012.
 
-\bibitem[Ope17]{compareHist}
-OpenCV.
+\bibitem[{Ope}17]{compareHist}
+{OpenCV}.
 \newblock {\em Histograms}, accessed January 28, 2017.
+\newblock
+  http://docs.opencv.org/2.4/modules/imgproc/doc/histograms.html?highlight=comparehist.
 
 \bibitem[RBHB06]{rother2006autocollage}
 Carsten Rother, Lucas Bordeaux, Youssef Hamadi, and Andrew Blake.
@@ -134,9 +137,11 @@ Jian Sun, Lu~Yuan, Jiaya Jia, and Heung-Yeung Shum.
 \newblock Image completion with structure propagation.
 \newblock {\em ACM Transactions on Graphics (ToG)}, 24(3):861--868, 2005.
 
-\bibitem[Win17]{openfilename}
-Windows.
+\bibitem[{Win}17]{openfilename}
+{Windows}.
 \newblock {\em OPENFILENAME structure}, 2008 (accessed January 28, 2017).
+\newblock
+  https://msdn.microsoft.com/en-us/library/windows/desktop/ms646839(v=vs.85).aspx.
 
 \bibitem[YCM09]{yeh2009sikuli}
 Tom Yeh, Tsung-Hsiang Chang, and Robert~C Miller.
